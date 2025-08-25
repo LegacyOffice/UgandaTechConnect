@@ -1,0 +1,67 @@
+# Django specific
+*.log
+*.pot
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+.Python
+*.sqlite3
+media/
+staticfiles/
+
+# Virtual environment
+venv/
+env/
+ENV/
+.venv/
+
+# Django local settings
+local_settings.py
+settings/local.py
+settings/dev.py
+*.env
+.env
+
+# Database
+*.db
+*.sqlite
+
+# IDE and editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Python package installation
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+*.whl
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Testing and coverage
+.coverage
+coverage.xml
+*.cover
+htmlcov/
+.tox/
+.pytest_cache/
+
+# Django migrations (optional, comment out if you want to track migrations)
+# migrations/
+
+# Miscellaneous
+*.bak
+*.swp
+*~
+.cache/
+.tmp/
+temp/
