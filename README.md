@@ -1,1 +1,1 @@
-# UgandaTechConnect
+# UgandaTechConnect plateform
