@@ -1,0 +1,31 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h2><i class="fa-solid fa-diagram-project"></i> {{ program.name }}</h2>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title"><i class="fa-solid fa-align-left"></i> Description</h5>
+                <p class="card-text">{{ program.description|linebreaks }}</p>
+
+                <h5 class="card-title"><i class="fa-solid fa-link"></i> National Alignment</h5>
+                <p class="card-text">{{ program.national_alignment }}</p>
+
+                <h5 class="card-title"><i class="fa-solid fa-bullseye"></i> Focus Areas</h5>
+                <p class="card-text">{{ program.focus_areas }}</p>
+
+                <h5 class="card-title"><i class="fa-solid fa-layer-group"></i> Phases</h5>
+                <p class="card-text">{{ program.phases }}</p>
+            </div>
+            <div class="card-footer d-flex justify-content-between">
+                <a href="{% url 'core:program_update' program.pk %}" class="btn btn-outline-secondary"><i class="fa-solid fa-edit"></i> Edit</a>
+                <a href="{% url 'core:program_delete' program.pk %}" class="btn btn-outline-danger"><i class="fa-solid fa-trash"></i> Delete</a>
+                <a href="{% url 'core:program_list' %}" class="btn btn-outline-info"><i class="fa-solid fa-arrow-left"></i> Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
