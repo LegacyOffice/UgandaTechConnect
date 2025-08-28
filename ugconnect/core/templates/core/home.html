@@ -1,0 +1,35 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card shadow mb-4">
+      <div class="card-body text-center">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Uganda_crest.png" alt="Logo" width="80" class="mb-3">
+        <h1 class="display-5 fw-bold mb-3">Uganda Tech Connect</h1>
+        <p class="lead mb-4">Welcome to the Uganda Tech Connect platform! Explore collaborative programs, discover innovative projects, and connect with technology leaders across Uganda.</p>
+        <div class="d-flex justify-content-center gap-3 mb-3">
+          <a href="{% url 'core:program_list' %}" class="btn btn-primary btn-lg"><i class="fa-solid fa-list"></i> View Programs</a>
+          <a href="{% url 'core:program_create' %}" class="btn btn-success btn-lg"><i class="fa-solid fa-plus"></i> Add Program</a>
+        </div>
+        <form method="get" action="{% url 'core:program_list' %}" class="mb-3">
+          <div class="input-group">
+            <input type="text" name="search" class="form-control" placeholder="Search programs...">
+            <button class="btn btn-outline-primary" type="submit"><i class="fa-solid fa-search"></i> Search</button>
+          </div>
+        </form>
+        <div class="row mt-4">
+          <div class="col-md-12">
+            <div class="card bg-light mb-2">
+              <div class="card-body">
+                <h5 class="card-title"><i class="fa-solid fa-info-circle"></i> About</h5>
+                <p class="card-text">Uganda Tech Connect is dedicated to fostering innovation, collaboration, and skill development in emerging technology domains such as IoT, automation, and renewable energy.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
