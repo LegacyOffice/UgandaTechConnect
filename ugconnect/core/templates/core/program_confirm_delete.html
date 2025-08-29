@@ -1,0 +1,21 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="card shadow">
+            <div class="card-header bg-danger text-white">
+                <h2><i class="fa-solid fa-trash"></i> Delete Program</h2>
+            </div>
+            <div class="card-body">
+                <p>Are you sure you want to delete the program <strong>{{ program.name }}</strong>?</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash"></i> Yes, delete</button>
+                    <a href="{% url 'core:program_detail' program.pk %}" class="btn btn-secondary"><i class="fa-solid fa-times"></i> Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
