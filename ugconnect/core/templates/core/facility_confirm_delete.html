@@ -1,0 +1,18 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="mb-3">
+    <h1><i class="fa-solid fa-trash"></i> Delete Facility</h1>
+    <a href="{% url 'core:facility_list' %}" class="btn btn-outline-secondary"><i class="fa-solid fa-arrow-left"></i> Cancel</a>
+</div>
+
+<div class="alert alert-danger">
+    <i class="fa-solid fa-exclamation-triangle"></i>
+    Are you sure you want to delete <strong>{{ facility.name }}</strong>?
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash"></i> Confirm Delete</button>
+</form>
+{% endblock %}
