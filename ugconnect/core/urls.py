@@ -11,4 +11,13 @@ urlpatterns = [
     path('programs/<uuid:pk>/', views.ProgramDetailView.as_view(), name='program_detail'),
     path('programs/<uuid:pk>/edit/', views.ProgramUpdateView.as_view(), name='program_update'),
     path('programs/<uuid:pk>/delete/', views.ProgramDeleteView.as_view(), name='program_delete'),
+
+
+    # Facility URLs
+    path('facilities/', views.FacilityListView.as_view(), name='facility_list'),
+    path('facilities/new/', views.FacilityCreateView.as_view(), name='facility_create'),
+    path('facilities/<uuid:pk>/', views.FacilityDetailView.as_view(), name='facility_detail'),
+    path('facilities/<uuid:pk>/edit/', views.FacilityUpdateView.as_view(), name='facility_update'),
+    path('facilities/<uuid:pk>/delete/', views.FacilityDeleteView.as_view(), name='facility_delete'),
+
 ]
