@@ -12,7 +12,7 @@
         <!-- Main Navigation Cards -->
         <div class="row mb-4">
           <!-- Programs Section -->
-          <div class="col-md-4 mb-3">
+          <div class="col-md-3 mb-3">
             <div class="card h-100 border-primary">
               <div class="card-body text-center">
                 <i class="fa-solid fa-diagram-project fa-3x text-primary mb-3"></i>
@@ -31,7 +31,7 @@
           </div>
 
           <!-- Facilities Section -->
-          <div class="col-md-4 mb-3">
+          <div class="col-md-3 mb-3">
             <div class="card h-100 border-success">
               <div class="card-body text-center">
                 <i class="fa-solid fa-building fa-3x text-success mb-3"></i>
@@ -50,7 +50,7 @@
           </div>
 
           <!-- Equipment Section -->
-          <div class="col-md-4 mb-3">
+          <div class="col-md-3 mb-3">
             <div class="card h-100 border-warning">
               <div class="card-body text-center">
                 <i class="fa-solid fa-cogs fa-3x text-warning mb-3"></i>
@@ -67,11 +67,30 @@
               </div>
             </div>
           </div>
+
+          <!-- Projects Section -->
+          <div class="col-md-3 mb-3">
+            <div class="card h-100 border-info">
+              <div class="card-body text-center">
+                <i class="fa-solid fa-lightbulb fa-3x text-info mb-3"></i>
+                <h5 class="card-title">Projects</h5>
+                <p class="card-text">Student team projects and innovation initiatives</p>
+                <div class="d-grid gap-2">
+                  <a href="{% url 'core:project_list' %}" class="btn btn-outline-info">
+                    <i class="fa-solid fa-list"></i> View Projects
+                  </a>
+                  <a href="{% url 'core:project_create' %}" class="btn btn-info">
+                    <i class="fa-solid fa-plus"></i> Add Project
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Quick Search Section -->
         <div class="row mb-4">
-          <div class="col-md-4">
+          <div class="col-md-3">
             <form method="get" action="{% url 'core:program_list' %}">
               <div class="input-group">
                 <input type="text" name="search" class="form-control" placeholder="Search programs...">
@@ -81,7 +100,7 @@
               </div>
             </form>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
             <form method="get" action="{% url 'core:facility_list' %}">
               <div class="input-group">
                 <input type="text" name="search" class="form-control" placeholder="Search facilities...">
@@ -91,11 +110,21 @@
               </div>
             </form>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
             <form method="get" action="{% url 'core:equipment_list' %}">
               <div class="input-group">
                 <input type="text" name="search" class="form-control" placeholder="Search equipment...">
                 <button class="btn btn-outline-warning" type="submit">
+                  <i class="fa-solid fa-search"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+          <div class="col-md-3">
+            <form method="get" action="{% url 'core:project_list' %}">
+              <div class="input-group">
+                <input type="text" name="search" class="form-control" placeholder="Search projects...">
+                <button class="btn btn-outline-info" type="submit">
                   <i class="fa-solid fa-search"></i>
                 </button>
               </div>

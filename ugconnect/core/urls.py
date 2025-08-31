@@ -26,4 +26,10 @@ urlpatterns = [
     path('equipment/create/', views.EquipmentCreateView.as_view(), name='equipment_create'),
     path('equipment/<uuid:pk>/update/', views.EquipmentUpdateView.as_view(), name='equipment_update'),
     path('equipment/<uuid:pk>/delete/', views.EquipmentDeleteView.as_view(), name='equipment_delete'),
+
+    path('projects/', views.ProjectListView.as_view(), name='project_list'),
+    path('projects/<int:pk>/', views.ProjectDetailView.as_view(), name='project_detail'),
+    path('projects/create/', views.ProjectCreateView.as_view(), name='project_create'),
+    path('projects/<int:pk>/update/', views.ProjectUpdateView.as_view(), name='project_update'),
+    path('projects/<int:pk>/delete/', views.ProjectDeleteView.as_view(), name='project_delete'),
 ]

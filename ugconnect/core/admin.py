@@ -1,6 +1,6 @@
 
 from django.contrib import admin
-from .models import Program ,Equipment
+from .models import Program ,Equipment, Project
 
 @admin.register(Program)
 class ProgramAdmin(admin.ModelAdmin):
@@ -57,3 +57,9 @@ class EquipmentAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         return super().get_queryset(request).select_related('facility')
 
+@admin.register(Project)
+class ProjectAdmin(admin.ModelAdmin):
+    list_display = ('ProjectId', 'Title', 'ProgramId', 'FacilityId', 'NatureOfProject', 'InnovationFocus')
+    list_filter = ('NatureOfProject', 'InnovationFocus', 'PrototypeStage')
+    search_fields = ('Title', 'Description')
+    ordering = ('ProjectId',)

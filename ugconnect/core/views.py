@@ -2,7 +2,9 @@
 from django.urls import reverse_lazy
 from django.shortcuts import render 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Program, Facility, Equipment
+from .models import Program, Facility, Equipment, Project
+from .forms import ProjectForm
+
 
 def home(request):
     return render(request, 'core/home.html')
@@ -182,3 +184,38 @@ class EquipmentDeleteView(DeleteView):
     context_object_name = 'equipment'
     success_url = reverse_lazy('core:equipment_list')
 
+
+class ProjectListView(ListView):
+    model = Project
+    template_name = 'project_list.html'
+    context_object_name = 'projects'
+    paginate_by = 10
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get('search')
+        if search_query:
+            queryset = queryset.filter(Title__icontains=search_query)
+        return queryset
+
+class ProjectDetailView(DetailView):
+    model = Project
+    template_name = 'project_detail.html'
+    context_object_name = 'project'
+
+class ProjectCreateView(CreateView):
+    model = Project
+    form_class = ProjectForm
+    template_name = 'core/project_form.html'  # Add 'core/' prefix
+    success_url = reverse_lazy('core:project_list')  # Add app namespace
+
+class ProjectUpdateView(UpdateView):
+    model = Project
+    form_class = ProjectForm
+    template_name = 'core/project_form.html'  # Add 'core/' prefix
+    success_url = reverse_lazy('core:project_list')  # Add app namespace
+
+class ProjectDeleteView(DeleteView):
+    model = Project
+    template_name = 'project_confirm_delete.html'
+    success_url = reverse_lazy('project_list')

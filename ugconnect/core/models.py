@@ -2,6 +2,7 @@
 from django.db import models
 from django.core.validators import RegexValidator
 import uuid
+from django.urls import reverse
 
 class Program(models.Model):
     """
@@ -142,3 +143,40 @@ class Equipment(models.Model):
         verbose_name_plural = "Equipment"
         ordering = ['facility__name', 'name']
 
+class Project(models.Model):
+    NATURE_CHOICES = [
+        ('research', 'Research'),
+        ('prototype', 'Prototype'),
+        ('applied', 'Applied Work'),
+    ]
+    
+    INNOVATION_CHOICES = [
+        ('iot', 'IoT Devices'),
+        ('smart_home', 'Smart Home'),
+        ('renewable_energy', 'Renewable Energy'),
+        ('other', 'Other'),
+    ]
+    
+    STAGE_CHOICES = [
+        ('concept', 'Concept'),
+        ('prototype', 'Prototype'),
+        ('mvp', 'MVP'),
+        ('market_launch', 'Market Launch'),
+    ]
+    
+    ProjectId = models.AutoField(primary_key=True)
+    ProgramId = models.ForeignKey('Program', on_delete=models.CASCADE, related_name='projects')
+    FacilityId = models.ForeignKey('Facility', on_delete=models.CASCADE, related_name='projects')
+    Title = models.CharField(max_length=200)
+    NatureOfProject = models.CharField(max_length=20, choices=NATURE_CHOICES)
+    Description = models.TextField()
+    InnovationFocus = models.CharField(max_length=20, choices=INNOVATION_CHOICES)
+    PrototypeStage = models.CharField(max_length=20, choices=STAGE_CHOICES)
+    TestingRequirements = models.TextField()
+    CommercializationPlan = models.TextField()
+    
+    def __str__(self):
+        return self.Title
+    
+    def get_absolute_url(self):
+        return reverse('project_detail', kwargs={'pk': self.ProjectId})

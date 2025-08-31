@@ -1,0 +1,83 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>{{ project.Title }}</h2>
+        <div>
+            <a href="{% url 'core:project_update' project.ProjectId %}" class="btn btn-warning">
+                <i class="fa-solid fa-edit"></i> Edit
+            </a>
+            <a href="{% url 'core:project_list' %}" class="btn btn-secondary">
+                <i class="fa-solid fa-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Project Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Program:</div>
+                        <div class="col-md-8">{{ project.ProgramId }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Facility:</div>
+                        <div class="col-md-8">{{ project.FacilityId }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Nature of Project:</div>
+                        <div class="col-md-8">{{ project.get_NatureOfProject_display }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Innovation Focus:</div>
+                        <div class="col-md-8">{{ project.get_InnovationFocus_display }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Prototype Stage:</div>
+                        <div class="col-md-8">{{ project.get_PrototypeStage_display }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Description:</div>
+                        <div class="col-md-8">{{ project.Description }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Testing Requirements:</div>
+                        <div class="col-md-8">{{ project.TestingRequirements }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 fw-bold">Commercialization Plan:</div>
+                        <div class="col-md-8">{{ project.CommercializationPlan }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <!-- Participants Section (if implemented) -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Participants</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">Participant management will be implemented in a future release.</p>
+                </div>
+            </div>
+            
+            <!-- Outcomes Section (if implemented) -->
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Outcomes</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">Outcome tracking will be implemented in a future release.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
