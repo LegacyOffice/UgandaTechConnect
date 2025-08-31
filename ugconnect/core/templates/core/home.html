@@ -88,6 +88,7 @@
           </div>
         </div>
 
+        
         <!-- Quick Search Section -->
         <div class="row mb-4">
           <div class="col-md-3">
@@ -131,6 +132,36 @@
             </form>
           </div>
         </div>
+
+        <!-- Services Section -->
+<div class="col-md-4 mb-4">
+   <div class="card h-100 border-info">
+     <div class="card-body text-center">
+       <i class="fa-solid fa-tools fa-3x text-info mb-4"></i>
+       <h5 class="card-title">Services</h5>
+       <p class="card-text">Services offered by facilities, including machining, testing, training, and more</p>
+       <div class="d-grid gap-2">
+         <a href="{% url 'core:service_list' %}" class="btn btn-outline-info">
+           <i class="fa-solid fa-list"></i> View Services
+       </a>
+         <a href="{% url 'core:service_create' %}" class="btn btn-info">
+           <i class="fa-solid fa-plus"></i> Add Service
+         </a>
+       </div>
+     </div>
+   </div>
+ </div>
+        <div class="col-md-4">
+          <form method="get" action="{% url 'core:service_list' %}">
+            <div class="input-group">
+              <input type="text" name="search" class="form-control" placeholder="Search services...">
+              <button class="btn btn-outline-info" type="submit">
+                  <i class="fa-solid fa-search"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+
 
         <!-- About Section -->
         <div class="row">

@@ -32,4 +32,12 @@ urlpatterns = [
     path('projects/create/', views.ProjectCreateView.as_view(), name='project_create'),
     path('projects/<int:pk>/update/', views.ProjectUpdateView.as_view(), name='project_update'),
     path('projects/<int:pk>/delete/', views.ProjectDeleteView.as_view(), name='project_delete'),
+
+    # Service URLs
+    path('services/', views.ServiceListView.as_view(), name='service_list'),
+    path('services/add/', views.ServiceCreateView.as_view(), name='service_create'),
+    path('services/<uuid:pk>/', views.ServiceDetailView.as_view(), name='service_detail'),
+    path('services/<uuid:pk>/edit/', views.ServiceUpdateView.as_view(), name='service_edit'),
+    path('services/<uuid:pk>/delete/', views.ServiceDeleteView.as_view(), name='service_delete'),
 ]
+

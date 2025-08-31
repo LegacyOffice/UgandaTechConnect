@@ -1,6 +1,6 @@
 
 from django.contrib import admin
-from .models import Program ,Equipment, Project
+from .models import Program ,Equipment, Project, Service
 
 @admin.register(Program)
 class ProgramAdmin(admin.ModelAdmin):
@@ -55,8 +55,44 @@ class EquipmentAdmin(admin.ModelAdmin):
     )
     
     def get_queryset(self, request):
-        return super().get_queryset(request).select_related('facility')
+        return super().get_queryset(request).select_related('facility') 
 
+
+@admin.register(Service)
+class ServiceAdmin(admin.ModelAdmin):
+    """
+    Customizes the display of the Service model in the Django admin site
+    """
+    list_display = (
+        'name', 
+        'facility', 
+        'created_at',
+        'updated_at'
+    )
+    search_fields = (
+        'name', 
+        'description', 
+        'facility__name'
+    )
+    list_filter = (
+        'facility',
+        'created_at'
+    )
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('name', 'facility', 'description')
+        }),
+        ('Service Details', {
+            'fields': (
+                'operating_hours',
+            )
+        }),
+    )
+    raw_id_fields = ('facility',)  # Removed invalid 'required_equipment'
+    ordering = ('facility__name', 'name')
+    
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('facility')
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ('ProjectId', 'Title', 'ProgramId', 'FacilityId', 'NatureOfProject', 'InnovationFocus')
