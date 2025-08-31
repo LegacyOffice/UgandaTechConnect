@@ -18,6 +18,12 @@ urlpatterns = [
     path('facilities/new/', views.FacilityCreateView.as_view(), name='facility_create'),
     path('facilities/<uuid:pk>/', views.FacilityDetailView.as_view(), name='facility_detail'),
     path('facilities/<uuid:pk>/edit/', views.FacilityUpdateView.as_view(), name='facility_update'),
-    path('facilities/<uuid:pk>/delete/', views.FacilityDeleteView.as_view(), name='facility_delete'),
+    path('facilities/<uuid:pk>/delete/', views.FacilityDeleteView.as_view(), 
+    name='facility_delete'),
 
+    path('equipment/', views.EquipmentListView.as_view(), name='equipment_list'),
+    path('equipment/<uuid:pk>/', views.EquipmentDetailView.as_view(), name='equipment_detail'),
+    path('equipment/create/', views.EquipmentCreateView.as_view(), name='equipment_create'),
+    path('equipment/<uuid:pk>/update/', views.EquipmentUpdateView.as_view(), name='equipment_update'),
+    path('equipment/<uuid:pk>/delete/', views.EquipmentDeleteView.as_view(), name='equipment_delete'),
 ]

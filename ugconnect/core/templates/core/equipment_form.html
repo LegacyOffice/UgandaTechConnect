@@ -1,0 +1,182 @@
+<!-- templates/core/equipment_form.html -->
+{% extends 'core/base.html' %}
+
+{% block title %}
+{% if object %}Edit Equipment{% else %}Add Equipment{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fa-solid fa-cogs"></i>
+                        {% if object %}Edit Equipment: {{ object.name }}{% else %}Add New Equipment{% endif %}
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.name.id_for_label }}" class="form-label">
+                                    <strong>Equipment Name *</strong>
+                                </label>
+                                {{ form.name }}
+                                {% if form.name.errors %}
+                                    <div class="text-danger small">{{ form.name.errors }}</div>
+                                {% endif %}
+                                <div class="form-text">{{ form.name.help_text }}</div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.facility.id_for_label }}" class="form-label">
+                                    <strong>Facility *</strong>
+                                </label>
+                                {{ form.facility }}
+                                {% if form.facility.errors %}
+                                    <div class="text-danger small">{{ form.facility.errors }}</div>
+                                {% endif %}
+                                <div class="form-text">{{ form.facility.help_text }}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.inventory_code.id_for_label }}" class="form-label">
+                                    <strong>Inventory Code *</strong>
+                                </label>
+                                {{ form.inventory_code }}
+                                {% if form.inventory_code.errors %}
+                                    <div class="text-danger small">{{ form.inventory_code.errors }}</div>
+                                {% endif %}
+                                <div class="form-text">{{ form.inventory_code.help_text }}</div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check mt-4">
+                                    {{ form.is_operational }}
+                                    <label for="{{ form.is_operational.id_for_label }}" class="form-check-label">
+                                        <strong>Currently Operational</strong>
+                                    </label>
+                                </div>
+                                {% if form.is_operational.errors %}
+                                    <div class="text-danger small">{{ form.is_operational.errors }}</div>
+                                {% endif %}
+                                <div class="form-text">{{ form.is_operational.help_text }}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.usage_domain.id_for_label }}" class="form-label">
+                                    <strong>Usage Domain *</strong>
+                                </label>
+                                {{ form.usage_domain }}
+                                {% if form.usage_domain.errors %}
+                                    <div class="text-danger small">{{ form.usage_domain.errors }}</div>
+                                {% endif %}
+                                <div class="form-text">{{ form.usage_domain.help_text }}</div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.support_phase.id_for_label }}" class="form-label">
+                                    <strong>Support Phase *</strong>
+                                </label>
+                                {{ form.support_phase }}
+                                {% if form.support_phase.errors %}
+                                    <div class="text-danger small">{{ form.support_phase.errors }}</div>
+                                {% endif %}
+                                <div class="form-text">{{ form.support_phase.help_text }}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.capabilities.id_for_label }}" class="form-label">
+                                <strong>Capabilities</strong>
+                            </label>
+                            {{ form.capabilities }}
+                            {% if form.capabilities.errors %}
+                                <div class="text-danger small">{{ form.capabilities.errors }}</div>
+                            {% endif %}
+                            <div class="form-text">{{ form.capabilities.help_text }}</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.description.id_for_label }}" class="form-label">
+                                <strong>Description</strong>
+                            </label>
+                            {{ form.description }}
+                            {% if form.description.errors %}
+                                <div class="text-danger small">{{ form.description.errors }}</div>
+                            {% endif %}
+                            <div class="form-text">{{ form.description.help_text }}</div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'core:equipment_list' %}" class="btn btn-secondary">
+                                <i class="fa-solid fa-arrow-left"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa-solid fa-save"></i>
+                                {% if object %}Update Equipment{% else %}Create Equipment{% endif %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Style form fields to match Bootstrap-like appearance */
+#id_name,
+#id_inventory_code,
+#id_capabilities,
+#id_description {
+    display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    box-sizing: border-box;
+}
+
+#id_capabilities,
+#id_description {
+    min-height: 100px;
+}
+
+#id_facility,
+#id_usage_domain,
+#id_support_phase {
+    display: block;
+    width: 100%;
+    padding: .375rem 1.75rem .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    box-sizing: border-box;
+    appearance: none;
+}
+
+#id_is_operational {
+    width: 1.25em;
+    height: 1.25em;
+    margin-top: .1rem;
+    vertical-align: middle;
+}
+</style>
+{% endblock %}

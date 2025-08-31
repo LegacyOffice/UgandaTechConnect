@@ -2,7 +2,7 @@
 from django.urls import reverse_lazy
 from django.shortcuts import render 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Program, Facility 
+from .models import Program, Facility, Equipment
 
 def home(request):
     return render(request, 'core/home.html')
@@ -97,3 +97,88 @@ class FacilityDeleteView(DeleteView):
     template_name = 'core/facility_confirm_delete.html'
     context_object_name = 'facility'
     success_url = reverse_lazy('core:facility_list')
+
+class EquipmentListView(ListView):
+    model = Equipment
+    template_name = 'core/equipment_list.html'
+    context_object_name = 'equipment_list'
+    
+    def get_queryset(self):
+        queryset = super().get_queryset().select_related('facility')
+        
+        # Search functionality
+        search_query = self.request.GET.get('search', '').strip()
+        if search_query:
+            queryset = queryset.filter(
+                name__icontains=search_query
+            )
+        
+        # Filter by facility
+        facility_filter = self.request.GET.get('facility')
+        if facility_filter:
+            queryset = queryset.filter(facility_id=facility_filter)
+        
+        # Filter by usage domain
+        domain_filter = self.request.GET.get('domain')
+        if domain_filter:
+            queryset = queryset.filter(usage_domain=domain_filter)
+        
+        # Filter by support phase
+        phase_filter = self.request.GET.get('phase')
+        if phase_filter:
+            queryset = queryset.filter(support_phase=phase_filter)
+            
+        # Filter by operational status
+        operational_filter = self.request.GET.get('operational')
+        if operational_filter == 'true':
+            queryset = queryset.filter(is_operational=True)
+        elif operational_filter == 'false':
+            queryset = queryset.filter(is_operational=False)
+        
+        return queryset
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['facilities'] = Facility.objects.all().order_by('name')
+        context['usage_domains'] = Equipment.USAGE_DOMAINS
+        context['support_phases'] = Equipment.SUPPORT_PHASES
+        return context
+
+
+class EquipmentDetailView(DetailView):
+    model = Equipment
+    template_name = 'core/equipment_detail.html'
+    context_object_name = 'equipment'
+    
+    def get_queryset(self):
+        return super().get_queryset().select_related('facility')
+
+
+class EquipmentCreateView(CreateView):
+    model = Equipment
+    fields = [
+        'facility', 'name', 'capabilities', 'description', 
+        'inventory_code', 'usage_domain', 'support_phase', 'is_operational'
+    ]
+    template_name = 'core/equipment_form.html'
+    success_url = reverse_lazy('core:equipment_list')
+
+
+class EquipmentUpdateView(UpdateView):
+    model = Equipment
+    fields = [
+        'facility', 'name', 'capabilities', 'description', 
+        'inventory_code', 'usage_domain', 'support_phase', 'is_operational'
+    ]
+    template_name = 'core/equipment_form.html'
+    
+    def get_success_url(self):
+        return reverse_lazy('core:equipment_detail', kwargs={'pk': self.object.pk})
+
+
+class EquipmentDeleteView(DeleteView):
+    model = Equipment
+    template_name = 'core/equipment_confirm_delete.html'
+    context_object_name = 'equipment'
+    success_url = reverse_lazy('core:equipment_list')
+

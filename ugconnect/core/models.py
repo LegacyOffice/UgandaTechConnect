@@ -1,5 +1,6 @@
 
 from django.db import models
+from django.core.validators import RegexValidator
 import uuid
 
 class Program(models.Model):
@@ -54,3 +55,90 @@ class Facility(models.Model):
 
     class Meta:
         ordering = ['name']
+
+class Equipment(models.Model):
+    """
+    Represents machinery/tools available at a facility.
+    Based on the capstone requirements.
+    """
+    
+    USAGE_DOMAINS = [
+        ('ELECTRONICS', 'Electronics'),
+        ('MECHANICAL', 'Mechanical'),
+        ('IOT', 'IoT'),
+        ('SOFTWARE', 'Software'),
+        ('TESTING', 'Testing'),
+        ('FABRICATION', 'Fabrication'),
+    ]
+    
+    SUPPORT_PHASES = [
+        ('TRAINING', 'Training'),
+        ('PROTOTYPING', 'Prototyping'),
+        ('TESTING', 'Testing'),
+        ('COMMERCIALIZATION', 'Commercialization'),
+    ]
+    
+    equipment_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    facility = models.ForeignKey(
+        'Facility',  # Reference to your existing Facility model
+        on_delete=models.CASCADE,
+        related_name='equipment_set',
+        help_text="Facility that owns this equipment"
+    )
+    name = models.CharField(
+        max_length=200,
+        help_text="Equipment name (e.g., '3D Printer', 'CNC Machine')"
+    )
+    capabilities = models.TextField(
+        blank=True,
+        help_text="Functions it can perform (e.g., 'PLA/ABS printing, 0.1mm precision')"
+    )
+    description = models.TextField(
+        blank=True,
+        help_text="Overview of equipment purpose and specifications"
+    )
+    inventory_code = models.CharField(
+        max_length=50,
+        unique=True,
+        validators=[RegexValidator(
+            regex=r'^[A-Z0-9\-_]+$',
+            message='Inventory code must contain only uppercase letters, numbers, hyphens, and underscores'
+        )],
+        help_text="Tracking code (e.g., 'EQ-CNC-001', 'PRINTER-3D-A2')"
+    )
+    usage_domain = models.CharField(
+        max_length=20,
+        choices=USAGE_DOMAINS,
+        help_text="Primary domain this equipment serves"
+    )
+    support_phase = models.CharField(
+        max_length=20,
+        choices=SUPPORT_PHASES,
+        help_text="Which project phase this equipment primarily supports"
+    )
+    is_operational = models.BooleanField(
+        default=True,
+        help_text="Whether equipment is currently operational"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return f"{self.name} ({self.facility.name})"
+    
+    def clean(self):
+        """Custom validation"""
+        from django.core.exceptions import ValidationError
+        
+        if self.inventory_code:
+            # Ensure inventory code is uppercase
+            self.inventory_code = self.inventory_code.upper()
+    
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
+    class Meta:
+        verbose_name_plural = "Equipment"
+        ordering = ['facility__name', 'name']
+
