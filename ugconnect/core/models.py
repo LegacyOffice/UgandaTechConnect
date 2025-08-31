@@ -180,3 +180,45 @@ class Project(models.Model):
     
     def get_absolute_url(self):
         return reverse('project_detail', kwargs={'pk': self.ProjectId})
+    
+class Service(models.Model):
+    """
+    Represents the types of work a facility can perform.
+    """
+    CATEGORY_CHOICES = [
+        ('MACHINING', 'Machining'),
+        ('TESTING', 'Testing'),
+        ('TRAINING', 'Training'),
+        ('FABRICATION', 'Fabrication'),
+        ('CONSULTANCY', 'Consultancy'),
+    ]
+
+    SKILL_TYPE_CHOICES = [
+        ('HARDWARE', 'Hardware'),
+        ('SOFTWARE', 'Software'),
+        ('INTEGRATION', 'Integration'),
+        ('MULTIDISCIPLINARY', 'Multidisciplinary'),
+    ]
+
+    service_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    facility = models.ForeignKey(
+        'Facility',
+        on_delete=models.CASCADE,
+        related_name='services',
+        help_text="Facility that offers this service"
+    )
+    name = models.CharField(max_length=200, help_text="Service name (e.g., CNC machining, PCB fabrication)")
+    description = models.TextField(blank=True, help_text="Details of what the service does")
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, help_text="Category of the service")
+    skill_type = models.CharField(max_length=50, choices=SKILL_TYPE_CHOICES, help_text="Skill type supported by this service")
+    operating_hours = models.CharField(max_length=50, blank=True, null=True, help_text="E.g., 9:00 AM - 5:00 PM"
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.name} ({self.facility.name})"
+
+    class Meta:
+        ordering = ['facility__name', 'name']

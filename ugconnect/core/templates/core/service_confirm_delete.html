@@ -1,0 +1,80 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Delete Service{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">
+                        <i class="fa-solid fa-exclamation-triangle"></i>
+                        Confirm Service Deletion
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <i class="fa-solid fa-warning"></i>
+                        <strong>Warning:</strong> This action will permanently remove all related records!
+                    </div>
+                    
+                    <h5>Confirm deletion of service:</h5>
+                    
+                    <div class="bg-light p-3 rounded mb-4">
+                        <div class="row mb-2">
+                            <div class="col-sm-4"><strong>Service Name:</strong></div>
+                            <div class="col-sm-8">{{ service.name }}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-4"><strong>Facility:</strong></div>
+                            <div class="col-sm-8">
+                                <a href="{% url 'core:facility_detail' service.facility.facility_id %}" class="text-decoration-none">
+                                    {{ service.facility.name }}
+                                </a>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-4"><strong>Category:</strong></div>
+                            <div class="col-sm-8">
+                                <span class="badge bg-primary">{{ service.get_category_display }}</span>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-4"><strong>Service Type:</strong></div>
+                            <div class="col-sm-8">
+                                <span class="badge bg-info">{{ service.get_service_type_display }}</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4"><strong>Status:</strong></div>
+                            <div class="col-sm-8">
+                                <span class="badge bg-{% if service.is_active %}success{% else %}secondary{% endif %}">
+                                    {% if service.is_active %}Active{% else %}Inactive{% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'core:service_detail' service.pk %}" class="btn btn-secondary">
+                                <i class="fa-solid fa-arrow-left"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fa-solid fa-trash"></i> Confirm Delete
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.border-danger { border-color: #dc3545!important; }
+.card-header { border-radius: calc(0.375rem - 1px) calc(0.375rem - 1px) 0 0; }
+</style>
+{% endblock %}

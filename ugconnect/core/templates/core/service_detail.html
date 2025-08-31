@@ -1,0 +1,108 @@
+{% extends 'core/base.html' %}
+
+{% block title %}{{ service.name }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>{{ service.name }}</h2>
+                <div>
+                    <a href="{% url 'core:service_edit' service.pk %}" class="btn btn-primary">
+                        <i class="fa-solid fa-pen-to-square"></i> Edit
+                    </a>
+                    <a href="{% url 'core:service_delete' service.pk %}" class="btn btn-danger">
+                        <i class="fa-solid fa-trash"></i> Delete
+                    </a>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Service Details</h5>
+                            
+                            <div class="row mb-3">
+                                <div class="col-sm-4"><strong>Facility:</strong></div>
+                                <div class="col-sm-8">
+                                    <a href="{% url 'core:facility_detail' service.facility.facility_id %}" class="text-decoration-none">
+                                        {{ service.facility.name }}
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-sm-4"><strong>Category:</strong></div>
+                                <div class="col-sm-8">
+                                    <span class="badge bg-primary">{{ service.get_category_display }}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-sm-4"><strong>Service Type:</strong></div>
+                                <div class="col-sm-8">
+                                    <span class="badge bg-info">{{ service.get_service_type_display }}</span>
+                                </div>
+                            </div>
+                            
+                            {% if service.description %}
+                            <div class="row mb-3">
+                                <div class="col-sm-4"><strong>Description:</strong></div>
+                                <div class="col-sm-8">{{ service.description }}</div>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="row mb-3">
+                                <div class="col-sm-4"><strong>Status:</strong></div>
+                                <div class="col-sm-8">
+                                    <span class="badge bg-{% if service.is_active %}success{% else %}secondary{% endif %}">
+                                        {% if service.is_active %}Active{% else %}Inactive{% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            {% if service.requirements %}
+                            <div class="row mb-3">
+                                <div class="col-sm-4"><strong>Requirements:</strong></div>
+                                <div class="col-sm-8">{{ service.requirements }}</div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Quick Actions</h5>
+                            <div class="d-grid gap-2">
+                                <a href="{% url 'core:service_list' %}" class="btn btn-outline-secondary">
+                                    <i class="fa-solid fa-arrow-left"></i> Back to Services
+                                </a>
+                                <a href="{% url 'core:facility_detail' service.facility.facility_id %}" class="btn btn-outline-info">
+                                    <i class="fa-solid fa-building"></i> View Facility
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.badge {
+    font-size: 0.9em;
+    padding: 0.6em 1em;
+    border-radius: 1.5em;
+}
+
+.bg-primary { background-color: #0d6efd!important; }
+.bg-info { background-color: #0dcaf0!important; }
+.bg-success { background-color: #198754!important; }
+.bg-secondary { background-color: #6c757d!important; }
+</style>
+{% endblock %}

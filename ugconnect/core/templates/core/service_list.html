@@ -1,0 +1,96 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Services{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Services</h2>
+                <a href="{% url 'core:service_create' %}" class="btn btn-primary">Add Service</a>
+            </div>
+
+            <!-- Enhanced Filters -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Search</label>
+                            <input type="text" name="search" class="form-control" 
+                                   value="{{ request.GET.search }}" placeholder="Service name or description">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Facility</label>
+                            <select name="facility" class="form-select">
+                                <option value="">All Facilities</option>
+                                {% for facility in facilities %}
+                                <option value="{{ facility.facility_id }}" 
+                                        {% if request.GET.facility == facility.facility_id|stringformat:"s" %}selected{% endif %}>
+                                    {{ facility.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Category</label>
+                            <select name="category" class="form-select">
+                                <option value="">All Categories</option>
+                                {% for code, name in service_categories %}
+                                <option value="{{ code }}" {% if request.GET.category == code %}selected{% endif %}>
+                                    {{ name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="submit" class="btn btn-outline-secondary">Filter</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Service Cards -->
+            {% if service_list %}
+            <div class="row">
+                {% for service in service_list %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h5 class="card-title">{{ service.name }}</h5>
+                                <span class="badge bg-{% if service.is_available %}success{% else %}warning{% endif %}">
+                                    {% if service.is_available %}Available{% else %}Unavailable{% endif %}
+                                </span>
+                            </div>
+                            <p class="card-text">
+                                <strong>Facility:</strong> {{ service.facility.name }}<br>
+                                <strong>Category:</strong> {{ service.get_category_display }}<br>
+                                <strong>Skill Type:</strong> {{ service.get_skill_type_display }}<br>
+                                {% if service.operating_hours %}
+                                <strong>Hours:</strong> {{ service.operating_hours }}
+                                {% endif %}
+                            </p>
+                            {% if service.description %}
+                            <p class="card-text">{{ service.description|truncatewords:15 }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="card-footer">
+                            <a href="{% url 'core:service_detail' service.service_id %}" 
+                               class="btn btn-sm btn-outline-primary">View Details</a>
+                            <a href="{% url 'core:service_update' service.service_id %}" 
+                               class="btn btn-sm btn-outline-secondary">Edit</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                No services found. <a href="{% url 'core:service_create' %}">Add the first service</a>.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
