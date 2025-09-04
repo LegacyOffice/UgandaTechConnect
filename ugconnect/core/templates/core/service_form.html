@@ -55,14 +55,14 @@
                             </div>
                             
                             <div class="col-md-6 mb-3">
-                                <label for="{{ form.service_type.id_for_label }}" class="form-label">
-                                    <strong>Service Type *</strong>
+                                <label for="{{ form.skill_type.id_for_label }}" class="form-label">
+                                    <strong>Skill Type *</strong>
                                 </label>
-                                {{ form.service_type }}
-                                {% if form.service_type.errors %}
-                                    <div class="text-danger small">{{ form.service_type.errors }}</div>
+                                {{ form.skill_type }}
+                                {% if form.skill_type.errors %}
+                                    <div class="text-danger small">{{ form.skill_type.errors }}</div>
                                 {% endif %}
-                                <div class="form-text">{{ form.service_type.help_text }}</div>
+                                <div class="form-text">{{ form.skill_type.help_text }}</div>
                             </div>
                         </div>
 

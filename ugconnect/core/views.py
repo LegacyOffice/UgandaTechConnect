@@ -220,43 +220,31 @@ class ProjectDeleteView(DeleteView):
     success_url = reverse_lazy('project_list')
 
 
-## SERVICE VIEWS ##
+# Service view
 class ServiceListView(ListView):
     model = Service
     template_name = 'core/service_list.html'
     context_object_name = 'services'
-    
 
     def get_queryset(self):
-        queryset = super().get_queryset().select_related('facility')
+        qs = super().get_queryset()
+        search = self.request.GET.get('search', '')
+        facility = self.request.GET.get('facility')
+        category = self.request.GET.get('category')
 
-        # Search functionality
-        search_query = self.request.GET.get('search', '').strip()
-        if search_query:
-            queryset = queryset.filter(name__icontains=search_query)
+        if search:
+            qs = qs.filter(name__icontains=search)
+        if facility:
+            qs = qs.filter(facility__facility_id=facility)
+        if category:
+            qs = qs.filter(category=category)
 
-        # Filter by facility
-        facility_filter = self.request.GET.get('facility')
-        if facility_filter:
-            queryset = queryset.filter(facility_id=facility_filter)
-
-        # Filter by category
-        category_filter = self.request.GET.get('category')
-        if category_filter:
-            queryset = queryset.filter(category=category_filter)
-
-        # Filter by skill type
-        skill_filter = self.request.GET.get('skill')
-        if skill_filter:
-            queryset = queryset.filter(skill_type=skill_filter)
-
-        return queryset
+        return qs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['facilities'] = Facility.objects.all().order_by('name')
-        context['categories'] = dict(Service.CATEGORY_CHOICES)
-        context['skill_types'] = dict(Service.SKILL_TYPE_CHOICES)
+        context['facilities'] = Facility.objects.all()
+        context['service_categories'] = Service.CATEGORY_CHOICES  # your model choices
         return context
 
 
@@ -273,8 +261,10 @@ class ServiceCreateView(CreateView):
     model = Service
     fields = ['facility', 'name', 'description', 'category', 'skill_type', 'operating_hours']
     template_name = 'core/service_form.html'
-    success_url = reverse_lazy('core:service_list')
-    
+
+    def get_success_url(self):
+        # Redirect to the detail page of the newly created service
+        return reverse_lazy('core:service_detail', kwargs={'pk': self.object.pk})
 
 class ServiceUpdateView(UpdateView):
     model = Service
@@ -282,11 +272,11 @@ class ServiceUpdateView(UpdateView):
     template_name = 'core/service_form.html'
 
     def get_success_url(self):
-        return reverse_lazy('core:service_list', kwargs={'pk': self.object.pk})
-     
+        return reverse_lazy('core:service_detail', kwargs={'pk': self.object.pk})
+
 
 class ServiceDeleteView(DeleteView):
     model = Service
     template_name = 'core/service_confirm_delete.html'
     context_object_name = 'service'
-    success_url = reverse_lazy('core:service_detail')
+    success_url = reverse_lazy('core:service_list')
