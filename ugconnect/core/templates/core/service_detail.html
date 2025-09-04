@@ -9,7 +9,7 @@
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2>{{ service.name }}</h2>
                 <div>
-                    <a href="{% url 'core:service_edit' service.pk %}" class="btn btn-primary">
+                    <a href="{% url 'core:service_update' service.pk %}" class="btn btn-primary">
                         <i class="fa-solid fa-pen-to-square"></i> Edit
                     </a>
                     <a href="{% url 'core:service_delete' service.pk %}" class="btn btn-danger">
@@ -22,7 +22,7 @@
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Service Details</h5>
+                            <h5 class="card-title"><Service class="name"></Service></h5>
                             
                             <div class="row mb-3">
                                 <div class="col-sm-4"><strong>Facility:</strong></div>
@@ -32,19 +32,15 @@
                                     </a>
                                 </div>
                             </div>
-                            
                             <div class="row mb-3">
-                                <div class="col-sm-4"><strong>Category:</strong></div>
-                                <div class="col-sm-8">
-                                    <span class="badge bg-primary">{{ service.get_category_display }}</span>
+                                <div class="col-sm-4" align-items-start><strong>Category:</strong></div>
+                                <div class="col-sm-8">{{ service.get_category_display|default:"N/A" }}</div>
                                 </div>
                             </div>
                             
                             <div class="row mb-3">
-                                <div class="col-sm-4"><strong>Service Type:</strong></div>
-                                <div class="col-sm-8">
-                                    <span class="badge bg-info">{{ service.get_service_type_display }}</span>
-                                </div>
+                                <div class="col-sm-4"><strong>Skill Type:</strong></div>
+                                <div class="col-sm-8">{{ service.get_skill_type_display|default:"N/A" }}</div>
                             </div>
                             
                             {% if service.description %}
@@ -53,15 +49,6 @@
                                 <div class="col-sm-8">{{ service.description }}</div>
                             </div>
                             {% endif %}
-                            
-                            <div class="row mb-3">
-                                <div class="col-sm-4"><strong>Status:</strong></div>
-                                <div class="col-sm-8">
-                                    <span class="badge bg-{% if service.is_active %}success{% else %}secondary{% endif %}">
-                                        {% if service.is_active %}Active{% else %}Inactive{% endif %}
-                                    </span>
-                                </div>
-                            </div>
                             
                             {% if service.requirements %}
                             <div class="row mb-3">
