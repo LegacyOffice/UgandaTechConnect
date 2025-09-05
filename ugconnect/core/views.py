@@ -2,7 +2,7 @@
 from django.urls import reverse_lazy
 from django.shortcuts import render 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Program, Facility, Equipment, Project, Service, Participant
+from .models import Program, Facility, Equipment, Project, Service, Participant, Outcome
 from .forms import ProjectForm
 from django.urls import reverse_lazy
 from .forms import ParticipantForm
@@ -352,3 +352,35 @@ class UnifiedSearchView(ListView):
         context.update(self.results_dict)
         context['query'] = self.request.GET.get('q', '')
         return context
+class OutcomeListView(ListView):
+    model = Outcome
+    template_name = 'core/outcome_list.html'
+    context_object_name = 'outcomes'
+    
+    def get_queryset(self):
+        # You can add filtering/sorting here if needed
+        return Outcome.objects.all().select_related('ProjectId')
+
+class OutcomeDetailView(DetailView):
+    model = Outcome
+    template_name = 'core/outcome_detail.html'
+    context_object_name = 'outcome'
+
+class OutcomeCreateView(CreateView):
+    model = Outcome
+    template_name = 'core/outcome_form.html'
+    fields = '__all__'
+    success_url = reverse_lazy('outcome_list')
+
+class OutcomeUpdateView(UpdateView):
+    model = Outcome
+    template_name = 'core/outcome_form.html'
+    fields = '__all__'
+    
+    def get_success_url(self):
+        return reverse_lazy('outcome_detail', kwargs={'pk': self.object.pk})
+
+class OutcomeDeleteView(DeleteView):
+    model = Outcome
+    template_name = 'core/outcome_confirm_delete.html'
+    success_url = reverse_lazy('outcome_list')

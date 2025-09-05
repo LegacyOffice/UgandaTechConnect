@@ -50,5 +50,11 @@ urlpatterns = [
     path('participants/<int:pk>/update/', ParticipantUpdateView.as_view(), name='participant_update'),
     path('participants/<int:pk>/delete/', ParticipantDeleteView.as_view(), name='participant_delete'),
     path('search/', UnifiedSearchView.as_view(), name='unified_search'),
+
+    path('outcomes/', views.OutcomeListView.as_view(), name='outcome_list'),
+    path('outcome/<int:pk>/', views.OutcomeDetailView.as_view(), name='outcome_detail'),
+    path('outcome/new/', views.OutcomeCreateView.as_view(), name='outcome_create'),
+    path('outcome/<int:pk>/edit/', views.OutcomeUpdateView.as_view(), name='outcome_update'),
+    path('outcome/<int:pk>/delete/', views.OutcomeDeleteView.as_view(), name='outcome_delete'),
 ]
 

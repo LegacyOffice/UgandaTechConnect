@@ -271,3 +271,54 @@ class Participant(models.Model):
 
     def __str__(self):
         return self.full_name
+class Outcome(models.Model):
+    # Outcome Type Choices
+    CAD = 'CAD'
+    PCB = 'PCB'
+    PROTOTYPE = 'Prototype'
+    REPORT = 'Report'
+    BUSINESS_PLAN = 'Business Plan'
+    OUTCOME_TYPE_CHOICES = [
+        (CAD, 'CAD'),
+        (PCB, 'PCB'),
+        (PROTOTYPE, 'Prototype'),
+        (REPORT, 'Report'),
+        (BUSINESS_PLAN, 'Business Plan'),
+    ]
+    
+    # Commercialization Status Choices
+    DEMOED = 'Demoed'
+    MARKET_LINKED = 'Market Linked'
+    LAUNCHED = 'Launched'
+    COMMERCIAL_STATUS_CHOICES = [
+        (DEMOED, 'Demoed'),
+        (MARKET_LINKED, 'Market Linked'),
+        (LAUNCHED, 'Launched'),
+    ]
+    
+    Outcomeld = models.AutoField(primary_key=True)
+    ProjectId = models.ForeignKey(
+        'Project',  # Assuming you have a Project model
+        on_delete=models.CASCADE,
+        related_name='outcomes'
+    )
+    Title = models.CharField(max_length=200)
+    Description = models.TextField(blank=True)
+    ArtifactLink = models.URLField(max_length=500, blank=True)
+    OutcomeType = models.CharField(
+        max_length=20,
+        choices=OUTCOME_TYPE_CHOICES,
+        default=REPORT
+    )
+    QualityCertification = models.CharField(max_length=200, blank=True)
+    CommercializationStatus = models.CharField(
+        max_length=20,
+        choices=COMMERCIAL_STATUS_CHOICES,
+        blank=True
+    )
+    
+    def __str__(self):
+        return self.Title
+    
+    def get_absolute_url(self):
+        return reverse('outcome_detail', kwargs={'pk': self.pk})

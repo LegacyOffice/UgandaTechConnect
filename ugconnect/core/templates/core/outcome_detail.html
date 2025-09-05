@@ -1,0 +1,77 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-10">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2><i class="fa-solid fa-diagram-project"></i> Outcome Details</h2>
+      <div class="btn-group" role="group">
+        <a href="{% url 'core:outcome_update' outcome.pk %}" class="btn btn-warning">
+          <i class="fa-solid fa-pen-to-square"></i> Edit
+        </a>
+        <a href="{% url 'core:outcome_delete' outcome.pk %}" class="btn btn-danger">
+          <i class="fa-solid fa-trash"></i> Delete
+        </a>
+        <a href="{% url 'core:outcome_list' %}" class="btn btn-secondary">
+          <i class="fa-solid fa-list"></i> Back to List
+        </a>
+      </div>
+    </div>
+
+    <div class="card shadow">
+      <div class="card-body">
+        <div class="row mb-4">
+          <div class="col-md-8">
+            <h3 class="card-title">{{ outcome.Title }}</h3>
+            <p class="text-muted">Outcome ID: {{ outcome.Outcomeld }}</p>
+          </div>
+          <div class="col-md-4 text-end">
+            <span class="badge bg-info fs-6">{{ outcome.OutcomeType }}</span>
+            {% if outcome.CommercializationStatus %}
+            <span class="badge 
+              {% if outcome.CommercializationStatus == 'Launched' %}bg-success
+              {% elif outcome.CommercializationStatus == 'Market Linked' %}bg-warning
+              {% elif outcome.CommercializationStatus == 'Demoed' %}bg-primary
+              {% else %}bg-secondary{% endif %} fs-6">
+              {{ outcome.CommercializationStatus }}
+            </span>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <h5><i class="fa-solid fa-diagram-project"></i> Project</h5>
+              <p>{{ outcome.ProjectId }}</p>
+            </div>
+
+            <div class="mb-3">
+              <h5><i class="fa-solid fa-link"></i> Artifact Link</h5>
+              {% if outcome.ArtifactLink %}
+              <a href="{{ outcome.ArtifactLink }}" target="_blank" class="text-truncate d-block">
+                {{ outcome.ArtifactLink }}
+              </a>
+              {% else %}
+              <p class="text-muted">Not provided</p>
+              {% endif %}
+            </div>
+
+            <div class="mb-3">
+              <h5><i class="fa-solid fa-certificate"></i> Quality Certification</h5>
+              <p>{{ outcome.QualityCertification|default:"Not provided" }}</p>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="mb-3">
+              <h5><i class="fa-solid fa-file-lines"></i> Description</h5>
+              <p>{{ outcome.Description|default:"No description provided" }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
