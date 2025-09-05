@@ -249,7 +249,7 @@ class ServiceListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['facilities'] = Facility.objects.all()
-        context['service_categories'] = Service.CATEGORY_CHOICES  # your model choices
+        context['service_categories'] = Service.CATEGORY_CHOICES  
         return context
 
 
@@ -268,7 +268,6 @@ class ServiceCreateView(CreateView):
     template_name = 'core/service_form.html'
 
     def get_success_url(self):
-        # Redirect to the detail page of the newly created service
         return reverse_lazy('core:service_detail', kwargs={'pk': self.object.pk})
 
 class ServiceUpdateView(UpdateView):
