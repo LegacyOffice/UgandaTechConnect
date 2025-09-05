@@ -1,0 +1,10 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<h1>Delete {{ object.full_name }}?</h1>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Yes, Delete</button>
+</form>
+<a href="{% url 'core:participant_list' %}">Cancel</a>
+{% endblock %}

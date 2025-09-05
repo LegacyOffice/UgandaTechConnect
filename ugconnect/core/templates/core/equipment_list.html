@@ -10,55 +10,6 @@
                 <h2>Equipment</h2>
                 <a href="{% url 'core:equipment_create' %}" class="btn btn-primary">Add Equipment</a>
             </div>
-
-            <!-- Filters -->
-            <div class="card mb-4">
-                <div class="card-body">
-                    <form method="get" class="row g-3">
-                        <div class="col-md-3">
-                            <label class="form-label">Search</label>
-                            <input type="text" name="search" class="form-control" value="{{ request.GET.search }}">
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label">Facility</label>
-                            <select name="facility" class="form-select">
-                                <option value="">All Facilities</option>
-                                {% for facility in facilities %}
-                                <option value="{{ facility.facility_id }}" {% if request.GET.facility == facility.facility_id|stringformat:"s" %}selected{% endif %}>
-                                    {{ facility.name }}
-                                </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label">Domain</label>
-                            <select name="domain" class="form-select">
-                                <option value="">All Domains</option>
-                                {% for domain_code, domain_name in usage_domains %}
-                                <option value="{{ domain_code }}" {% if request.GET.domain == domain_code %}selected{% endif %}>
-                                    {{ domain_name }}
-                                </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label">Phase</label>
-                            <select name="phase" class="form-select">
-                                <option value="">All Phases</option>
-                                {% for phase_code, phase_name in support_phases %}
-                                <option value="{{ phase_code }}" {% if request.GET.phase == phase_code %}selected{% endif %}>
-                                    {{ phase_name }}
-                                </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-md-2 d-flex align-items-end">
-                            <button type="submit" class="btn btn-outline-secondary">Filter</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
             <!-- Equipment List -->
             {% if equipment_list %}
             <div class="row">

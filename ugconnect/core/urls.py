@@ -2,6 +2,11 @@
 
 from django.urls import path
 from . import views
+from .views import (
+    ParticipantListView, ParticipantDetailView, ParticipantCreateView,
+    ParticipantUpdateView, ParticipantDeleteView
+)
+from .views import UnifiedSearchView
 app_name = 'core'
 
 urlpatterns = [
@@ -39,5 +44,12 @@ urlpatterns = [
     path('services/<uuid:pk>/', views.ServiceDetailView.as_view(), name='service_detail'),
     path('services/<uuid:pk>/update/', views.ServiceUpdateView.as_view(), name='service_update'),
     path('services/<uuid:pk>/delete/', views.ServiceDeleteView.as_view(), name='service_delete'),
+
+    path('participants/', ParticipantListView.as_view(), name='participant_list'),
+    path('participants/<int:pk>/', ParticipantDetailView.as_view(), name='participant_detail'),
+    path('participants/create/', ParticipantCreateView.as_view(), name='participant_create'),
+    path('participants/<int:pk>/update/', ParticipantUpdateView.as_view(), name='participant_update'),
+    path('participants/<int:pk>/delete/', ParticipantDeleteView.as_view(), name='participant_delete'),
+    path('search/', UnifiedSearchView.as_view(), name='unified_search'),
 ]
 

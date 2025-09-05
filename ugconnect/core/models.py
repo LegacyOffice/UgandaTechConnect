@@ -222,3 +222,53 @@ class Service(models.Model):
 
     class Meta:
         ordering = ['facility__name', 'name']
+        
+        
+
+class Participant(models.Model):
+    AFFILIATION_CHOICES = [
+        ('CS', 'Computer Science'),
+        ('SE', 'Software Engineering'),
+        ('Engineering', 'Engineering'),
+        ('Other', 'Other'),
+    ]
+
+    SPECIALIZATION_CHOICES = [
+        ('Software', 'Software'),
+        ('Hardware', 'Hardware'),
+        ('Business', 'Business'),
+    ]
+
+    INSTITUTION_CHOICES = [
+        ('SCIT', 'SCIT'),
+        ('CEDAT', 'CEDAT'),
+        ('UniPod', 'UniPod'),
+        ('UIRI', 'UIRI'),
+        ('Lwera', 'Lwera'),
+    ]
+
+    ROLE_CHOICES = [
+        ('Student', 'Student'),
+        ('Lecturer', 'Lecturer'),
+        ('Contributor', 'Contributor'),
+    ]
+
+    SKILL_ROLE_CHOICES = [
+        ('Developer', 'Developer'),
+        ('Engineer', 'Engineer'),
+        ('Designer', 'Designer'),
+        ('Business Lead', 'Business Lead'),
+    ]
+
+    project = models.ForeignKey('Project', on_delete=models.CASCADE, related_name='participants')
+    full_name = models.CharField(max_length=255)
+    email = models.EmailField(unique=True)
+    affiliation = models.CharField(max_length=50, choices=AFFILIATION_CHOICES)
+    specialization = models.CharField(max_length=50, choices=SPECIALIZATION_CHOICES)
+    cross_skill_trained = models.BooleanField(default=False)
+    institution = models.CharField(max_length=100, choices=INSTITUTION_CHOICES)
+    role_on_project = models.CharField(max_length=50, choices=ROLE_CHOICES)
+    skill_role = models.CharField(max_length=50, choices=SKILL_ROLE_CHOICES)
+
+    def __str__(self):
+        return self.full_name

@@ -2,8 +2,13 @@
 from django.urls import reverse_lazy
 from django.shortcuts import render 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Program, Facility, Equipment, Project, Service
+from .models import Program, Facility, Equipment, Project, Service, Participant
 from .forms import ProjectForm
+from django.urls import reverse_lazy
+from .forms import ParticipantForm
+from django.db.models import Q
+
+
 
 def home(request):
     return render(request, 'core/home.html')
@@ -280,3 +285,71 @@ class ServiceDeleteView(DeleteView):
     template_name = 'core/service_confirm_delete.html'
     context_object_name = 'service'
     success_url = reverse_lazy('core:service_list')
+    
+    
+
+class ParticipantListView(ListView):
+    model = Participant
+    template_name = 'core/participant_list.html'
+    context_object_name = 'participants'
+
+class ParticipantDetailView(DetailView):
+    model = Participant
+    template_name = 'core/participant_detail.html'
+
+class ParticipantCreateView(CreateView):
+    model = Participant
+    form_class = ParticipantForm
+    template_name = 'core/participant_form.html'
+    success_url = reverse_lazy('core:participant_list')
+
+class ParticipantUpdateView(UpdateView):
+    model = Participant
+    form_class = ParticipantForm
+    template_name = 'core/participant_form.html'
+    success_url = reverse_lazy('core:participant_list')
+
+class ParticipantDeleteView(DeleteView):
+    model = Participant
+    template_name = 'core/participant_confirm_delete.html'
+    success_url = reverse_lazy('core:participant_list')
+    
+
+class UnifiedSearchView(ListView):
+    template_name = 'core/search_results.html'
+    context_object_name = 'results'
+
+    def get_queryset(self):
+        query = self.request.GET.get('q', '').strip()
+    
+        programs = Program.objects.none()
+        facilities = Facility.objects.none()
+        equipment = Equipment.objects.none()
+        projects = Project.objects.none()
+        services = Service.objects.none()
+        participants = Participant.objects.none()
+
+        if query:
+            programs = Program.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
+            facilities = Facility.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
+            equipment = Equipment.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
+            projects = Project.objects.filter(Q(Title__icontains=query) | Q(Description__icontains=query))
+            services = Service.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
+            participants = Participant.objects.filter(Q(full_name__icontains=query) | Q(email__icontains=query))
+            
+        self.results_dict = {
+            'programs': programs,
+            'facilities': facilities,
+            'equipment': equipment,
+            'projects': projects,
+            'services': services,
+            'participants': participants,
+        }
+        
+        return []
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(self.results_dict)
+        context['query'] = self.request.GET.get('q', '')
+        return context
