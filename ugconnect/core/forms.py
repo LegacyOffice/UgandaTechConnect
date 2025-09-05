@@ -1,5 +1,5 @@
 from django import forms
-from .models import Project
+from .models import Project, Participant
 
 class ProjectForm(forms.ModelForm):
     class Meta:
@@ -13,4 +13,15 @@ class ProjectForm(forms.ModelForm):
             'Description': forms.Textarea(attrs={'rows': 4}),
             'TestingRequirements': forms.Textarea(attrs={'rows': 4}),
             'CommercializationPlan': forms.Textarea(attrs={'rows': 4}),
+        }
+        
+        
+
+
+class ParticipantForm(forms.ModelForm):
+    class Meta:
+        model = Participant
+        fields = '__all__'  
+        widgets = {
+            'cross_skill_trained': forms.CheckboxInput(),
         }

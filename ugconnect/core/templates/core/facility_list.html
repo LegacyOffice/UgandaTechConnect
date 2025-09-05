@@ -9,13 +9,6 @@
     </div>
 </div>
 
-<form method="get" class="mb-4">
-    <div class="input-group">
-        <input type="text" name="search" class="form-control" placeholder="Search facilities..." value="{{ request.GET.search }}">
-        <button class="btn btn-outline-primary" type="submit"><i class="fa-solid fa-search"></i> Search</button>
-    </div>
-</form>
-
 {% if facilities %}
     <div class="row row-cols-1 row-cols-md-2 g-4">
         {% for facility in facilities %}

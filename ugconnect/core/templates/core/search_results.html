@@ -1,0 +1,132 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Search Results</h1>
+
+    {% if query %}
+        <p class="lead">Showing results for: <strong>"{{ query }}"</strong></p>
+
+        {% if programs|length > 0 or facilities|length > 0 or equipment|length > 0 or projects|length > 0 or services|length > 0 or participants|length > 0 %}
+            
+            {% if programs %}
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h2><i class="fa-solid fa-list"></i> Programs ({{ programs|length }})</h2>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            {% for program in programs %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <a href="{% url 'core:program_detail' program.pk %}">{{ program.name }}</a>
+                                    <span class="badge bg-secondary rounded-pill">Program</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if facilities %}
+                <div class="card mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h2><i class="fa-solid fa-building"></i> Facilities ({{ facilities|length }})</h2>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            {% for facility in facilities %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <a href="{% url 'core:facility_detail' facility.pk %}">{{ facility.name }}</a>
+                                    <span class="badge bg-secondary rounded-pill">Facility</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if equipment %}
+                <div class="card mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h2><i class="fa-solid fa-screwdriver-wrench"></i> Equipment ({{ equipment|length }})</h2>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            {% for item in equipment %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <a href="{% url 'core:equipment_detail' item.pk %}">{{ item.name }}</a>
+                                    <span class="badge bg-secondary rounded-pill">Equipment</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if projects %}
+                <div class="card mb-4">
+                    <div class="card-header bg-warning text-dark">
+                        <h2><i class="fa-solid fa-rocket"></i> Projects ({{ projects|length }})</h2>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            {% for project in projects %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <a href="{% url 'core:project_detail' project.pk %}">{{ project.Title }}</a>
+                                    <span class="badge bg-secondary rounded-pill">Project</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if services %}
+                <div class="card mb-4">
+                    <div class="card-header bg-danger text-white">
+                        <h2><i class="fa-solid fa-handshake"></i> Services ({{ services|length }})</h2>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            {% for service in services %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <a href="{% url 'core:service_detail' service.pk %}">{{ service.name }}</a>
+                                    <span class="badge bg-secondary rounded-pill">Service</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if participants %}
+                <div class="card mb-4">
+                    <div class="card-header bg-secondary text-white">
+                        <h2><i class="fa-solid fa-user-group"></i> Participants ({{ participants|length }})</h2>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            {% for participant in participants %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <a href="{% url 'core:participant_detail' participant.pk %}">{{ participant.full_name }}</a>
+                                    <span class="badge bg-secondary rounded-pill">Participant</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+
+        {% else %}
+            <div class="alert alert-info" role="alert">
+                No results found for your search query.
+            </div>
+        {% endif %}
+
+    {% else %}
+        <div class="alert alert-warning" role="alert">
+            Please enter a search term to see results.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

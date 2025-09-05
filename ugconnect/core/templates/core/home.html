@@ -8,10 +8,8 @@
         <img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Uganda_crest.png" alt="Logo" width="80" class="mb-3">
         <h1 class="display-5 fw-bold mb-3">Uganda Tech Connect</h1>
         <p class="lead mb-4">Welcome to the Uganda Tech Connect platform! Explore collaborative programs, discover innovative projects, and connect with technology leaders across Uganda.</p>
-        
-        <!-- Main Navigation Cards -->
+      
         <div class="row mb-4">
-          <!-- Programs Section -->
           <div class="col-md-3 mb-3">
             <div class="card h-100 border-primary">
               <div class="card-body text-center">
@@ -87,80 +85,44 @@
             </div>
           </div>
         </div>
-
-        
-        <!-- Quick Search Section -->
-        <div class="row mb-4">
-          <div class="col-md-3">
-            <form method="get" action="{% url 'core:program_list' %}">
-              <div class="input-group">
-                <input type="text" name="search" class="form-control" placeholder="Search programs...">
-                <button class="btn btn-outline-primary" type="submit">
-                  <i class="fa-solid fa-search"></i>
-                </button>
-              </div>
-            </form>
-          </div>
-          <div class="col-md-3">
-            <form method="get" action="{% url 'core:facility_list' %}">
-              <div class="input-group">
-                <input type="text" name="search" class="form-control" placeholder="Search facilities...">
-                <button class="btn btn-outline-success" type="submit">
-                  <i class="fa-solid fa-search"></i>
-                </button>
-              </div>
-            </form>
-          </div>
-          <div class="col-md-3">
-            <form method="get" action="{% url 'core:equipment_list' %}">
-              <div class="input-group">
-                <input type="text" name="search" class="form-control" placeholder="Search equipment...">
-                <button class="btn btn-outline-warning" type="submit">
-                  <i class="fa-solid fa-search"></i>
-                </button>
-              </div>
-            </form>
-          </div>
-          <div class="col-md-3">
-            <form method="get" action="{% url 'core:project_list' %}">
-              <div class="input-group">
-                <input type="text" name="search" class="form-control" placeholder="Search projects...">
-                <button class="btn btn-outline-info" type="submit">
-                  <i class="fa-solid fa-search"></i>
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-
-        <!-- Services Section -->
-<div class="col-md-4 mb-4">
-   <div class="card h-100 border-info">
-     <div class="card-body text-center">
-       <i class="fa-solid fa-tools fa-3x text-info mb-4"></i>
-       <h5 class="card-title">Services</h5>
-       <p class="card-text">Services offered by facilities, including machining, testing, training, and more</p>
-       <div class="d-grid gap-2">
-         <a href="{% url 'core:service_list' %}" class="btn btn-outline-info">
-           <i class="fa-solid fa-list"></i> View Services
-       </a>
-         <a href="{% url 'core:service_create' %}" class="btn btn-info">
-           <i class="fa-solid fa-plus"></i> Add Service
-         </a>
-       </div>
-     </div>
-   </div>
- </div>
-        <div class="col-md-4">
-          <form method="get" action="{% url 'core:service_list' %}">
-            <div class="input-group">
-              <input type="text" name="search" class="form-control" placeholder="Search services...">
-              <button class="btn btn-outline-info" type="submit">
-                  <i class="fa-solid fa-search"></i>
-              </button>
+<div class="row mb-4">
+    <div class="col-md-6 mb-4">
+        <div class="card h-100 border-info">
+            <div class="card-body text-center">
+                <i class="fa-solid fa-tools fa-3x text-info mb-4"></i>
+                <h5 class="card-title">Services</h5>
+                <p class="card-text">Services offered by facilities, including machining, testing, training, and more</p>
+                <div class="d-grid gap-2">
+                    <a href="{% url 'core:service_list' %}" class="btn btn-outline-info">
+                        <i class="fa-solid fa-list"></i> View Services
+                    </a>
+                    <a href="{% url 'core:service_create' %}" class="btn btn-info">
+                        <i class="fa-solid fa-plus"></i> Add Service
+                    </a>
+                </div>
             </div>
-          </form>
         </div>
+    </div>
+    
+    <div class="col-md-6 mb-4">
+        <div class="card h-100 border-secondary">
+            <div class="card-body text-center">
+                <i class="fa-solid fa-user fa-3x text-secondary mb-4"></i>
+                <h5 class="card-title">Participants</h5>
+                <p class="card-text">Students, faculty, and industry partners involved in projects and programs</p>
+                <div class="d-grid gap-2">
+                    <a href="{% url 'core:participant_list' %}" class="btn btn-outline-secondary">
+                        <i class="fa-solid fa-list"></i> View Participants
+                    </a>
+                    <a href="{% url 'core:participant_create' %}" class="btn btn-secondary">
+                        <i class="fa-solid fa-plus"></i> Add Participant
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
         <!-- About Section -->
