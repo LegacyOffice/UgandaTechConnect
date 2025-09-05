@@ -132,7 +132,6 @@ class Equipment(models.Model):
         from django.core.exceptions import ValidationError
         
         if self.inventory_code:
-            # Ensure inventory code is uppercase
             self.inventory_code = self.inventory_code.upper()
     
     def save(self, *args, **kwargs):
