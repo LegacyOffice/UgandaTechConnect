@@ -18,7 +18,6 @@ urlpatterns = [
     path('programs/<uuid:pk>/delete/', views.ProgramDeleteView.as_view(), name='program_delete'),
 
 
-    # Facility URLs
     path('facilities/', views.FacilityListView.as_view(), name='facility_list'),
     path('facilities/new/', views.FacilityCreateView.as_view(), name='facility_create'),
     path('facilities/<uuid:pk>/', views.FacilityDetailView.as_view(), name='facility_detail'),
@@ -38,7 +37,7 @@ urlpatterns = [
     path('projects/<int:pk>/update/', views.ProjectUpdateView.as_view(), name='project_update'),
     path('projects/<int:pk>/delete/', views.ProjectDeleteView.as_view(), name='project_delete'),
 
-    # Service URLs
+  
     path('services/', views.ServiceListView.as_view(), name='service_list'),
     path('services/add/', views.ServiceCreateView.as_view(), name='service_create'),
     path('services/<uuid:pk>/', views.ServiceDetailView.as_view(), name='service_detail'),
