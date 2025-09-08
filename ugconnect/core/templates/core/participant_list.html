@@ -1,12 +1,11 @@
 {% extends 'core/base.html' %}
 {% block content %}
-<h1>Participants</h1>
-<table>
+<h2>Participants</h2>
+<table class="table table-hover">
     <thead>
         <tr>
-            <th>Full Name</th>
+            <th>Name</th>
             <th>Email</th>
-            <th>Project</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -15,15 +14,16 @@
         <tr>
             <td>{{ participant.full_name }}</td>
             <td>{{ participant.email }}</td>
-            <td>{{ participant.project.title }}</td>
             <td>
-                <a href="{% url 'core:participant_detail' participant.pk %}">View</a> |
-                <a href="{% url 'core:participant_update' participant.pk %}">Edit</a> |
-                <a href="{% url 'core:participant_delete' participant.pk %}">Delete</a>
+                <a href="{% url 'core:participant_detail' participant.pk %}" class="btn btn-sm btn-info">View</a>
+                <a href="{% url 'core:participant_update' participant.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                <a href="{% url 'core:participant_delete' participant.pk %}" class="btn btn-sm btn-danger">Delete</a>
             </td>
         </tr>
+        {% empty %}
+        <tr><td colspan="3">No participants found.</td></tr>
         {% endfor %}
     </tbody>
 </table>
-<a href="{% url 'core:participant_create' %}">Add Participant</a>
+<a href="{% url 'core:participant_create' %}" class="btn btn-success">Add Participant</a>
 {% endblock %}

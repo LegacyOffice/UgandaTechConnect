@@ -1,15 +1,24 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-<h1>{{ object.full_name }}</h1>
-<p>Email: {{ object.email }}</p>
-<p>Affiliation: {{ object.affiliation }}</p>
-<p>Specialization: {{ object.specialization }}</p>
-<p>Cross-Skill Trained: {{ object.cross_skill_trained|yesno }}</p>
-<p>Institution: {{ object.institution }}</p>
-<p>Role: {{ object.role_on_project }}</p>
-<p>Skill Role: {{ object.skill_role }}</p>
-<p>Project: {{ object.project.title }}</p>
-<a href="{% url 'core:participant_update' object.pk %}">Edit</a> |
-<a href="{% url 'core:participant_delete' object.pk %}">Delete</a>
+<div class="card">
+    <div class="card-header">
+        <h3>{{ participant.full_name }}</h3>
+    </div>
+    <div class="card-body">
+        <p><strong>Email:</strong> {{ participant.email }}</p>
+        <p><strong>Affiliation:</strong> {{ participant.affiliation }}</p>
+        <p><strong>Specialization:</strong> {{ participant.specialization }}</p>
+        <p><strong>Cross-Skill Trained:</strong> {{ participant.cross_skill_trained|yesno }}</p>
+        <p><strong>Institution:</strong> {{ participant.institution }}</p>
+        <p><strong>Role:</strong> {{ participant.role_on_project }}</p>
+        <p><strong>Skill Role:</strong> {{ participant.skill_role }}</p>
+        <p><strong>Project:</strong> {{ participant.project.title }}</p>
+    </div>
+    <div class="card-footer">
+        <a href="{% url 'core:participant_update' participant.pk %}" class="btn btn-warning">Edit</a>
+        <a href="{% url 'core:participant_delete' participant.pk %}" class="btn btn-danger">Delete</a>
+        <a href="{% url 'core:participant_list' %}" class="btn btn-secondary">Back</a>
+    </div>
+</div>
 {% endblock %}

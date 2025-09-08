@@ -1,13 +1,12 @@
 {% extends 'core/base.html' %}
-
 {% block content %}
 <div class="alert alert-danger">
-    <h4>Delete Participant</h4>
-    <p>Are you sure you want to delete "{{ participant.full_name }}"?</p>
+    <h4>Delete Project</h4>
+    <p>Are you sure you want to delete "{{ project.Title }}"?</p>
     <form method="post">
         {% csrf_token %}
         <button type="submit" class="btn btn-danger">Delete</button>
-        <a href="{% url 'core:participant_list' %}" class="btn btn-secondary">Cancel</a>
+        <a href="{% url 'core:project_list' %}" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
 {% endblock %}

@@ -1,45 +1,286 @@
 {% extends 'core/base.html' %}
 
+{% block title %}
+{% if object %}Edit Facility{% else %}Create Facility{% endif %} - Uganda Tech Connect
+{% endblock %}
+
 {% block content %}
-<div class="mb-3">
-    <h1>
-        {% if facility %}<i class="fa-solid fa-edit"></i> Edit Facility{% else %}<i class="fa-solid fa-plus"></i> Add Facility{% endif %}
-    </h1>
-    <a href="{% url 'core:facility_list' %}" class="btn btn-outline-secondary"><i class="fa-solid fa-arrow-left"></i> Back to Facilities</a>
-</div>
-
-<div class="card shadow-lg border-0 rounded-3">
-    <div class="card-body p-4">
-        <form method="post" novalidate>
-            {% csrf_token %}
-
-            {% for field in form %}
-                <div class="mb-3">
-                    <label for="{{ field.id_for_label }}" class="form-label fw-bold">
-                        {{ field.label }}
-                    </label>
-                    <div class="input-group">
-                        <span class="input-group-text">
-                            <i class="fa-solid fa-circle-dot"></i>
-                        </span>
-                        {{ field }}
-                    </div>
-                    {% if field.help_text %}
-                        <small class="form-text text-muted">{{ field.help_text }}</small>
-                    {% endif %}
-                    {% for error in field.errors %}
-                        <div class="text-danger small">{{ error }}</div>
-                    {% endfor %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="fw-bold mb-1">
+                        <i class="fa-solid fa-building text-success me-2"></i>
+                        {% if object %}Edit Facility{% else %}Create New Facility{% endif %}
+                    </h2>
+                    <p class="text-muted mb-0">
+                        {% if object %}Update the facility details below{% else %}Register a new innovation space or collaboration facility{% endif %}
+                    </p>
                 </div>
-            {% endfor %}
-
-            <div class="d-flex justify-content-end mt-4">
-                <button type="submit" class="btn btn-success px-4">
-                    <i class="fa-solid fa-save"></i> Save
-                </button>
+                <a href="{% url 'core:facility_list' %}" class="btn btn-outline-secondary">
+                    <i class="fa-solid fa-arrow-left me-2"></i>Back to Facilities
+                </a>
             </div>
-        </form>
+
+            <!-- Form Card -->
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-success bg-opacity-10 border-0">
+                    <h5 class="card-title mb-0">
+                        <i class="fa-solid fa-edit me-2"></i>Facility Information
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        
+                        <!-- Error Messages -->
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger mb-4" role="alert">
+                                <i class="fa-solid fa-exclamation-triangle me-2"></i>
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+
+                        <div class="row">
+                            <!-- Facility Name -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.name.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-building text-success me-1"></i>
+                                    Facility Name <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" 
+                                       class="form-control {% if form.name.errors %}is-invalid{% endif %}" 
+                                       id="{{ form.name.id_for_label }}" 
+                                       name="{{ form.name.name }}" 
+                                       value="{{ form.name.value|default:'' }}"
+                                       placeholder="e.g., Makerere Innovation Lab">
+                                {% if form.name.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.name.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.name.help_text %}
+                                    <div class="form-text">{{ form.name.help_text }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Facility Type -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.type.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-layer-group text-info me-1"></i>
+                                    Facility Type
+                                </label>
+                                <input type="text" 
+                                       class="form-control {% if form.type.errors %}is-invalid{% endif %}" 
+                                       id="{{ form.type.id_for_label }}" 
+                                       name="{{ form.type.name }}" 
+                                       value="{{ form.type.value|default:'' }}"
+                                       placeholder="MakerSpace, Research Lab, University, Virtual Hub">
+                                {% if form.type.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.type.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.type.help_text %}
+                                    <div class="form-text">{{ form.type.help_text }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Location -->
+                            <div class="col-md-8 mb-3">
+                                <label for="{{ form.location.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-map-marker-alt text-danger me-1"></i>
+                                    Location
+                                </label>
+                                <input type="text" 
+                                       class="form-control {% if form.location.errors %}is-invalid{% endif %}" 
+                                       id="{{ form.location.id_for_label }}" 
+                                       name="{{ form.location.name }}" 
+                                       value="{{ form.location.value|default:'' }}"
+                                       placeholder="Kampala, Uganda">
+                                {% if form.location.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.location.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.location.help_text %}
+                                    <div class="form-text">{{ form.location.help_text }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Capacity -->
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.capacity.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-users text-warning me-1"></i>
+                                    Capacity
+                                </label>
+                                <input type="number" 
+                                       class="form-control {% if form.capacity.errors %}is-invalid{% endif %}" 
+                                       id="{{ form.capacity.id_for_label }}" 
+                                       name="{{ form.capacity.name }}" 
+                                       value="{{ form.capacity.value|default:'' }}"
+                                       placeholder="50">
+                                {% if form.capacity.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.capacity.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.capacity.help_text %}
+                                    <div class="form-text">{{ form.capacity.help_text }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-3">
+                            <label for="{{ form.description.id_for_label }}" class="form-label fw-semibold">
+                                <i class="fa-solid fa-file-text text-info me-1"></i>
+                                Description
+                            </label>
+                            <textarea class="form-control {% if form.description.errors %}is-invalid{% endif %}" 
+                                      id="{{ form.description.id_for_label }}" 
+                                      name="{{ form.description.name }}" 
+                                      rows="4"
+                                      placeholder="Provide an overview of the facility and what it offers...">{{ form.description.value|default:'' }}</textarea>
+                            {% if form.description.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.description.errors|first }}
+                                </div>
+                            {% endif %}
+                            {% if form.description.help_text %}
+                                <div class="form-text">{{ form.description.help_text }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Resources -->
+                        <div class="mb-3">
+                            <label for="{{ form.resources.id_for_label }}" class="form-label fw-semibold">
+                                <i class="fa-solid fa-tools text-secondary me-1"></i>
+                                Available Resources
+                            </label>
+                            <textarea class="form-control {% if form.resources.errors %}is-invalid{% endif %}" 
+                                      id="{{ form.resources.id_for_label }}" 
+                                      name="{{ form.resources.name }}" 
+                                      rows="3"
+                                      placeholder="3D Printers, CNC Machines, PCB Fabrication, Internet, Meeting Rooms...">{{ form.resources.value|default:'' }}</textarea>
+                            {% if form.resources.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.resources.errors|first }}
+                                </div>
+                            {% endif %}
+                            {% if form.resources.help_text %}
+                                <div class="form-text">{{ form.resources.help_text }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="row">
+                            <!-- Contact Email -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.contact_email.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-envelope text-primary me-1"></i>
+                                    Contact Email
+                                </label>
+                                <input type="email" 
+                                       class="form-control {% if form.contact_email.errors %}is-invalid{% endif %}" 
+                                       id="{{ form.contact_email.id_for_label }}" 
+                                       name="{{ form.contact_email.name }}" 
+                                       value="{{ form.contact_email.value|default:'' }}"
+                                       placeholder="contact@facility.ug">
+                                {% if form.contact_email.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.contact_email.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.contact_email.help_text %}
+                                    <div class="form-text">{{ form.contact_email.help_text }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Contact Phone -->
+                            <div class="col-md-6 mb-4">
+                                <label for="{{ form.contact_phone.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-phone text-success me-1"></i>
+                                    Contact Phone
+                                </label>
+                                <input type="tel" 
+                                       class="form-control {% if form.contact_phone.errors %}is-invalid{% endif %}" 
+                                       id="{{ form.contact_phone.id_for_label }}" 
+                                       name="{{ form.contact_phone.name }}" 
+                                       value="{{ form.contact_phone.value|default:'' }}"
+                                       placeholder="+256 XXX XXX XXX">
+                                {% if form.contact_phone.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.contact_phone.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.contact_phone.help_text %}
+                                    <div class="form-text">{{ form.contact_phone.help_text }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Associated Programs -->
+                        {% if form.programs %}
+                        <div class="mb-4">
+                            <label for="{{ form.programs.id_for_label }}" class="form-label fw-semibold">
+                                <i class="fa-solid fa-link text-warning me-1"></i>
+                                Associated Programs
+                            </label>
+                            <select class="form-select {% if form.programs.errors %}is-invalid{% endif %}" 
+                                    id="{{ form.programs.id_for_label }}" 
+                                    name="{{ form.programs.name }}" 
+                                    multiple>
+                                {% for choice in form.programs.field.queryset %}
+                                    <option value="{{ choice.pk }}" 
+                                            {% if choice.pk in form.programs.value %}selected{% endif %}>
+                                        {{ choice.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            {% if form.programs.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.programs.errors|first }}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">Hold Ctrl/Cmd to select multiple programs</div>
+                        </div>
+                        {% endif %}
+
+                        <!-- Form Actions -->
+                        <div class="d-flex justify-content-end gap-3 pt-3 border-top">
+                            <a href="{% url 'core:facility_list' %}" class="btn btn-outline-secondary">
+                                <i class="fa-solid fa-times me-2"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fa-solid fa-save me-2"></i>
+                                {% if object %}Update Facility{% else %}Create Facility{% endif %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Help Section -->
+            <div class="mt-4">
+                <div class="card border-0 bg-light">
+                    <div class="card-body p-3">
+                        <h6 class="fw-semibold mb-2">
+                            <i class="fa-solid fa-lightbulb text-warning me-2"></i>Tips for Facility Registration
+                        </h6>
+                        <ul class="small text-muted mb-0 ps-3">
+                            <li>Provide accurate location information for easy discovery</li>
+                            <li>List all available resources and equipment comprehensively</li>
+                            <li>Include current contact information for facility coordination</li>
+                            <li>Associate with relevant programs to maximize collaboration opportunities</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-
 {% endblock %}

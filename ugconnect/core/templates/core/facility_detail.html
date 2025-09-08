@@ -1,36 +1,24 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-<div class="mb-3">
-    <h1><i class="fa-solid fa-building"></i> {{ facility.name }}</h1>
-    <a href="{% url 'core:facility_list' %}" class="btn btn-outline-secondary"><i class="fa-solid fa-arrow-left"></i> Back to Facilities</a>
-</div>
-
-<div class="card shadow-sm">
+<div class="card">
+    <div class="card-header">
+        <h3>{{ facility.name }}</h3>
+    </div>
     <div class="card-body">
         <p><strong>Description:</strong> {{ facility.description }}</p>
-        <p><strong>Type:</strong> {{ facility.type }}</p>
         <p><strong>Location:</strong> {{ facility.location }}</p>
+        <p><strong>Type:</strong> {{ facility.type }}</p>
         <p><strong>Capacity:</strong> {{ facility.capacity }}</p>
         <p><strong>Resources:</strong> {{ facility.resources }}</p>
         <p><strong>Contact Email:</strong> {{ facility.contact_email }}</p>
         <p><strong>Contact Phone:</strong> {{ facility.contact_phone }}</p>
-
-        <hr>
-        <h5><i class="fa-solid fa-diagram-project"></i> Programs Hosted</h5>
-        {% if facility.programs.all %}
-            <ul>
-                {% for program in facility.programs.all %}
-                    <li><a href="{% url 'core:program_detail' program.pk %}">{{ program.name }}</a></li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>No programs linked to this facility yet.</p>
-        {% endif %}
+        <p><strong>Programs:</strong> {{ facility.programs.all|join:", " }}</p>
     </div>
-    <div class="card-footer d-flex justify-content-between">
-        <a href="{% url 'core:facility_update' facility.pk %}" class="btn btn-outline-secondary"><i class="fa-solid fa-edit"></i> Edit</a>
-        <a href="{% url 'core:facility_delete' facility.pk %}" class="btn btn-outline-danger"><i class="fa-solid fa-trash"></i> Delete</a>
+    <div class="card-footer">
+        <a href="{% url 'core:facility_update' facility.pk %}" class="btn btn-warning">Edit</a>
+        <a href="{% url 'core:facility_delete' facility.pk %}" class="btn btn-danger">Delete</a>
+        <a href="{% url 'core:facility_list' %}" class="btn btn-secondary">Back</a>
     </div>
 </div>
 {% endblock %}

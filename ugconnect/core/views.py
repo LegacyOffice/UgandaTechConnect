@@ -1,4 +1,3 @@
-
 from django.urls import reverse_lazy
 from django.shortcuts import render 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -319,33 +318,9 @@ class UnifiedSearchView(ListView):
     context_object_name = 'results'
 
     def get_queryset(self):
-        query = self.request.GET.get('q', '').strip()
-    
-        programs = Program.objects.none()
-        facilities = Facility.objects.none()
-        equipment = Equipment.objects.none()
-        projects = Project.objects.none()
-        services = Service.objects.none()
-        participants = Participant.objects.none()
-
-        if query:
-            programs = Program.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
-            facilities = Facility.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
-            equipment = Equipment.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
-            projects = Project.objects.filter(Q(Title__icontains=query) | Q(Description__icontains=query))
-            services = Service.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
-            participants = Participant.objects.filter(Q(full_name__icontains=query) | Q(email__icontains=query))
-            
-        self.results_dict = {
-            'programs': programs,
-            'facilities': facilities,
-            'equipment': equipment,
-            'projects': projects,
-            'services': services,
-            'participants': participants,
-        }
-        
-        return []
+        query = self.request.GET.get('q', '')
+        # Example: search only Programs by name
+        return Program.objects.filter(name__icontains=query)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -4,49 +4,84 @@
 
 {% block content %}
 <div class="container mt-4">
-    <div class="row">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Equipment</h2>
-                <a href="{% url 'core:equipment_create' %}" class="btn btn-primary">Add Equipment</a>
+    <h2>Equipment</h2>
+    <form method="get" class="mb-3">
+        <div class="row g-2">
+            <div class="col-md-3">
+                <input type="text" name="search" class="form-control" placeholder="Search equipment..." value="{{ request.GET.search }}">
             </div>
-            <!-- Equipment List -->
-            {% if equipment_list %}
-            <div class="row">
-                {% for equipment in equipment_list %}
-                <div class="col-md-6 col-lg-4 mb-4">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <h5 class="card-title">{{ equipment.name }}</h5>
-                                <span class="badge bg-{% if equipment.is_operational %}success{% else %}danger{% endif %}">
-                                    {% if equipment.is_operational %}Operational{% else %}Down{% endif %}
-                                </span>
-                            </div>
-                            <p class="card-text">
-                                <strong>Facility:</strong> {{ equipment.facility.name }}<br>
-                                <strong>Domain:</strong> {{ equipment.get_usage_domain_display }}<br>
-                                <strong>Phase:</strong> {{ equipment.get_support_phase_display }}<br>
-                                <strong>Code:</strong> {{ equipment.inventory_code }}
-                            </p>
-                            {% if equipment.description %}
-                            <p class="card-text">{{ equipment.description|truncatewords:15 }}</p>
-                            {% endif %}
-                        </div>
-                        <div class="card-footer">
-                            <a href="{% url 'core:equipment_detail' equipment.equipment_id %}" class="btn btn-sm btn-outline-primary">View Details</a>
-                            <a href="{% url 'core:equipment_update' equipment.equipment_id %}" class="btn btn-sm btn-outline-secondary">Edit</a>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
+            <div class="col-md-2">
+                <select name="facility" class="form-select">
+                    <option value="">Facility</option>
+                    {% for f in facilities %}
+                    <option value="{{ f.pk }}" {% if request.GET.facility == f.pk|stringformat:"s" %}selected{% endif %}>{{ f.name }}</option>
+                    {% endfor %}
+                </select>
             </div>
-            {% else %}
-            <div class="alert alert-info">
-                No equipment found. <a href="{% url 'core:equipment_create' %}">Add the first equipment</a>.
+            <div class="col-md-2">
+                <select name="domain" class="form-select">
+                    <option value="">Usage Domain</option>
+                    {% for d in usage_domains %}
+                    <option value="{{ d.0 }}" {% if request.GET.domain == d.0 %}selected{% endif %}>{{ d.1 }}</option>
+                    {% endfor %}
+                </select>
             </div>
-            {% endif %}
+            <div class="col-md-2">
+                <select name="phase" class="form-select">
+                    <option value="">Support Phase</option>
+                    {% for p in support_phases %}
+                    <option value="{{ p.0 }}" {% if request.GET.phase == p.0 %}selected{% endif %}>{{ p.1 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select name="operational" class="form-select">
+                    <option value="">Operational?</option>
+                    <option value="true" {% if request.GET.operational == "true" %}selected{% endif %}>Yes</option>
+                    <option value="false" {% if request.GET.operational == "false" %}selected{% endif %}>No</option>
+                </select>
+            </div>
+            <div class="col-md-1">
+                <button class="btn btn-primary w-100" type="submit">Filter</button>
+            </div>
         </div>
-    </div>
+    </form>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Facility</th>
+                <th>Domain</th>
+                <th>Phase</th>
+                <th>Operational</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for equipment in equipment_list %}
+            <tr>
+                <td>{{ equipment.name }}</td>
+                <td>{{ equipment.facility.name }}</td>
+                <td>{{ equipment.get_usage_domain_display }}</td>
+                <td>{{ equipment.get_support_phase_display }}</td>
+                <td>
+                    {% if equipment.is_operational %}
+                    <span class="badge bg-success">Yes</span>
+                    {% else %}
+                    <span class="badge bg-danger">No</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'core:equipment_detail' equipment.pk %}" class="btn btn-sm btn-info">View</a>
+                    <a href="{% url 'core:equipment_update' equipment.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="{% url 'core:equipment_delete' equipment.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6">No equipment found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'core:equipment_create' %}" class="btn btn-success">Add Equipment</a>
 </div>
 {% endblock %}

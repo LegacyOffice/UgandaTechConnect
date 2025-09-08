@@ -18,62 +18,21 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title"><Service class="name"></Service></h5>
-                            
-                            <div class="row mb-3">
-                                <div class="col-sm-4"><strong>Facility:</strong></div>
-                                <div class="col-sm-8">
-                                    <a href="{% url 'core:facility_detail' service.facility.facility_id %}" class="text-decoration-none">
-                                        {{ service.facility.name }}
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-sm-4" align-items-start><strong>Category:</strong></div>
-                                <div class="col-sm-8">{{ service.get_category_display|default:"N/A" }}</div>
-                                </div>
-                            </div>
-                            
-                            <div class="row mb-3">
-                                <div class="col-sm-4"><strong>Skill Type:</strong></div>
-                                <div class="col-sm-8">{{ service.get_skill_type_display|default:"N/A" }}</div>
-                            </div>
-                            
-                            {% if service.description %}
-                            <div class="row mb-3">
-                                <div class="col-sm-4"><strong>Description:</strong></div>
-                                <div class="col-sm-8">{{ service.description }}</div>
-                            </div>
-                            {% endif %}
-                            
-                            {% if service.requirements %}
-                            <div class="row mb-3">
-                                <div class="col-sm-4"><strong>Requirements:</strong></div>
-                                <div class="col-sm-8">{{ service.requirements }}</div>
-                            </div>
-                            {% endif %}
-                        </div>
-                    </div>
+            <div class="card">
+                <div class="card-header">
+                    <h3>{{ service.name }}</h3>
                 </div>
-                
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Quick Actions</h5>
-                            <div class="d-grid gap-2">
-                                <a href="{% url 'core:service_list' %}" class="btn btn-outline-secondary">
-                                    <i class="fa-solid fa-arrow-left"></i> Back to Services
-                                </a>
-                                <a href="{% url 'core:facility_detail' service.facility.facility_id %}" class="btn btn-outline-info">
-                                    <i class="fa-solid fa-building"></i> View Facility
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+                <div class="card-body">
+                    <p><strong>Facility:</strong> {{ service.facility.name }}</p>
+                    <p><strong>Description:</strong> {{ service.description }}</p>
+                    <p><strong>Category:</strong> {{ service.get_category_display }}</p>
+                    <p><strong>Skill Type:</strong> {{ service.skill_type }}</p>
+                    <p><strong>Operating Hours:</strong> {{ service.operating_hours }}</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'core:service_update' service.pk %}" class="btn btn-warning">Edit</a>
+                    <a href="{% url 'core:service_delete' service.pk %}" class="btn btn-danger">Delete</a>
+                    <a href="{% url 'core:service_list' %}" class="btn btn-secondary">Back</a>
                 </div>
             </div>
         </div>

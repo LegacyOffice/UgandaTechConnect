@@ -28,21 +28,21 @@
             <tbody>
               {% for outcome in outcomes %}
               <tr>
-                <td>{{ outcome.Outcomeld }}</td>
-                <td>{{ outcome.Title }}</td>
-                <td>{{ outcome.ProjectId }}</td>
+                <td>{{ outcome.id }}</td>
+                <td>{{ outcome.title }}</td>
+                <td>{{ outcome.project }}</td>
                 <td>
-                  <span class="badge bg-info">{{ outcome.OutcomeType }}</span>
+                  <span class="badge bg-info">{{ outcome.outcome_type }}</span>
                 </td>
                 <td>
-                  {% if outcome.CommercializationStatus == 'Launched' %}
-                    <span class="badge bg-success">{{ outcome.CommercializationStatus }}</span>
-                  {% elif outcome.CommercializationStatus == 'Market Linked' %}
-                    <span class="badge bg-warning">{{ outcome.CommercializationStatus }}</span>
-                  {% elif outcome.CommercializationStatus == 'Demoed' %}
-                    <span class="badge bg-primary">{{ outcome.CommercializationStatus }}</span>
+                  {% if outcome.commercialization_status == 'Launched' %}
+                    <span class="badge bg-success">{{ outcome.commercialization_status }}</span>
+                  {% elif outcome.commercialization_status == 'Market Linked' %}
+                    <span class="badge bg-warning">{{ outcome.commercialization_status }}</span>
+                  {% elif outcome.commercialization_status == 'Demoed' %}
+                    <span class="badge bg-primary">{{ outcome.commercialization_status }}</span>
                   {% else %}
-                    <span class="badge bg-secondary">{{ outcome.CommercializationStatus|default:"Not set" }}</span>
+                    <span class="badge bg-secondary">{{ outcome.commercialization_status|default:"Not set" }}</span>
                   {% endif %}
                 </td>
                 <td>

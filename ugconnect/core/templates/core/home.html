@@ -1,200 +1,360 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-<div class="row justify-content-center">
-  <div class="col-md-10">
-    <div class="card shadow mb-4">
-      <div class="card-body text-center">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Uganda_crest.png" alt="Logo" width="80" class="mb-3">
-        <h1 class="display-5 fw-bold mb-3">Uganda Tech Connect</h1>
-        <p class="lead mb-4">Welcome to the Uganda Tech Connect platform! Explore collaborative programs, discover innovative projects, and connect with technology leaders across Uganda.</p>
-      
-        <div class="row mb-4">
-          <!-- Programs Section -->
-          <div class="col-md-3 mb-3">
-            <div class="card h-100 border-primary">
-              <div class="card-body text-center">
-                <i class="fa-solid fa-diagram-project fa-3x text-primary mb-3"></i>
-                <h5 class="card-title">Programs</h5>
-                <p class="card-text">Manage collaboration umbrellas and national alignment projects</p>
-                <div class="d-grid gap-2">
-                  <a href="{% url 'core:program_list' %}" class="btn btn-outline-primary">
-                    <i class="fa-solid fa-list"></i> View Programs
-                  </a>
-                  <a href="{% url 'core:program_create' %}" class="btn btn-primary">
-                    <i class="fa-solid fa-plus"></i> Add Program
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
+<!-- Hero Section -->
+<div class="bg-gradient" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 80px 0;">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <h1 class="display-3 fw-bold mb-4">Uganda Tech Connect</h1>
+        <p class="lead mb-4">Empowering Uganda's technological transformation through collaboration, innovation, and strategic partnerships in emerging technologies.</p>
+        <div class="d-flex gap-3">
+          <a href="#features" class="btn btn-light btn-lg">Explore Platform</a>
+          <a href="{% url 'core:project_create' %}" class="btn btn-outline-light btn-lg">Start Project</a>
+        </div>
+      </div>
+      <div class="col-md-6 text-center">
+        <div class="bg-white bg-opacity-10 rounded-circle p-5 d-inline-block">
+          <i class="fa-solid fa-microchip fa-6x text-white"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-          <!-- Facilities Section -->
-          <div class="col-md-3 mb-3">
-            <div class="card h-100 border-success">
-              <div class="card-body text-center">
-                <i class="fa-solid fa-building fa-3x text-success mb-3"></i>
-                <h5 class="card-title">Facilities</h5>
-                <p class="card-text">Government facilities, labs, workshops, and testing centers</p>
-                <div class="d-grid gap-2">
-                  <a href="{% url 'core:facility_list' %}" class="btn btn-outline-success">
-                    <i class="fa-solid fa-list"></i> View Facilities
-                  </a>
-                  <a href="{% url 'core:facility_create' %}" class="btn btn-success">
-                    <i class="fa-solid fa-plus"></i> Add Facility
-                  </a>
-                </div>
-              </div>
-            </div>
+<!-- Stats Section -->
+<div class="py-5 bg-light">
+  <div class="container">
+    <div class="row text-center">
+      <div class="col-md-3 mb-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <i class="fa-solid fa-diagram-project fa-2x text-primary mb-2"></i>
+            <h3 class="fw-bold text-primary">{{ programs_count|default:"0" }}</h3>
+            <p class="text-muted">Active Programs</p>
           </div>
-
-          <!-- Equipment Section -->
-          <div class="col-md-3 mb-3">
-            <div class="card h-100 border-warning">
-              <div class="card-body text-center">
-                <i class="fa-solid fa-cogs fa-3x text-warning mb-3"></i>
-                <h5 class="card-title">Equipment</h5>
-                <p class="card-text">Machinery, tools, and devices available at facilities</p>
-                <div class="d-grid gap-2">
-                  <a href="{% url 'core:equipment_list' %}" class="btn btn-outline-warning">
-                    <i class="fa-solid fa-list"></i> View Equipment
-                  </a>
-                  <a href="{% url 'core:equipment_create' %}" class="btn btn-warning">
-                    <i class="fa-solid fa-plus"></i> Add Equipment
-                  </a>
-                </div>
-              </div>
-            </div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <i class="fa-solid fa-building fa-2x text-success mb-2"></i>
+            <h3 class="fw-bold text-success">{{ facilities_count|default:"0" }}</h3>
+            <p class="text-muted">Partner Facilities</p>
           </div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <i class="fa-solid fa-lightbulb fa-2x text-warning mb-2"></i>
+            <h3 class="fw-bold text-warning">{{ projects_count|default:"0" }}</h3>
+            <p class="text-muted">Innovation Projects</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <i class="fa-solid fa-users fa-2x text-info mb-2"></i>
+            <h3 class="fw-bold text-info">{{ participants_count|default:"0" }}</h3>
+            <p class="text-muted">Active Participants</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-          <!-- Projects Section -->
-          <div class="col-md-3 mb-3">
-            <div class="card h-100 border-info">
-              <div class="card-body text-center">
-                <i class="fa-solid fa-lightbulb fa-3x text-info mb-3"></i>
-                <h5 class="card-title">Projects</h5>
-                <p class="card-text">Student team projects and innovation initiatives</p>
-                <div class="d-grid gap-2">
-                  <a href="{% url 'core:project_list' %}" class="btn btn-outline-info">
-                    <i class="fa-solid fa-list"></i> View Projects
-                  </a>
-                  <a href="{% url 'core:project_create' %}" class="btn btn-info">
-                    <i class="fa-solid fa-plus"></i> Add Project
-                  </a>
-                </div>
-              </div>
+<!-- Features Section -->
+<div class="py-5" id="features">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="display-5 fw-bold">Platform Features</h2>
+      <p class="lead text-muted">Comprehensive tools for managing Uganda's tech ecosystem</p>
+    </div>
+    
+    <div class="row g-4">
+      <!-- Programs Section -->
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body text-center p-4">
+            <div class="bg-primary bg-opacity-10 rounded-circle p-3 d-inline-block mb-3">
+              <i class="fa-solid fa-diagram-project fa-2x text-primary"></i>
+            </div>
+            <h5 class="card-title fw-bold">Programs</h5>
+            <p class="card-text text-muted">Manage collaboration umbrellas and national alignment projects that drive Uganda's digital transformation.</p>
+            <div class="d-grid gap-2">
+              <a href="{% url 'core:program_list' %}" class="btn btn-outline-primary">
+                <i class="fa-solid fa-list me-2"></i>View Programs
+              </a>
+              <a href="{% url 'core:program_create' %}" class="btn btn-primary">
+                <i class="fa-solid fa-plus me-2"></i>Add Program
+              </a>
             </div>
           </div>
         </div>
+      </div>
 
-        <div class="row mb-4">
-          <!-- Services Section -->
-          <div class="col-md-3 mb-3">
-            <div class="card h-100 border-info">
-              <div class="card-body text-center">
-                <i class="fa-solid fa-tools fa-3x text-info mb-3"></i>
-                <h5 class="card-title">Services</h5>
-                <p class="card-text">Services offered by facilities, including machining, testing, training, and more</p>
-                <div class="d-grid gap-2">
-                  <a href="{% url 'core:service_list' %}" class="btn btn-outline-info">
-                    <i class="fa-solid fa-list"></i> View Services
-                  </a>
-                  <a href="{% url 'core:service_create' %}" class="btn btn-info">
-                    <i class="fa-solid fa-plus"></i> Add Service
-                  </a>
-                </div>
-              </div>
+      <!-- Facilities Section -->
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body text-center p-4">
+            <div class="bg-success bg-opacity-10 rounded-circle p-3 d-inline-block mb-3">
+              <i class="fa-solid fa-building fa-2x text-success"></i>
             </div>
-          </div>
-          
-          <!-- Participants Section -->
-          <div class="col-md-3 mb-3">
-            <div class="card h-100 border-secondary">
-              <div class="card-body text-center">
-                <i class="fa-solid fa-user fa-3x text-secondary mb-3"></i>
-                <h5 class="card-title">Participants</h5>
-                <p class="card-text">Students, faculty, and industry partners involved in projects and programs</p>
-                <div class="d-grid gap-2">
-                  <a href="{% url 'core:participant_list' %}" class="btn btn-outline-secondary">
-                    <i class="fa-solid fa-list"></i> View Participants
-                  </a>
-                  <a href="{% url 'core:participant_create' %}" class="btn btn-secondary">
-                    <i class="fa-solid fa-plus"></i> Add Participant
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Outcomes Section (NEW) -->
-          <div class="col-md-3 mb-3">
-            <div class="card h-100 border-danger">
-              <div class="card-body text-center">
-                <i class="fa-solid fa-trophy fa-3x text-danger mb-3"></i>
-                <h5 class="card-title">Outcomes</h5>
-                <p class="card-text">Project deliverables including CAD, PCB, Prototypes, Reports, and Business Plans</p>
-                <div class="d-grid gap-2">
-                  <a href="{% url 'core:outcome_list' %}" class="btn btn-outline-danger">
-                    <i class="fa-solid fa-list"></i> View Outcomes
-                  </a>
-                  <a href="{% url 'core:outcome_create' %}" class="btn btn-danger">
-                    <i class="fa-solid fa-plus"></i> Add Outcome
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Placeholder for future expansion -->
-          <div class="col-md-3 mb-3">
-            <div class="card h-100 border-dark">
-              <div class="card-body text-center">
-                <i class="fa-solid fa-ellipsis fa-3x text-dark mb-3"></i>
-                <h5 class="card-title">More Features</h5>
-                <p class="card-text">Additional functionality coming soon to support Uganda's tech ecosystem</p>
-                <div class="d-grid gap-2">
-                  <button class="btn btn-outline-dark" disabled>
-                    <i class="fa-solid fa-list"></i> Coming Soon
-                  </button>
-                  <button class="btn btn-dark" disabled>
-                    <i class="fa-solid fa-plus"></i> Coming Soon
-                  </button>
-                </div>
-              </div>
+            <h5 class="card-title fw-bold">Facilities</h5>
+            <p class="card-text text-muted">Government facilities, labs, workshops, and testing centers equipped for innovation.</p>
+            <div class="d-grid gap-2">
+              <a href="{% url 'core:facility_list' %}" class="btn btn-outline-success">
+                <i class="fa-solid fa-list me-2"></i>View Facilities
+              </a>
+              <a href="{% url 'core:facility_create' %}" class="btn btn-success">
+                <i class="fa-solid fa-plus me-2"></i>Add Facility
+              </a>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- About Section -->
+      <!-- Equipment Section -->
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body text-center p-4">
+            <div class="bg-warning bg-opacity-10 rounded-circle p-3 d-inline-block mb-3">
+              <i class="fa-solid fa-cogs fa-2x text-warning"></i>
+            </div>
+            <h5 class="card-title fw-bold">Equipment</h5>
+            <p class="card-text text-muted">Advanced machinery, tools, and devices available at partner facilities.</p>
+            <div class="d-grid gap-2">
+              <a href="{% url 'core:equipment_list' %}" class="btn btn-outline-warning">
+                <i class="fa-solid fa-list me-2"></i>View Equipment
+              </a>
+              <a href="{% url 'core:equipment_create' %}" class="btn btn-warning">
+                <i class="fa-solid fa-plus me-2"></i>Add Equipment
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Projects Section -->
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body text-center p-4">
+            <div class="bg-info bg-opacity-10 rounded-circle p-3 d-inline-block mb-3">
+              <i class="fa-solid fa-lightbulb fa-2x text-info"></i>
+            </div>
+            <h5 class="card-title fw-bold">Projects</h5>
+            <p class="card-text text-muted">Student team projects and innovation initiatives driving real-world solutions.</p>
+            <div class="d-grid gap-2">
+              <a href="{% url 'core:project_list' %}" class="btn btn-outline-info">
+                <i class="fa-solid fa-list me-2"></i>View Projects
+              </a>
+              <a href="{% url 'core:project_create' %}" class="btn btn-info">
+                <i class="fa-solid fa-plus me-2"></i>Add Project
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Services Section -->
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body text-center p-4">
+            <div class="bg-secondary bg-opacity-10 rounded-circle p-3 d-inline-block mb-3">
+              <i class="fa-solid fa-tools fa-2x text-secondary"></i>
+            </div>
+            <h5 class="card-title fw-bold">Services</h5>
+            <p class="card-text text-muted">Professional services including machining, testing, training, and consultation.</p>
+            <div class="d-grid gap-2">
+              <a href="{% url 'core:service_list' %}" class="btn btn-outline-secondary">
+                <i class="fa-solid fa-list me-2"></i>View Services
+              </a>
+              <a href="{% url 'core:service_create' %}" class="btn btn-secondary">
+                <i class="fa-solid fa-plus me-2"></i>Add Service
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Participants Section -->
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body text-center p-4">
+            <div class="bg-dark bg-opacity-10 rounded-circle p-3 d-inline-block mb-3">
+              <i class="fa-solid fa-users fa-2x text-dark"></i>
+            </div>
+            <h5 class="card-title fw-bold">Participants</h5>
+            <p class="card-text text-muted">Students, faculty, and industry partners collaborating on innovative projects.</p>
+            <div class="d-grid gap-2">
+              <a href="{% url 'core:participant_list' %}" class="btn btn-outline-dark">
+                <i class="fa-solid fa-list me-2"></i>View Participants
+              </a>
+              <a href="{% url 'core:participant_create' %}" class="btn btn-dark">
+                <i class="fa-solid fa-plus me-2"></i>Add Participant
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Mission & Vision Section -->
+<div class="py-5 bg-light">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <h2 class="display-6 fw-bold mb-4">Our Mission</h2>
+        <p class="lead mb-4">To foster innovation, collaboration, and skill development in emerging technology domains while aligning with Uganda's national development priorities.</p>
         <div class="row">
-          <div class="col-md-12">
-            <div class="card bg-light">
-              <div class="card-body">
-                <h5 class="card-title">
-                  <i class="fa-solid fa-info-circle"></i> About Uganda Tech Connect
-                </h5>
-                <p class="card-text">
-                  Uganda Tech Connect is dedicated to fostering innovation, collaboration, and skill development in emerging technology domains such as IoT, automation, and renewable energy. Our platform connects students, facilities, and equipment to drive Uganda's digital transformation.
-                </p>
-                <div class="row text-start mt-3">
-                  <div class="col-md-4">
-                    <h6><i class="fa-solid fa-target"></i> Our Mission</h6>
-                    <p class="small">Align student projects with Uganda's NDPIII, Digital Transformation Roadmap, and 4IR Strategy</p>
-                  </div>
-                  <div class="col-md-4">
-                    <h6><i class="fa-solid fa-users"></i> Collaboration</h6>
-                    <p class="small">Connect multidisciplinary teams from CS, SE, and Engineering programs</p>
-                  </div>
-                  <div class="col-md-4">
-                    <h6><i class="fa-solid fa-rocket"></i> Innovation</h6>
-                    <p class="small">Support real-world projects from concept to commercialization</p>
-                  </div>
-                </div>
+          <div class="col-md-6 mb-3">
+            <div class="d-flex align-items-start">
+              <i class="fa-solid fa-target text-primary me-3 mt-1"></i>
+              <div>
+                <h6 class="fw-bold">Strategic Alignment</h6>
+                <p class="small text-muted mb-0">Projects aligned with NDPIII and Digital Transformation Roadmap</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="d-flex align-items-start">
+              <i class="fa-solid fa-handshake text-success me-3 mt-1"></i>
+              <div>
+                <h6 class="fw-bold">Collaboration</h6>
+                <p class="small text-muted mb-0">Connecting multidisciplinary teams across institutions</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="d-flex align-items-start">
+              <i class="fa-solid fa-rocket text-warning me-3 mt-1"></i>
+              <div>
+                <h6 class="fw-bold">Innovation</h6>
+                <p class="small text-muted mb-0">Supporting projects from concept to commercialization</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="d-flex align-items-start">
+              <i class="fa-solid fa-graduation-cap text-info me-3 mt-1"></i>
+              <div>
+                <h6 class="fw-bold">Skill Development</h6>
+                <p class="small text-muted mb-0">Building capacity in emerging technologies</p>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <div class="col-md-6 text-center">
+        <div class="bg-white rounded-3 shadow-lg p-4">
+          <h5 class="fw-bold mb-3">Focus Areas</h5>
+          <div class="row g-3">
+            <div class="col-6">
+              <div class="bg-primary bg-opacity-10 rounded p-3">
+                <i class="fa-solid fa-wifi text-primary mb-2"></i>
+                <p class="small fw-bold mb-0">IoT & Connectivity</p>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="bg-success bg-opacity-10 rounded p-3">
+                <i class="fa-solid fa-leaf text-success mb-2"></i>
+                <p class="small fw-bold mb-0">Green Energy</p>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="bg-warning bg-opacity-10 rounded p-3">
+                <i class="fa-solid fa-robot text-warning mb-2"></i>
+                <p class="small fw-bold mb-0">Automation</p>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="bg-info bg-opacity-10 rounded p-3">
+                <i class="fa-solid fa-brain text-info mb-2"></i>
+                <p class="small fw-bold mb-0">AI & ML</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Outcomes Section -->
+<div class="py-5">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="display-6 fw-bold">Project Outcomes</h2>
+      <p class="lead text-muted">Track deliverables and impact across all initiatives</p>
+    </div>
+    
+    <div class="row text-center">
+      <div class="col-md-3 mb-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <div class="bg-danger bg-opacity-10 rounded-circle p-3 d-inline-block mb-3">
+              <i class="fa-solid fa-trophy fa-2x text-danger"></i>
+            </div>
+            <h5 class="fw-bold">Outcomes</h5>
+            <p class="text-muted">CAD files, PCB designs, prototypes, reports, and business plans</p>
+            <div class="d-grid gap-2">
+              <a href="{% url 'core:outcome_list' %}" class="btn btn-outline-danger">
+                <i class="fa-solid fa-list me-2"></i>View Outcomes
+              </a>
+              <a href="{% url 'core:outcome_create' %}" class="btn btn-danger">
+                <i class="fa-solid fa-plus me-2"></i>Add Outcome
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-9">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div class="text-center p-3 bg-light rounded">
+              <i class="fa-solid fa-file-code fa-2x text-primary mb-2"></i>
+              <h6 class="fw-bold">Technical Docs</h6>
+              <p class="small text-muted mb-0">CAD files & technical specifications</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="text-center p-3 bg-light rounded">
+              <i class="fa-solid fa-microchip fa-2x text-success mb-2"></i>
+              <h6 class="fw-bold">Hardware</h6>
+              <p class="small text-muted mb-0">PCB designs & prototypes</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="text-center p-3 bg-light rounded">
+              <i class="fa-solid fa-chart-line fa-2x text-warning mb-2"></i>
+              <h6 class="fw-bold">Business Plans</h6>
+              <p class="small text-muted mb-0">Commercialization strategies</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Call to Action -->
+<div class="py-5 bg-dark text-white">
+  <div class="container text-center">
+    <h2 class="display-6 fw-bold mb-3">Ready to Innovate?</h2>
+    <p class="lead mb-4">Join Uganda's growing tech ecosystem and contribute to national development</p>
+    <div class="d-flex justify-content-center gap-3">
+      <a href="{% url 'core:program_list' %}" class="btn btn-light btn-lg">
+        <i class="fa-solid fa-rocket me-2"></i>Explore Programs
+      </a>
+      <a href="{% url 'core:participant_create' %}" class="btn btn-outline-light btn-lg">
+        <i class="fa-solid fa-user-plus me-2"></i>Join Platform
+      </a>
     </div>
   </div>
 </div>

@@ -1,97 +1,22 @@
 {% extends 'core/base.html' %}
-
-{% block title %}{{ equipment.name }}{% endblock %}
-
 {% block content %}
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>{{ equipment.name }}</h2>
-                <div>
-                    <a href="{% url 'core:equipment_update' equipment.equipment_id %}" class="btn btn-primary">Edit</a>
-                    <a href="{% url 'core:equipment_delete' equipment.equipment_id %}" class="btn btn-danger">Delete</a>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Equipment Details</h5>
-                            
-                            <div class="row mb-3">
-                                <div class="col-sm-4"><strong>Name:</strong></div>
-                                <div class="col-sm-8">{{ equipment.name }}</div>
-                            </div>
-                            
-                            <div class="row mb-3">
-                                <div class="col-sm-4"><strong>Facility:</strong></div>
-                                <div class="col-sm-8">
-                                    <a href="{% url 'core:facility_detail' equipment.facility.facility_id %}">
-                                        {{ equipment.facility.name }}
-                                    </a>
-                                </div>
-                            </div>
-                            
-                            <div class="row mb-3">
-                                <div class="col-sm-4"><strong>Inventory Code:</strong></div>
-                                <div class="col-sm-8"><code>{{ equipment.inventory_code }}</code></div>
-                            </div>
-                            
-                            <div class="row mb-3">
-                                <div class="col-sm-4"><strong>Usage Domain:</strong></div>
-                                <div class="col-sm-8">
-                                    <span class="badge bg-primary">{{ equipment.get_usage_domain_display }}</span>
-                                </div>
-                            </div>
-                            
-                            <div class="row mb-3">
-                                <div class="col-sm-4"><strong>Support Phase:</strong></div>
-                                <div class="col-sm-8">
-                                    <span class="badge bg-info">{{ equipment.get_support_phase_display }}</span>
-                                </div>
-                            </div>
-                            
-                            <div class="row mb-3">
-                                <div class="col-sm-4"><strong>Status:</strong></div>
-                                <div class="col-sm-8">
-                                    <span class="badge bg-{% if equipment.is_operational %}success{% else %}danger{% endif %}">
-                                        {% if equipment.is_operational %}Operational{% else %}Out of Service{% endif %}
-                                    </span>
-                                </div>
-                            </div>
-                            
-                            {% if equipment.description %}
-                            <div class="row mb-3">
-                                <div class="col-sm-4"><strong>Description:</strong></div>
-                                <div class="col-sm-8">{{ equipment.description }}</div>
-                            </div>
-                            {% endif %}
-                            
-                            {% if equipment.capabilities %}
-                            <div class="row mb-3">
-                                <div class="col-sm-4"><strong>Capabilities:</strong></div>
-                                <div class="col-sm-8">{{ equipment.capabilities }}</div>
-                            </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Quick Actions</h5>
-                            <div class="d-grid gap-2">
-                                <a href="{% url 'core:equipment_list' %}" class="btn btn-outline-secondary">Back to Equipment</a>
-                                <a href="{% url 'core:facility_detail' equipment.facility.facility_id %}" class="btn btn-outline-info">View Facility</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div class="card">
+    <div class="card-header">
+        <h3>{{ equipment.name }}</h3>
+    </div>
+    <div class="card-body">
+        <p><strong>Facility:</strong> {{ equipment.facility.name }}</p>
+        <p><strong>Capabilities:</strong> {{ equipment.capabilities }}</p>
+        <p><strong>Description:</strong> {{ equipment.description }}</p>
+        <p><strong>Inventory Code:</strong> {{ equipment.inventory_code }}</p>
+        <p><strong>Usage Domain:</strong> {{ equipment.get_usage_domain_display }}</p>
+        <p><strong>Support Phase:</strong> {{ equipment.get_support_phase_display }}</p>
+        <p><strong>Operational:</strong> {% if equipment.is_operational %}Yes{% else %}No{% endif %}</p>
+    </div>
+    <div class="card-footer">
+        <a href="{% url 'core:equipment_update' equipment.pk %}" class="btn btn-warning">Edit</a>
+        <a href="{% url 'core:equipment_delete' equipment.pk %}" class="btn btn-danger">Delete</a>
+        <a href="{% url 'core:equipment_list' %}" class="btn btn-secondary">Back</a>
     </div>
 </div>
 {% endblock %}

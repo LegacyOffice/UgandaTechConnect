@@ -1,12 +1,9 @@
-
-
 from django.urls import path
 from . import views
 from .views import (
     ParticipantListView, ParticipantDetailView, ParticipantCreateView,
     ParticipantUpdateView, ParticipantDeleteView
 )
-from .views import UnifiedSearchView
 app_name = 'core'
 
 urlpatterns = [
@@ -49,7 +46,7 @@ urlpatterns = [
     path('participants/create/', ParticipantCreateView.as_view(), name='participant_create'),
     path('participants/<int:pk>/update/', ParticipantUpdateView.as_view(), name='participant_update'),
     path('participants/<int:pk>/delete/', ParticipantDeleteView.as_view(), name='participant_delete'),
-    path('search/', UnifiedSearchView.as_view(), name='unified_search'),
+    path('search/', views.UnifiedSearchView.as_view(), name='search'),
 
     path('outcomes/', views.OutcomeListView.as_view(), name='outcome_list'),
     path('outcome/<int:pk>/', views.OutcomeDetailView.as_view(), name='outcome_detail'),

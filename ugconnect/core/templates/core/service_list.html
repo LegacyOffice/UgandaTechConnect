@@ -4,55 +4,57 @@
 
 {% block content %}
 <div class="container mt-4">
-    <div class="row">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Services</h2>
-                <a href="{% url 'core:service_create' %}" class="btn btn-primary">Add Service</a>
+    <h2>Services</h2>
+    <form method="get" class="mb-3">
+        <div class="row g-2">
+            <div class="col-md-4">
+                <input type="text" name="search" class="form-control" placeholder="Search services..." value="{{ request.GET.search }}">
             </div>
-
-            <!-- Service Cards -->
-            {% if services %}
-            <div class="row">
-                {% for service in services %}
-<!--  -->
-                <div class="col-md-6 col-lg-4 mb-4">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <h5 class="card-title">{{ service.name }}</h5>
-                                <!-- <span class="badge bg-{% if service.is_available %}success{% else %}warning{% endif %}"> -->
-                                    <!-- {% if service.is_available %}Available{% else %}Unavailable{% endif %} -->
-                                <!-- </span> -->
-                            </div>
-                            <p class="card-text">
-                                <strong>Facility:</strong> {{ service.facility.name }}<br>
-                                <strong>Category:</strong> {{ service.get_category_display }}<br>
-                                <strong>Skill Type:</strong> {{ service.get_skill_type_display }}<br>
-                                {% if service.operating_hours %}
-                                <strong>Hours:</strong> {{ service.operating_hours }}
-                                {% endif %}
-                            </p>
-                            {% if service.description %}
-                            <p class="card-text">{{ service.description|truncatewords:15 }}</p>
-                            {% endif %}
-                        </div>
-                        <div class="card-footer">
-                            <a href="{% url 'core:service_detail' service.service_id %}" 
-                               class="btn btn-sm btn-outline-primary">View Details</a>
-                            <a href="{% url 'core:service_update' service.service_id %}" 
-                               class="btn btn-sm btn-outline-secondary">Edit</a>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
+            <div class="col-md-4">
+                <select name="facility" class="form-select">
+                    <option value="">Facility</option>
+                    {% for f in facilities %}
+                    <option value="{{ f.pk }}" {% if request.GET.facility == f.pk|stringformat:"s" %}selected{% endif %}>{{ f.name }}</option>
+                    {% endfor %}
+                </select>
             </div>
-            {% else %}
-            <div class="alert alert-info">
-                No services found. <a href="{% url 'core:service_create' %}">Add the first service</a>.
+            <div class="col-md-4">
+                <select name="category" class="form-select">
+                    <option value="">Category</option>
+                    {% for c in service_categories %}
+                    <option value="{{ c.0 }}" {% if request.GET.category == c.0 %}selected{% endif %}>{{ c.1 }}</option>
+                    {% endfor %}
+                </select>
             </div>
-            {% endif %}
         </div>
-    </div>
+        <button class="btn btn-primary mt-2" type="submit">Filter</button>
+    </form>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Facility</th>
+                <th>Category</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for service in services %}
+            <tr>
+                <td>{{ service.name }}</td>
+                <td>{{ service.facility.name }}</td>
+                <td>{{ service.get_category_display }}</td>
+                <td>
+                    <a href="{% url 'core:service_detail' service.pk %}" class="btn btn-sm btn-info">View</a>
+                    <a href="{% url 'core:service_update' service.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="{% url 'core:service_delete' service.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4">No services found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'core:service_create' %}" class="btn btn-success">Add Service</a>
 </div>
 {% endblock %}
