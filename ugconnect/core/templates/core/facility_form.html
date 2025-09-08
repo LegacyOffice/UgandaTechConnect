@@ -1,4 +1,5 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
 {% block title %}
 {% if object %}Edit Facility{% else %}Create Facility{% endif %} - Uganda Tech Connect
@@ -283,4 +284,192 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Facility Form TypeScript Enhancements -->
+<script src="{% static 'js/form-enhancements.js' %}"></script>
+<script type="module">
+    // Facility-specific enhancements
+        // Facility-specific enhancements
+        const facilityFormEnhancements = {
+            setupLocationValidation() {
+                const locationField = document.querySelector('input[name*="location"], input[name*="address"]');
+                if (locationField) {
+                    locationField.addEventListener('blur', () => {
+                        const location = locationField.value.toLowerCase();
+                        const ugandanCities = ['kampala', 'entebbe', 'jinja', 'mbale', 'gulu', 'mbarara', 'masaka', 'fort portal'];
+                        
+                        const isUgandanLocation = ugandanCities.some(city => 
+                            location.includes(city)
+                        );
+                        
+                        if (!isUgandanLocation && location.length > 3) {
+                            this.showLocationSuggestion(locationField);
+                        }
+                    });
+                }
+            },
+
+            showLocationSuggestion(field) {
+                const suggestion = document.createElement('div');
+                suggestion.className = 'alert alert-warning mt-2';
+                suggestion.innerHTML = `
+                    <small>
+                        <i class="fa-solid fa-map-marker-alt me-1"></i>
+                        Consider specifying a Ugandan city (e.g., Kampala, Entebbe, Jinja) for better regional alignment
+                    </small>
+                `;
+                
+                const existingSuggestion = field.parentNode.querySelector('.alert-warning');
+                if (existingSuggestion) {
+                    existingSuggestion.remove();
+                }
+                
+                field.parentNode.appendChild(suggestion);
+                
+                setTimeout(() => {
+                    suggestion.remove();
+                }, 8000);
+            },
+
+            setupCapacityCalculation() {
+                const capacityField = document.querySelector('input[name*="capacity"], input[type="number"]');
+                const typeField = document.querySelector('select[name*="type"], input[name*="type"]');
+                
+                if (capacityField && typeField) {
+                    const calculateOptimalCapacity = () => {
+                        const facilityType = typeField.value?.toLowerCase() || '';
+                        let suggestedCapacity = 0;
+                        
+                        if (facilityType.includes('lab')) suggestedCapacity = 20;
+                        else if (facilityType.includes('workshop')) suggestedCapacity = 15;
+                        else if (facilityType.includes('co-work')) suggestedCapacity = 50;
+                        else if (facilityType.includes('incubator')) suggestedCapacity = 30;
+                        else suggestedCapacity = 25; // Default
+                        
+                        if (parseInt(capacityField.value) === 0) {
+                            capacityField.value = suggestedCapacity;
+                            this.showCapacitySuggestion(capacityField, suggestedCapacity);
+                        }
+                    };
+                    
+                    typeField.addEventListener('change', calculateOptimalCapacity);
+                }
+            },
+
+            showCapacitySuggestion(field, suggestedCapacity) {
+                const suggestion = document.createElement('div');
+                suggestion.className = 'alert alert-info mt-2';
+                suggestion.innerHTML = `
+                    <small>
+                        <i class="fa-solid fa-users me-1"></i>
+                        Suggested capacity: ${suggestedCapacity} people (based on facility type)
+                    </small>
+                `;
+                
+                const existingSuggestion = field.parentNode.querySelector('.alert-info');
+                if (existingSuggestion) {
+                    existingSuggestion.remove();
+                }
+                
+                field.parentNode.appendChild(suggestion);
+                
+                setTimeout(() => {
+                    suggestion.remove();
+                }, 6000);
+            },
+
+            setupEquipmentSuggestions() {
+                const equipmentField = document.querySelector('textarea[name*="equipment"], textarea[name*="resources"]');
+                const typeField = document.querySelector('select[name*="type"], input[name*="type"]');
+                
+                if (equipmentField && typeField) {
+                    typeField.addEventListener('change', () => {
+                        const facilityType = typeField.value?.toLowerCase() || '';
+                        const suggestions = this.getEquipmentSuggestions(facilityType);
+                        
+                        if (suggestions.length > 0 && !equipmentField.value.trim()) {
+                            equipmentField.placeholder = `Suggested equipment: ${suggestions.join(', ')}`;
+                        }
+                    });
+                }
+            },
+
+            getEquipmentSuggestions(facilityType) {
+                const equipmentMap = {
+                    'lab': ['Computers', '3D Printers', 'Oscilloscopes', 'Multimeters', 'Breadboards'],
+                    'workshop': ['Power Tools', 'Workbenches', 'Safety Equipment', 'Welding Equipment'],
+                    'co-work': ['Desks', 'Chairs', 'Wi-Fi', 'Projectors', 'Meeting Rooms'],
+                    'incubator': ['Mentoring Spaces', 'Presentation Equipment', 'Networking Facilities']
+                };
+                
+                for (const [key, equipment] of Object.entries(equipmentMap)) {
+                    if (facilityType.includes(key)) {
+                        return equipment;
+                    }
+                }
+                
+                return ['Basic Computing Equipment', 'Internet Access', 'Furniture'];
+            },
+
+            setupAccessibilityCheck() {
+                const form = document.querySelector('form');
+                if (form) {
+                    const accessibilityKeywords = ['wheelchair', 'accessible', 'disability', 'ramp', 'elevator'];
+                    
+                    form.addEventListener('submit', (e) => {
+                        const description = document.querySelector('textarea[name*="description"]')?.value?.toLowerCase() || '';
+                        
+                        const hasAccessibilityMention = accessibilityKeywords.some(keyword => 
+                            description.includes(keyword)
+                        );
+                        
+                        if (!hasAccessibilityMention) {
+                            const confirmed = confirm(
+                                'Have you considered accessibility features for people with disabilities? ' +
+                                'This is important for inclusive innovation spaces.'
+                            );
+                            
+                            if (!confirmed) {
+                                e.preventDefault();
+                                const descriptionField = document.querySelector('textarea[name*="description"]');
+                                if (descriptionField) {
+                                    descriptionField.focus();
+                                    descriptionField.value += '\n\nAccessibility features: ';
+                                }
+                            }
+                        }
+                    });
+                }
+            },
+
+            setupProgramAlignment() {
+                const programsSelect = document.querySelector('select[name*="programs"]');
+                const focusAreasField = document.querySelector('input[name*="focus"], textarea[name*="focus"]');
+                
+                if (programsSelect && focusAreasField) {
+                    programsSelect.addEventListener('change', () => {
+                        const selectedPrograms = Array.from(programsSelect.selectedOptions)
+                            .map(option => option.textContent);
+                        
+                        console.log('📊 Facility aligned with programs:', selectedPrograms);
+                        
+                        if (selectedPrograms.length > 0 && !focusAreasField.value.trim()) {
+                            focusAreasField.placeholder = 'Consider focus areas that complement selected programs';
+                        }
+                    });
+                }
+            }
+        };
+
+        // Initialize facility-specific enhancements
+        facilityFormEnhancements.setupLocationValidation();
+        facilityFormEnhancements.setupCapacityCalculation();
+        facilityFormEnhancements.setupEquipmentSuggestions();
+        facilityFormEnhancements.setupAccessibilityCheck();
+        facilityFormEnhancements.setupProgramAlignment();
+        
+        console.log('✅ Facility form enhancements loaded');
+</script>
 {% endblock %}

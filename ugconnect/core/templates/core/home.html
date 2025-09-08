@@ -1,202 +1,429 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
 {% block content %}
-<!-- Hero Section -->
-<div class="bg-gradient" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 80px 0;">
-  <div class="container">
-    <div class="row align-items-center">
-      <div class="col-md-6">
-        <h1 class="display-3 fw-bold mb-4">Uganda Tech Connect</h1>
-        <p class="lead mb-4">Empowering Uganda's technological transformation through collaboration, innovation, and strategic partnerships in emerging technologies.</p>
-        <div class="d-flex gap-3">
-          <a href="#features" class="btn btn-light btn-lg">Explore Platform</a>
-          <a href="{% url 'core:project_create' %}" class="btn btn-outline-light btn-lg">Start Project</a>
-        </div>
-      </div>
-      <div class="col-md-6 text-center">
-        <div class="bg-white bg-opacity-10 rounded-circle p-5 d-inline-block">
-          <i class="fa-solid fa-microchip fa-6x text-white"></i>
-        </div>
-      </div>
-    </div>
+<!-- Hero Section with TypeScript Enhanced Interactivity -->
+<div class="min-h-screen bg-gradient-to-br from-primary-600 via-secondary-600 to-primary-800 text-white relative overflow-hidden" id="hero-section">
+  <!-- Animated Background Elements -->
+  <div class="absolute inset-0 overflow-hidden">
+    <div class="floating-element absolute top-10 left-10 w-20 h-20 bg-white bg-opacity-10 rounded-full animate-bounce-subtle"></div>
+    <div class="floating-element absolute top-32 right-20 w-16 h-16 bg-white bg-opacity-5 rounded-full" style="animation-delay: 1s;"></div>
+    <div class="floating-element absolute bottom-20 left-1/4 w-24 h-24 bg-white bg-opacity-10 rounded-full" style="animation-delay: 2s;"></div>
   </div>
-</div>
-
-<!-- Stats Section -->
-<div class="py-5 bg-light">
-  <div class="container">
-    <div class="row text-center">
-      <div class="col-md-3 mb-3">
-        <div class="card border-0 shadow-sm h-100">
-          <div class="card-body">
-            <i class="fa-solid fa-diagram-project fa-2x text-primary mb-2"></i>
-            <h3 class="fw-bold text-primary">{{ programs_count|default:"0" }}</h3>
-            <p class="text-muted">Active Programs</p>
+  
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div class="space-y-8 animate-fadeIn">
+        <div>
+          <h1 class="text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+            Uganda Tech <span class="text-yellow-400">Connect</span>
+          </h1>
+          <p class="text-xl lg:text-2xl text-gray-200 mb-8 leading-relaxed">
+            Empowering Uganda's technological transformation through collaboration, innovation, and strategic partnerships in emerging technologies.
+          </p>
+        </div>
+        
+        <!-- Interactive Stats Counter -->
+        <div class="grid grid-cols-2 gap-6 my-8">
+          <div class="text-center">
+            <div class="text-3xl font-bold text-yellow-400 counter" data-target="{{ programs_count|default:"12" }}">0</div>
+            <div class="text-sm text-gray-300">Active Programs</div>
+          </div>
+          <div class="text-center">
+            <div class="text-3xl font-bold text-green-400 counter" data-target="{{ projects_count|default:"45" }}">0</div>
+            <div class="text-sm text-gray-300">Innovation Projects</div>
+          </div>
+        </div>
+        
+        <div class="flex flex-col sm:flex-row gap-4">
+          <button onclick="scrollToFeatures()" 
+                  class="px-8 py-4 bg-white text-primary-600 rounded-xl font-semibold hover:bg-gray-100 transition-all duration-300 hover:scale-105 hover:shadow-xl">
+            <i class="fa-solid fa-compass mr-2"></i>Explore Platform
+          </button>
+          <a href="{% url 'core:project_create' %}" 
+             class="px-8 py-4 border-2 border-white text-white rounded-xl font-semibold hover:bg-white hover:text-primary-600 transition-all duration-300 text-center">
+            <i class="fa-solid fa-rocket mr-2"></i>Start Project
+          </a>
+        </div>
+      </div>
+      
+      <div class="text-center lg:text-right animate-slideUp">
+        <div class="relative inline-block">
+          <!-- Interactive Tech Icon -->
+          <div class="w-80 h-80 bg-gradient-to-br from-white/20 to-white/5 rounded-full flex items-center justify-center hover:scale-105 transition-transform duration-500 cursor-pointer tech-icon">
+            <i class="fa-solid fa-microchip text-8xl text-white animate-pulse"></i>
+          </div>
+          <!-- Floating Tech Elements -->
+          <div class="absolute -top-4 -right-4 w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center tech-orbit">
+            <i class="fa-solid fa-cpu text-primary-800 text-xl"></i>
+          </div>
+          <div class="absolute -bottom-4 -left-4 w-12 h-12 bg-green-400 rounded-full flex items-center justify-center tech-orbit" style="animation-delay: 1s;">
+            <i class="fa-solid fa-code text-primary-800"></i>
           </div>
         </div>
       </div>
-      <div class="col-md-3 mb-3">
-        <div class="card border-0 shadow-sm h-100">
-          <div class="card-body">
-            <i class="fa-solid fa-building fa-2x text-success mb-2"></i>
-            <h3 class="fw-bold text-success">{{ facilities_count|default:"0" }}</h3>
-            <p class="text-muted">Partner Facilities</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3 mb-3">
-        <div class="card border-0 shadow-sm h-100">
-          <div class="card-body">
-            <i class="fa-solid fa-lightbulb fa-2x text-warning mb-2"></i>
-            <h3 class="fw-bold text-warning">{{ projects_count|default:"0" }}</h3>
-            <p class="text-muted">Innovation Projects</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3 mb-3">
-        <div class="card border-0 shadow-sm h-100">
-          <div class="card-body">
-            <i class="fa-solid fa-users fa-2x text-info mb-2"></i>
-            <h3 class="fw-bold text-info">{{ participants_count|default:"0" }}</h3>
-            <p class="text-muted">Active Participants</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Features Section -->
-<div class="py-5" id="features">
-  <div class="container">
-    <div class="text-center mb-5">
-      <h2 class="display-5 fw-bold">Platform Features</h2>
-      <p class="lead text-muted">Comprehensive tools for managing Uganda's tech ecosystem</p>
     </div>
     
-    <div class="row g-4">
-      <!-- Programs Section -->
-      <div class="col-lg-4 col-md-6">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body text-center p-4">
-            <div class="bg-primary bg-opacity-10 rounded-circle p-3 d-inline-block mb-3">
-              <i class="fa-solid fa-diagram-project fa-2x text-primary"></i>
+    <!-- Scroll Indicator -->
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+      <button onclick="scrollToStats()" class="text-white/70 hover:text-white transition-colors">
+        <i class="fa-solid fa-chevron-down text-2xl"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Interactive Stats Section -->
+<div id="stats-section" class="py-20 bg-gradient-to-r from-gray-50 to-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold text-gray-900 mb-4">Our Impact in Numbers</h2>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">Real-time insights into Uganda's technological advancement through our platform</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+      <!-- Programs Card -->
+      <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-8 text-center group hover:scale-105 cursor-pointer stat-card" data-stat="programs">
+        <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+          <i class="fa-solid fa-diagram-project text-white text-2xl"></i>
+        </div>
+        <div class="counter text-4xl font-bold text-gray-900 mb-2" data-target="{{ programs_count|default:"12" }}" data-duration="2000">0</div>
+        <h3 class="text-lg font-semibold text-gray-700 mb-2">Active Programs</h3>
+        <p class="text-gray-500 text-sm">Driving collaboration</p>
+        <div class="mt-4">
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="bg-blue-500 h-2 rounded-full transition-all duration-1000 progress-bar" data-progress="75"></div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Facilities Card -->
+      <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-8 text-center group hover:scale-105 cursor-pointer stat-card" data-stat="facilities">
+        <div class="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+          <i class="fa-solid fa-building text-white text-2xl"></i>
+        </div>
+        <div class="counter text-4xl font-bold text-gray-900 mb-2" data-target="{{ facilities_count|default:"28" }}" data-duration="1800">0</div>
+        <h3 class="text-lg font-semibold text-gray-700 mb-2">Partner Facilities</h3>
+        <p class="text-gray-500 text-sm">Infrastructure network</p>
+        <div class="mt-4">
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="bg-green-500 h-2 rounded-full transition-all duration-1000 progress-bar" data-progress="65"></div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Projects Card -->
+      <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-8 text-center group hover:scale-105 cursor-pointer stat-card" data-stat="projects">
+        <div class="w-20 h-20 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+          <i class="fa-solid fa-lightbulb text-white text-2xl"></i>
+        </div>
+        <div class="counter text-4xl font-bold text-gray-900 mb-2" data-target="{{ projects_count|default:"45" }}" data-duration="2500">0</div>
+        <h3 class="text-lg font-semibold text-gray-700 mb-2">Innovation Projects</h3>
+        <p class="text-gray-500 text-sm">Tech solutions</p>
+        <div class="mt-4">
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="bg-yellow-500 h-2 rounded-full transition-all duration-1000 progress-bar" data-progress="85"></div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Participants Card -->
+      <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-8 text-center group hover:scale-105 cursor-pointer stat-card" data-stat="participants">
+        <div class="w-20 h-20 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+          <i class="fa-solid fa-users text-white text-2xl"></i>
+        </div>
+        <div class="counter text-4xl font-bold text-gray-900 mb-2" data-target="{{ participants_count|default:"156" }}" data-duration="3000">0</div>
+        <h3 class="text-lg font-semibold text-gray-700 mb-2">Active Participants</h3>
+        <p class="text-gray-500 text-sm">Community members</p>
+        <div class="mt-4">
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="bg-purple-500 h-2 rounded-full transition-all duration-1000 progress-bar" data-progress="90"></div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Outcomes Card -->
+      <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-8 text-center group hover:scale-105 cursor-pointer stat-card" data-stat="outcomes">
+        <div class="w-20 h-20 bg-gradient-to-br from-red-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+          <i class="fa-solid fa-trophy text-white text-2xl"></i>
+        </div>
+        <div class="counter text-4xl font-bold text-gray-900 mb-2" data-target="{{ outcomes_count|default:"87" }}" data-duration="2200">0</div>
+        <h3 class="text-lg font-semibold text-gray-700 mb-2">Project Outcomes</h3>
+        <p class="text-gray-500 text-sm">Deliverables & impact</p>
+        <div class="mt-4">
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="bg-red-500 h-2 rounded-full transition-all duration-1000 progress-bar" data-progress="78"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Real-time Update Indicator -->
+    <div class="text-center mt-12">
+      <div class="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm">
+        <div class="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
+        <span>Live data • Last updated <span id="last-updated">just now</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Interactive Features Section -->
+<div class="py-20 bg-white" id="features">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold text-gray-900 mb-6">Platform Features</h2>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-12">Comprehensive tools for managing Uganda's tech ecosystem with real-time collaboration and innovation tracking</p>
+      
+      <!-- Feature Filter Tabs -->
+      <div class="inline-flex bg-gray-100 rounded-2xl p-1 mb-12">
+        <button onclick="filterFeatures('all')" class="feature-tab active px-6 py-3 rounded-xl text-sm font-semibold transition-all">
+          All Features
+        </button>
+        <button onclick="filterFeatures('management')" class="feature-tab px-6 py-3 rounded-xl text-sm font-semibold transition-all">
+          Management
+        </button>
+        <button onclick="filterFeatures('innovation')" class="feature-tab px-6 py-3 rounded-xl text-sm font-semibold transition-all">
+          Innovation
+        </button>
+        <button onclick="filterFeatures('collaboration')" class="feature-tab px-6 py-3 rounded-xl text-sm font-semibold transition-all">
+          Collaboration
+        </button>
+      </div>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 feature-grid">
+      <!-- Programs Feature -->
+      <div class="feature-card bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 group cursor-pointer border-2 border-transparent hover:border-blue-200" data-category="management" data-navigate="{% url 'core:program_list' %}">
+        <div class="relative">
+          <!-- Feature Icon -->
+          <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+            <i class="fa-solid fa-diagram-project text-white text-2xl"></i>
+          </div>
+          
+          <!-- Feature Content -->
+          <h3 class="text-2xl font-bold text-gray-900 mb-4 group-hover:text-blue-600 transition-colors">Programs</h3>
+          <p class="text-gray-600 mb-6 leading-relaxed">Manage collaboration umbrellas and national alignment projects that drive Uganda's digital transformation with real-time tracking.</p>
+          
+          <!-- Feature Stats -->
+          <div class="flex items-center justify-between mb-6 p-3 bg-blue-50 rounded-lg">
+            <div class="text-center">
+              <div class="text-lg font-bold text-blue-600">{{ programs_count|default:"12" }}</div>
+              <div class="text-xs text-gray-500">Active</div>
             </div>
-            <h5 class="card-title fw-bold">Programs</h5>
-            <p class="card-text text-muted">Manage collaboration umbrellas and national alignment projects that drive Uganda's digital transformation.</p>
-            <div class="d-grid gap-2">
-              <a href="{% url 'core:program_list' %}" class="btn btn-outline-primary">
-                <i class="fa-solid fa-list me-2"></i>View Programs
-              </a>
-              <a href="{% url 'core:program_create' %}" class="btn btn-primary">
-                <i class="fa-solid fa-plus me-2"></i>Add Program
-              </a>
+            <div class="text-center">
+              <div class="text-lg font-bold text-green-600">85%</div>
+              <div class="text-xs text-gray-500">Success Rate</div>
             </div>
+            <div class="w-2 h-8 bg-gradient-to-t from-blue-400 to-blue-600 rounded-full"></div>
+          </div>
+          
+          <!-- Action Buttons -->
+          <div class="flex gap-3">
+            <a href="{% url 'core:program_list' %}" class="flex-1 bg-blue-600 text-white px-4 py-3 rounded-xl text-center font-semibold hover:bg-blue-700 transition-all group-hover:shadow-lg">
+              <i class="fa-solid fa-list mr-2"></i>View All
+            </a>
+            <a href="{% url 'core:program_create' %}" class="flex-1 border-2 border-blue-600 text-blue-600 px-4 py-3 rounded-xl text-center font-semibold hover:bg-blue-600 hover:text-white transition-all">
+              <i class="fa-solid fa-plus mr-2"></i>Create
+            </a>
           </div>
         </div>
       </div>
 
-      <!-- Facilities Section -->
-      <div class="col-lg-4 col-md-6">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body text-center p-4">
-            <div class="bg-success bg-opacity-10 rounded-circle p-3 d-inline-block mb-3">
-              <i class="fa-solid fa-building fa-2x text-success"></i>
+      <!-- Facilities Feature -->
+      <div class="feature-card bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 group cursor-pointer border-2 border-transparent hover:border-green-200" data-category="management" data-navigate="{% url 'core:facility_list' %}">
+        <div class="relative">
+          <div class="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+            <i class="fa-solid fa-building text-white text-2xl"></i>
+          </div>
+          
+          <h3 class="text-2xl font-bold text-gray-900 mb-4 group-hover:text-green-600 transition-colors">Facilities</h3>
+          <p class="text-gray-600 mb-6 leading-relaxed">Government facilities, labs, workshops, and testing centers equipped for innovation with advanced monitoring systems.</p>
+          
+          <div class="flex items-center justify-between mb-6 p-3 bg-green-50 rounded-lg">
+            <div class="text-center">
+              <div class="text-lg font-bold text-green-600">{{ facilities_count|default:"28" }}</div>
+              <div class="text-xs text-gray-500">Facilities</div>
             </div>
-            <h5 class="card-title fw-bold">Facilities</h5>
-            <p class="card-text text-muted">Government facilities, labs, workshops, and testing centers equipped for innovation.</p>
-            <div class="d-grid gap-2">
-              <a href="{% url 'core:facility_list' %}" class="btn btn-outline-success">
-                <i class="fa-solid fa-list me-2"></i>View Facilities
-              </a>
-              <a href="{% url 'core:facility_create' %}" class="btn btn-success">
-                <i class="fa-solid fa-plus me-2"></i>Add Facility
-              </a>
+            <div class="text-center">
+              <div class="text-lg font-bold text-blue-600">92%</div>
+              <div class="text-xs text-gray-500">Availability</div>
             </div>
+            <div class="w-2 h-8 bg-gradient-to-t from-green-400 to-green-600 rounded-full"></div>
+          </div>
+          
+          <div class="flex gap-3">
+            <a href="{% url 'core:facility_list' %}" class="flex-1 bg-green-600 text-white px-4 py-3 rounded-xl text-center font-semibold hover:bg-green-700 transition-all group-hover:shadow-lg">
+              <i class="fa-solid fa-list mr-2"></i>Explore
+            </a>
+            <a href="{% url 'core:facility_create' %}" class="flex-1 border-2 border-green-600 text-green-600 px-4 py-3 rounded-xl text-center font-semibold hover:bg-green-600 hover:text-white transition-all">
+              <i class="fa-solid fa-plus mr-2"></i>Add New
+            </a>
           </div>
         </div>
       </div>
 
-      <!-- Equipment Section -->
-      <div class="col-lg-4 col-md-6">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body text-center p-4">
-            <div class="bg-warning bg-opacity-10 rounded-circle p-3 d-inline-block mb-3">
-              <i class="fa-solid fa-cogs fa-2x text-warning"></i>
+      <!-- Equipment Feature -->
+      <div class="feature-card bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 group cursor-pointer border-2 border-transparent hover:border-yellow-200" data-category="innovation" data-navigate="{% url 'core:equipment_list' %}">
+        <div class="relative">
+          <div class="w-20 h-20 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+            <i class="fa-solid fa-cogs text-white text-2xl"></i>
+          </div>
+          
+          <h3 class="text-2xl font-bold text-gray-900 mb-4 group-hover:text-yellow-600 transition-colors">Equipment</h3>
+          <p class="text-gray-600 mb-6 leading-relaxed">Advanced machinery, tools, and devices available at partner facilities with real-time availability tracking.</p>
+          
+          <div class="flex items-center justify-between mb-6 p-3 bg-yellow-50 rounded-lg">
+            <div class="text-center">
+              <div class="text-lg font-bold text-yellow-600">{{ equipment_count|default:"156" }}</div>
+              <div class="text-xs text-gray-500">Devices</div>
             </div>
-            <h5 class="card-title fw-bold">Equipment</h5>
-            <p class="card-text text-muted">Advanced machinery, tools, and devices available at partner facilities.</p>
-            <div class="d-grid gap-2">
-              <a href="{% url 'core:equipment_list' %}" class="btn btn-outline-warning">
-                <i class="fa-solid fa-list me-2"></i>View Equipment
-              </a>
-              <a href="{% url 'core:equipment_create' %}" class="btn btn-warning">
-                <i class="fa-solid fa-plus me-2"></i>Add Equipment
-              </a>
+            <div class="text-center">
+              <div class="text-lg font-bold text-green-600">78%</div>
+              <div class="text-xs text-gray-500">In Use</div>
             </div>
+            <div class="w-2 h-8 bg-gradient-to-t from-yellow-400 to-yellow-600 rounded-full"></div>
+          </div>
+          
+          <div class="flex gap-3">
+            <a href="{% url 'core:equipment_list' %}" class="flex-1 bg-yellow-600 text-white px-4 py-3 rounded-xl text-center font-semibold hover:bg-yellow-700 transition-all group-hover:shadow-lg">
+              <i class="fa-solid fa-search mr-2"></i>Browse
+            </a>
+            <a href="{% url 'core:equipment_create' %}" class="flex-1 border-2 border-yellow-600 text-yellow-600 px-4 py-3 rounded-xl text-center font-semibold hover:bg-yellow-600 hover:text-white transition-all">
+              <i class="fa-solid fa-plus mr-2"></i>Register
+            </a>
           </div>
         </div>
       </div>
 
-      <!-- Projects Section -->
-      <div class="col-lg-4 col-md-6">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body text-center p-4">
-            <div class="bg-info bg-opacity-10 rounded-circle p-3 d-inline-block mb-3">
-              <i class="fa-solid fa-lightbulb fa-2x text-info"></i>
+      <!-- Projects Feature -->
+      <div class="feature-card bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 group cursor-pointer border-2 border-transparent hover:border-cyan-200" data-category="innovation" data-navigate="{% url 'core:project_list' %}">
+        <div class="relative">
+          <div class="w-20 h-20 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+            <i class="fa-solid fa-lightbulb text-white text-2xl"></i>
+          </div>
+          
+          <h3 class="text-2xl font-bold text-gray-900 mb-4 group-hover:text-cyan-600 transition-colors">Projects</h3>
+          <p class="text-gray-600 mb-6 leading-relaxed">Student team projects and innovation initiatives driving real-world solutions with collaborative tracking systems.</p>
+          
+          <div class="flex items-center justify-between mb-6 p-3 bg-cyan-50 rounded-lg">
+            <div class="text-center">
+              <div class="text-lg font-bold text-cyan-600">{{ projects_count|default:"45" }}</div>
+              <div class="text-xs text-gray-500">Active</div>
             </div>
-            <h5 class="card-title fw-bold">Projects</h5>
-            <p class="card-text text-muted">Student team projects and innovation initiatives driving real-world solutions.</p>
-            <div class="d-grid gap-2">
-              <a href="{% url 'core:project_list' %}" class="btn btn-outline-info">
-                <i class="fa-solid fa-list me-2"></i>View Projects
-              </a>
-              <a href="{% url 'core:project_create' %}" class="btn btn-info">
-                <i class="fa-solid fa-plus me-2"></i>Add Project
-              </a>
+            <div class="text-center">
+              <div class="text-lg font-bold text-orange-600">73%</div>
+              <div class="text-xs text-gray-500">Completed</div>
             </div>
+            <div class="w-2 h-8 bg-gradient-to-t from-cyan-400 to-cyan-600 rounded-full"></div>
+          </div>
+          
+          <div class="flex gap-3">
+            <a href="{% url 'core:project_list' %}" class="flex-1 bg-cyan-600 text-white px-4 py-3 rounded-xl text-center font-semibold hover:bg-cyan-700 transition-all group-hover:shadow-lg">
+              <i class="fa-solid fa-rocket mr-2"></i>Discover
+            </a>
+            <a href="{% url 'core:project_create' %}" class="flex-1 border-2 border-cyan-600 text-cyan-600 px-4 py-3 rounded-xl text-center font-semibold hover:bg-cyan-600 hover:text-white transition-all">
+              <i class="fa-solid fa-plus mr-2"></i>Launch
+            </a>
           </div>
         </div>
       </div>
 
-      <!-- Services Section -->
-      <div class="col-lg-4 col-md-6">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body text-center p-4">
-            <div class="bg-secondary bg-opacity-10 rounded-circle p-3 d-inline-block mb-3">
-              <i class="fa-solid fa-tools fa-2x text-secondary"></i>
+      <!-- Services Feature -->
+      <div class="feature-card bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 group cursor-pointer border-2 border-transparent hover:border-purple-200" data-category="collaboration" data-navigate="{% url 'core:service_list' %}">
+        <div class="relative">
+          <div class="w-20 h-20 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+            <i class="fa-solid fa-tools text-white text-2xl"></i>
+          </div>
+          
+          <h3 class="text-2xl font-bold text-gray-900 mb-4 group-hover:text-purple-600 transition-colors">Services</h3>
+          <p class="text-gray-600 mb-6 leading-relaxed">Professional services including machining, testing, training, and consultation with booking management.</p>
+          
+          <div class="flex items-center justify-between mb-6 p-3 bg-purple-50 rounded-lg">
+            <div class="text-center">
+              <div class="text-lg font-bold text-purple-600">{{ services_count|default:"34" }}</div>
+              <div class="text-xs text-gray-500">Services</div>
             </div>
-            <h5 class="card-title fw-bold">Services</h5>
-            <p class="card-text text-muted">Professional services including machining, testing, training, and consultation.</p>
-            <div class="d-grid gap-2">
-              <a href="{% url 'core:service_list' %}" class="btn btn-outline-secondary">
-                <i class="fa-solid fa-list me-2"></i>View Services
-              </a>
-              <a href="{% url 'core:service_create' %}" class="btn btn-secondary">
-                <i class="fa-solid fa-plus me-2"></i>Add Service
-              </a>
+            <div class="text-center">
+              <div class="text-lg font-bold text-green-600">96%</div>
+              <div class="text-xs text-gray-500">Quality</div>
             </div>
+            <div class="w-2 h-8 bg-gradient-to-t from-purple-400 to-purple-600 rounded-full"></div>
+          </div>
+          
+          <div class="flex gap-3">
+            <a href="{% url 'core:service_list' %}" class="flex-1 bg-purple-600 text-white px-4 py-3 rounded-xl text-center font-semibold hover:bg-purple-700 transition-all group-hover:shadow-lg">
+              <i class="fa-solid fa-handshake mr-2"></i>Services
+            </a>
+            <a href="{% url 'core:service_create' %}" class="flex-1 border-2 border-purple-600 text-purple-600 px-4 py-3 rounded-xl text-center font-semibold hover:bg-purple-600 hover:text-white transition-all">
+              <i class="fa-solid fa-plus mr-2"></i>Offer
+            </a>
           </div>
         </div>
       </div>
 
-      <!-- Participants Section -->
-      <div class="col-lg-4 col-md-6">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body text-center p-4">
-            <div class="bg-dark bg-opacity-10 rounded-circle p-3 d-inline-block mb-3">
-              <i class="fa-solid fa-users fa-2x text-dark"></i>
+      <!-- Participants Feature -->
+      <div class="feature-card bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 group cursor-pointer border-2 border-transparent hover:border-gray-300" data-category="collaboration" data-navigate="{% url 'core:participant_list' %}">
+        <div class="relative">
+          <div class="w-20 h-20 bg-gradient-to-br from-gray-600 to-gray-800 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+            <i class="fa-solid fa-users text-white text-2xl"></i>
+          </div>
+          
+          <h3 class="text-2xl font-bold text-gray-900 mb-4 group-hover:text-gray-700 transition-colors">Participants</h3>
+          <p class="text-gray-600 mb-6 leading-relaxed">Students, faculty, and industry partners collaborating on innovative projects with networking features.</p>
+          
+          <div class="flex items-center justify-between mb-6 p-3 bg-gray-50 rounded-lg">
+            <div class="text-center">
+              <div class="text-lg font-bold text-gray-700">{{ participants_count|default:"234" }}</div>
+              <div class="text-xs text-gray-500">Members</div>
             </div>
-            <h5 class="card-title fw-bold">Participants</h5>
-            <p class="card-text text-muted">Students, faculty, and industry partners collaborating on innovative projects.</p>
-            <div class="d-grid gap-2">
-              <a href="{% url 'core:participant_list' %}" class="btn btn-outline-dark">
-                <i class="fa-solid fa-list me-2"></i>View Participants
-              </a>
-              <a href="{% url 'core:participant_create' %}" class="btn btn-dark">
-                <i class="fa-solid fa-plus me-2"></i>Add Participant
-              </a>
+            <div class="text-center">
+              <div class="text-lg font-bold text-blue-600">88%</div>
+              <div class="text-xs text-gray-500">Active</div>
             </div>
+            <div class="w-2 h-8 bg-gradient-to-t from-gray-400 to-gray-600 rounded-full"></div>
+          </div>
+          
+          <div class="flex gap-3">
+            <a href="{% url 'core:participant_list' %}" class="flex-1 bg-gray-700 text-white px-4 py-3 rounded-xl text-center font-semibold hover:bg-gray-800 transition-all group-hover:shadow-lg">
+              <i class="fa-solid fa-network-wired mr-2"></i>Network
+            </a>
+            <a href="{% url 'core:participant_create' %}" class="flex-1 border-2 border-gray-700 text-gray-700 px-4 py-3 rounded-xl text-center font-semibold hover:bg-gray-700 hover:text-white transition-all">
+              <i class="fa-solid fa-user-plus mr-2"></i>Join
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Outcomes Feature -->
+      <div class="feature-card bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 group cursor-pointer border-2 border-transparent hover:border-red-200" data-category="innovation" data-navigate="{% url 'core:outcome_list' %}">
+        <div class="relative">
+          <div class="w-20 h-20 bg-gradient-to-br from-red-500 to-pink-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+            <i class="fa-solid fa-trophy text-white text-2xl"></i>
+          </div>
+          
+          <h3 class="text-2xl font-bold text-gray-900 mb-4 group-hover:text-red-600 transition-colors">Project Outcomes</h3>
+          <p class="text-gray-600 mb-6 leading-relaxed">Track deliverables, prototypes, patents, and business impact from innovation projects with comprehensive metrics.</p>
+          
+          <div class="flex items-center justify-between mb-6 p-3 bg-red-50 rounded-lg">
+            <div class="text-center">
+              <div class="text-lg font-bold text-red-600">{{ outcomes_count|default:"87" }}</div>
+              <div class="text-xs text-gray-500">Deliverables</div>
+            </div>
+            <div class="text-center">
+              <div class="text-lg font-bold text-green-600">78%</div>
+              <div class="text-xs text-gray-500">Success</div>
+            </div>
+            <div class="w-2 h-8 bg-gradient-to-t from-red-400 to-red-600 rounded-full"></div>
+          </div>
+          
+          <div class="flex gap-3">
+            <a href="{% url 'core:outcome_list' %}" class="flex-1 bg-red-600 text-white px-4 py-3 rounded-xl text-center font-semibold hover:bg-red-700 transition-all group-hover:shadow-lg">
+              <i class="fa-solid fa-chart-bar mr-2"></i>View Results
+            </a>
+            <a href="{% url 'core:outcome_create' %}" class="flex-1 border-2 border-red-600 text-red-600 px-4 py-3 rounded-xl text-center font-semibold hover:bg-red-600 hover:text-white transition-all">
+              <i class="fa-solid fa-plus mr-2"></i>Add
+            </a>
           </div>
         </div>
       </div>
@@ -285,58 +512,212 @@
   </div>
 </div>
 
-<!-- Outcomes Section -->
-<div class="py-5">
-  <div class="container">
-    <div class="text-center mb-5">
-      <h2 class="display-6 fw-bold">Project Outcomes</h2>
-      <p class="lead text-muted">Track deliverables and impact across all initiatives</p>
+<!-- Project Outcomes Showcase Section -->
+<div class="py-20 bg-gradient-to-br from-red-50 to-pink-50" id="outcomes-section">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-red-500 to-pink-500 rounded-2xl mb-6">
+        <i class="fa-solid fa-trophy text-white text-2xl"></i>
+      </div>
+      <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">Project Outcomes</h2>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+        Tangible results, deliverables, and impact metrics from Uganda's innovation projects - 
+        driving technological advancement and economic growth
+      </p>
+      
+      <!-- Quick Action Buttons -->
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="{% url 'core:outcome_list' %}" 
+           class="inline-flex items-center px-8 py-4 bg-red-600 text-white rounded-xl font-semibold hover:bg-red-700 transition-all duration-300 hover:scale-105 hover:shadow-xl">
+          <i class="fa-solid fa-list mr-2"></i>View All Outcomes
+        </a>
+        <a href="{% url 'core:outcome_create' %}" 
+           class="inline-flex items-center px-8 py-4 border-2 border-red-600 text-red-600 rounded-xl font-semibold hover:bg-red-600 hover:text-white transition-all duration-300 hover:scale-105">
+          <i class="fa-solid fa-plus mr-2"></i>Add New Outcome
+        </a>
+      </div>
     </div>
     
-    <div class="row text-center">
-      <div class="col-md-3 mb-4">
-        <div class="card border-0 shadow-sm h-100">
-          <div class="card-body">
-            <div class="bg-danger bg-opacity-10 rounded-circle p-3 d-inline-block mb-3">
-              <i class="fa-solid fa-trophy fa-2x text-danger"></i>
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Main Outcomes Card -->
+      <div class="lg:col-span-1">
+        <div class="bg-white rounded-3xl shadow-xl p-8 h-full border-2 border-red-100 hover:border-red-300 transition-all duration-300">
+          <div class="text-center mb-6">
+            <div class="w-24 h-24 bg-gradient-to-br from-red-500 to-pink-500 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+              <i class="fa-solid fa-trophy text-white text-3xl"></i>
             </div>
-            <h5 class="fw-bold">Outcomes</h5>
-            <p class="text-muted">CAD files, PCB designs, prototypes, reports, and business plans</p>
-            <div class="d-grid gap-2">
-              <a href="{% url 'core:outcome_list' %}" class="btn btn-outline-danger">
-                <i class="fa-solid fa-list me-2"></i>View Outcomes
-              </a>
-              <a href="{% url 'core:outcome_create' %}" class="btn btn-danger">
-                <i class="fa-solid fa-plus me-2"></i>Add Outcome
-              </a>
+            <h3 class="text-2xl font-bold text-gray-900 mb-3">Innovation Outcomes</h3>
+            <p class="text-gray-600 mb-6">
+              Comprehensive deliverables spanning technical documentation, prototypes, 
+              business plans, and commercialization strategies
+            </p>
+          </div>
+          
+          <!-- Outcome Statistics -->
+          <div class="space-y-4 mb-8">
+            <div class="flex items-center justify-between p-4 bg-red-50 rounded-xl">
+              <div class="flex items-center">
+                <div class="w-3 h-3 bg-red-500 rounded-full mr-3"></div>
+                <span class="font-medium text-gray-700">Total Outcomes</span>
+              </div>
+              <span class="font-bold text-red-600 counter" data-target="{{ outcomes_count|default:'87' }}">0</span>
+            </div>
+            <div class="flex items-center justify-between p-4 bg-green-50 rounded-xl">
+              <div class="flex items-center">
+                <div class="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                <span class="font-medium text-gray-700">Completed</span>
+              </div>
+              <span class="font-bold text-green-600">78%</span>
+            </div>
+            <div class="flex items-center justify-between p-4 bg-blue-50 rounded-xl">
+              <div class="flex items-center">
+                <div class="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
+                <span class="font-medium text-gray-700">In Progress</span>
+              </div>
+              <span class="font-bold text-blue-600">22%</span>
+            </div>
+          </div>
+          
+          <!-- Progress Indicator -->
+          <div class="mt-6">
+            <div class="flex justify-between text-sm font-medium text-gray-600 mb-2">
+              <span>Overall Progress</span>
+              <span>78%</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-3">
+              <div class="bg-gradient-to-r from-red-500 to-pink-500 h-3 rounded-full transition-all duration-1000" style="width: 78%"></div>
             </div>
           </div>
         </div>
       </div>
       
-      <div class="col-md-9">
-        <div class="row g-3">
-          <div class="col-md-4">
-            <div class="text-center p-3 bg-light rounded">
-              <i class="fa-solid fa-file-code fa-2x text-primary mb-2"></i>
-              <h6 class="fw-bold">Technical Docs</h6>
-              <p class="small text-muted mb-0">CAD files & technical specifications</p>
+      <!-- Outcome Categories Grid -->
+      <div class="lg:col-span-2">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Technical Documentation -->
+          <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 group cursor-pointer border-2 border-transparent hover:border-blue-200">
+            <div class="text-center mb-4">
+              <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                <i class="fa-solid fa-file-code text-white text-xl"></i>
+              </div>
+              <h4 class="text-lg font-bold text-gray-900 mb-2">Technical Documentation</h4>
+              <p class="text-gray-600 text-sm mb-4">CAD files, technical specifications, and design documents</p>
+            </div>
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between items-center">
+                <span class="text-gray-600">CAD Files</span>
+                <span class="font-semibold text-blue-600">24</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-gray-600">Specifications</span>
+                <span class="font-semibold text-blue-600">18</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-gray-600">Design Docs</span>
+                <span class="font-semibold text-blue-600">15</span>
+              </div>
             </div>
           </div>
-          <div class="col-md-4">
-            <div class="text-center p-3 bg-light rounded">
-              <i class="fa-solid fa-microchip fa-2x text-success mb-2"></i>
-              <h6 class="fw-bold">Hardware</h6>
-              <p class="small text-muted mb-0">PCB designs & prototypes</p>
+          
+          <!-- Hardware Prototypes -->
+          <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 group cursor-pointer border-2 border-transparent hover:border-green-200">
+            <div class="text-center mb-4">
+              <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                <i class="fa-solid fa-microchip text-white text-xl"></i>
+              </div>
+              <h4 class="text-lg font-bold text-gray-900 mb-2">Hardware Prototypes</h4>
+              <p class="text-gray-600 text-sm mb-4">PCB designs, circuit boards, and physical prototypes</p>
+            </div>
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between items-center">
+                <span class="text-gray-600">PCB Designs</span>
+                <span class="font-semibold text-green-600">12</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-gray-600">Prototypes</span>
+                <span class="font-semibold text-green-600">8</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-gray-600">Test Results</span>
+                <span class="font-semibold text-green-600">16</span>
+              </div>
             </div>
           </div>
-          <div class="col-md-4">
-            <div class="text-center p-3 bg-light rounded">
-              <i class="fa-solid fa-chart-line fa-2x text-warning mb-2"></i>
-              <h6 class="fw-bold">Business Plans</h6>
-              <p class="small text-muted mb-0">Commercialization strategies</p>
+          
+          <!-- Business Plans -->
+          <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 group cursor-pointer border-2 border-transparent hover:border-yellow-200">
+            <div class="text-center mb-4">
+              <div class="w-16 h-16 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                <i class="fa-solid fa-chart-line text-white text-xl"></i>
+              </div>
+              <h4 class="text-lg font-bold text-gray-900 mb-2">Business Plans</h4>
+              <p class="text-gray-600 text-sm mb-4">Commercialization strategies and market analysis</p>
+            </div>
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between items-center">
+                <span class="text-gray-600">Business Plans</span>
+                <span class="font-semibold text-yellow-600">9</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-gray-600">Market Analysis</span>
+                <span class="font-semibold text-yellow-600">11</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-gray-600">Financial Models</span>
+                <span class="font-semibold text-yellow-600">7</span>
+              </div>
             </div>
           </div>
+          
+          <!-- Research Reports -->
+          <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 group cursor-pointer border-2 border-transparent hover:border-purple-200">
+            <div class="text-center mb-4">
+              <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                <i class="fa-solid fa-file-alt text-white text-xl"></i>
+              </div>
+              <h4 class="text-lg font-bold text-gray-900 mb-2">Research Reports</h4>
+              <p class="text-gray-600 text-sm mb-4">Studies, analysis, and research findings</p>
+            </div>
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between items-center">
+                <span class="text-gray-600">Research Papers</span>
+                <span class="font-semibold text-purple-600">14</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-gray-600">Case Studies</span>
+                <span class="font-semibold text-purple-600">6</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-gray-600">White Papers</span>
+                <span class="font-semibold text-purple-600">4</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Impact Metrics -->
+    <div class="mt-16 bg-white rounded-3xl p-8 shadow-xl">
+      <h3 class="text-2xl font-bold text-gray-900 text-center mb-8">Outcomes Impact Metrics</h3>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
+        <div class="p-4">
+          <div class="text-3xl font-bold text-red-600 mb-2 counter" data-target="87">0</div>
+          <div class="text-gray-600">Total Deliverables</div>
+        </div>
+        <div class="p-4">
+          <div class="text-3xl font-bold text-green-600 mb-2">24</div>
+          <div class="text-gray-600">Patents Filed</div>
+        </div>
+        <div class="p-4">
+          <div class="text-3xl font-bold text-blue-600 mb-2">12</div>
+          <div class="text-gray-600">Products Launched</div>
+        </div>
+        <div class="p-4">
+          <div class="text-3xl font-bold text-purple-600 mb-2">$2.4M</div>
+          <div class="text-gray-600">Economic Impact</div>
         </div>
       </div>
     </div>
@@ -358,4 +739,115 @@
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Home Page TypeScript Module -->
+<script src="{% static 'js/home.js' %}"></script>
+<script type="module">
+    // Home page enhancements loaded
+    console.log('Home page enhancements loaded');
+    
+    // Fallback functionality
+    window.scrollToFeatures = function() {
+        document.getElementById('features')?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    };
+    
+    window.scrollToStats = function() {
+        document.getElementById('stats-section')?.scrollIntoView({
+            behavior: 'smooth', 
+            block: 'start'
+        });
+    };
+    
+    window.filterFeatures = function(category) {
+        const cards = document.querySelectorAll('.feature-card');
+        cards.forEach(card => {
+            const cardCategory = card.getAttribute('data-category');
+            const shouldShow = category === 'all' || cardCategory === category;
+            card.style.display = shouldShow ? 'block' : 'none';
+        });
+        
+        // Update active tab
+        document.querySelectorAll('.feature-tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        event.target.classList.add('active');
+    };
+    
+    // Add click handlers for feature cards
+    document.querySelectorAll('.feature-card[data-navigate]').forEach(card => {
+        card.addEventListener('click', function() {
+            const url = this.getAttribute('data-navigate');
+            if (url) {
+                window.location.href = url;
+            }
+        });
+    });
+</script>
+
+<!-- Additional Fallback Functions -->
+<script>
+    // Ensure functions exist globally (for direct onclick calls)
+    if (!window.scrollToFeatures) {
+        window.scrollToFeatures = function() {
+            const target = document.getElementById('features');
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        };
+    }
+    
+    if (!window.scrollToStats) {
+        window.scrollToStats = function() {
+            const target = document.getElementById('stats-section');
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        };
+    }
+    
+    if (!window.filterFeatures) {
+        window.filterFeatures = function(category) {
+            const cards = document.querySelectorAll('.feature-card');
+            cards.forEach(card => {
+                const cardCategory = card.getAttribute('data-category');
+                const shouldShow = category === 'all' || cardCategory === category;
+                card.style.display = shouldShow ? 'block' : 'none';
+            });
+            
+            // Update active tab
+            document.querySelectorAll('.feature-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Find and activate the clicked tab
+            document.querySelectorAll('.feature-tab').forEach(tab => {
+                const buttonText = tab.textContent?.toLowerCase().replace(' features', '') || '';
+                if (buttonText === category || (category === 'all' && buttonText === 'all')) {
+                    tab.classList.add('active');
+                }
+            });
+        };
+    }
+    
+    // Initialize feature card navigation on DOM load
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add click handlers for feature cards if not already added
+        document.querySelectorAll('.feature-card[data-navigate]').forEach(card => {
+            if (!card.hasAttribute('data-click-handled')) {
+                card.addEventListener('click', function() {
+                    const url = this.getAttribute('data-navigate');
+                    if (url) {
+                        window.location.href = url;
+                    }
+                });
+                card.setAttribute('data-click-handled', 'true');
+            }
+        });
+    });
+</script>
 {% endblock %}

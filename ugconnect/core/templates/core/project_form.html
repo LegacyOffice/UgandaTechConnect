@@ -1,4 +1,5 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
 {% block title %}
 {% if object %}Edit Project{% else %}Add Project{% endif %} - Uganda Tech Connect
@@ -32,8 +33,19 @@
                     </h5>
                 </div>
                 <div class="card-body p-4">
-                    <form method="post" novalidate>
+                    <form method="post" novalidate data-enhance="form" data-auto-save="true" data-progress-tracking="true">
                         {% csrf_token %}
+                        
+                        <!-- Form Progress Indicator -->
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <small class="text-muted">Form Progress</small>
+                                <small class="text-muted"><span id="form-progress">0</span>% Complete</small>
+                            </div>
+                            <div class="progress" style="height: 6px;">
+                                <div class="progress-bar bg-info" role="progressbar" style="width: 0%" id="form-progress-bar"></div>
+                            </div>
+                        </div>
                         
                         <!-- Error Messages -->
                         {% if form.non_field_errors %}
@@ -62,7 +74,11 @@
                                        id="{{ form.Title.id_for_label }}" 
                                        name="{{ form.Title.name }}" 
                                        value="{{ form.Title.value|default:'' }}"
-                                       placeholder="Smart Agriculture IoT System">
+                                       placeholder="Smart Agriculture IoT System"
+                                       data-validate="required,minLength:3,maxLength:200"
+                                       data-counter="true"
+                                       maxlength="200"
+                                       autocomplete="off">
                                 {% if form.Title.errors %}
                                     <div class="invalid-feedback">
                                         {{ form.Title.errors|first }}
@@ -81,7 +97,9 @@
                                 </label>
                                 <select class="form-select {% if form.Category.errors %}is-invalid{% endif %}" 
                                         id="{{ form.Category.id_for_label }}" 
-                                        name="{{ form.Category.name }}">
+                                        name="{{ form.Category.name }}"
+                                        data-validate="required"
+                                        data-search="true">
                                     <option value="">Select Category</option>
                                     {% for value, label in form.Category.field.choices %}
                                         {% if value %}
@@ -112,7 +130,16 @@
                                           id="{{ form.Description.id_for_label }}" 
                                           name="{{ form.Description.name }}" 
                                           rows="4"
-                                          placeholder="Provide a comprehensive description of the project, its objectives, and expected outcomes...">{{ form.Description.value|default:'' }}</textarea>
+                                          placeholder="Provide a comprehensive description of the project, its objectives, and expected outcomes..."
+                                          data-validate="required,minLength:50,maxLength:2000"
+                                          data-counter="true" 
+                                          data-auto-resize="true"
+                                          data-suggestions="true"
+                                          maxlength="2000">{{ form.Description.value|default:'' }}</textarea>
+                                <div class="form-text d-flex justify-content-between">
+                                    <span class="text-muted">Provide comprehensive details about your project</span>
+                                    <span class="character-count">0/2000</span>
+                                </div>
                                 {% if form.Description.errors %}
                                     <div class="invalid-feedback">
                                         {{ form.Description.errors|first }}
@@ -420,4 +447,66 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Project Form TypeScript Enhancements -->
+<script src="{% static 'js/form-enhancements.js' %}"></script>
+<script type="module">
+    // Additional project-specific enhancements
+        // Additional project-specific enhancements
+        const projectFormEnhancements = {
+            setupProjectTypeHandling() {
+                const projectTypeField = document.querySelector('select[name*="type"], select[name*="Type"]');
+                const budgetField = document.querySelector('input[name*="budget"], input[name*="Budget"]');
+                
+                if (projectTypeField && budgetField) {
+                    projectTypeField.addEventListener('change', () => {
+                        const selectedType = projectTypeField.value;
+                        if (selectedType.includes('research') || selectedType.includes('prototype')) {
+                            budgetField.closest('.mb-3, .form-group')?.classList.add('animate-fadeIn');
+                        }
+                    });
+                }
+            },
+
+            setupInnovationSuggestions() {
+                const innovationField = document.querySelector('input[name*="KeyInnovation"], input[name*="innovation"]');
+                if (innovationField) {
+                    const suggestions = ['AI-powered', 'IoT-enabled', 'Blockchain-based', 'Machine Learning', 'Automated', 'Smart sensing', 'Data-driven', 'Cloud-native'];
+                    
+                    innovationField.addEventListener('input', (e) => {
+                        const value = e.target.value.toLowerCase();
+                        if (value.length > 2) {
+                            const matchingSuggestions = suggestions.filter(s => 
+                                s.toLowerCase().includes(value)
+                            );
+                            console.log('Innovation suggestions:', matchingSuggestions);
+                        }
+                    });
+                }
+            },
+
+            setupCollaborationHints() {
+                const facilityField = document.querySelector('select[name*="FacilityId"], select[name*="facility"]');
+                const programField = document.querySelector('select[name*="ProgramId"], select[name*="program"]');
+                
+                if (facilityField && programField) {
+                    programField.addEventListener('change', () => {
+                        const selectedProgram = programField.selectedOptions[0]?.textContent;
+                        if (selectedProgram) {
+                            console.log('Consider facilities aligned with:', selectedProgram);
+                        }
+                    });
+                }
+            }
+        };
+
+        // Initialize project-specific enhancements
+        projectFormEnhancements.setupProjectTypeHandling();
+        projectFormEnhancements.setupInnovationSuggestions();
+        projectFormEnhancements.setupCollaborationHints();
+        
+        console.log('✅ Project form enhancements loaded');
+</script>
 {% endblock %}

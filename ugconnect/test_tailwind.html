@@ -303,29 +303,140 @@
 
                     <!-- Interactive Elements Demo -->
                     <div class="space-y-6">
-                        <h2 class="text-xl font-semibold text-gray-900">Interactive Elements</h2>
+                        <h2 class="text-xl font-semibold text-gray-900">Interactive Elements with TypeScript</h2>
                         
                         <div class="flex flex-wrap gap-3">
-                            <button class="px-6 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors duration-200 hover:-translate-y-0.5 transform">
-                                Primary Button
+                            <button onclick="testTypeScriptAlert('success', 'Success alert test!')" class="px-6 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors duration-200 hover:-translate-y-0.5 transform">
+                                Test Success Alert
                             </button>
-                            <button class="px-6 py-2 bg-secondary-500 text-white rounded-lg hover:bg-secondary-600 transition-colors duration-200 hover:-translate-y-0.5 transform">
-                                Secondary Button
+                            <button onclick="testTypeScriptAlert('error', 'Error alert test!')" class="px-6 py-2 bg-secondary-500 text-white rounded-lg hover:bg-secondary-600 transition-colors duration-200 hover:-translate-y-0.5 transform">
+                                Test Error Alert
                             </button>
-                            <button class="px-6 py-2 bg-success-500 text-white rounded-lg hover:bg-success-600 transition-colors duration-200 hover:-translate-y-0.5 transform">
-                                Success Button
+                            <button onclick="testTypeScriptAlert('warning', 'Warning alert test!')" class="px-6 py-2 bg-success-500 text-white rounded-lg hover:bg-success-600 transition-colors duration-200 hover:-translate-y-0.5 transform">
+                                Test Warning Alert
                             </button>
-                            <button class="px-6 py-2 bg-warning-500 text-white rounded-lg hover:bg-warning-600 transition-colors duration-200 hover:-translate-y-0.5 transform">
-                                Warning Button
+                            <button onclick="testTypeScriptAlert('info', 'Info alert test!')" class="px-6 py-2 bg-warning-500 text-white rounded-lg hover:bg-warning-600 transition-colors duration-200 hover:-translate-y-0.5 transform">
+                                Test Info Alert
                             </button>
+                        </div>
+
+                        <!-- Enhanced Form Demo -->
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4">TypeScript Enhanced Form</h3>
+                            
+                            <form data-enhance="true" 
+                                  data-validate-on-input="true" 
+                                  data-show-progress-bar="true"
+                                  data-confirm-before-submit="false"
+                                  class="space-y-4">
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="demo-name" class="block text-sm font-medium text-gray-700 mb-1">
+                                            Full Name *
+                                        </label>
+                                        <input type="text" 
+                                               id="demo-name"
+                                               name="name" 
+                                               data-validation='{"required": true, "minLength": 2, "maxLength": 50}'
+                                               data-validation-message="Please enter a valid name"
+                                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                                               placeholder="Enter your full name">
+                                    </div>
+                                    
+                                    <div>
+                                        <label for="demo-email" class="block text-sm font-medium text-gray-700 mb-1">
+                                            Email Address *
+                                        </label>
+                                        <input type="email" 
+                                               id="demo-email"
+                                               name="email" 
+                                               data-validation='{"required": true, "email": true}'
+                                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                                               placeholder="Enter your email">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label for="demo-phone" class="block text-sm font-medium text-gray-700 mb-1">
+                                        Phone Number
+                                    </label>
+                                    <input type="tel" 
+                                           id="demo-phone"
+                                           name="phone" 
+                                           data-validation='{"phone": true}'
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                                           placeholder="+256 XXX XXX XXX">
+                                </div>
+
+                                <div>
+                                    <label for="demo-organization" class="block text-sm font-medium text-gray-700 mb-1">
+                                        Organization Type *
+                                    </label>
+                                    <select id="demo-organization"
+                                            name="organization_type" 
+                                            data-enhance="true"
+                                            data-validation='{"required": true}'
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors">
+                                        <option value="">Select organization type</option>
+                                        <option value="startup">Startup</option>
+                                        <option value="sme">Small/Medium Enterprise</option>
+                                        <option value="corporation">Corporation</option>
+                                        <option value="ngo">NGO</option>
+                                        <option value="academic">Academic Institution</option>
+                                        <option value="government">Government Agency</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label for="demo-message" class="block text-sm font-medium text-gray-700 mb-1">
+                                        Message
+                                    </label>
+                                    <textarea id="demo-message"
+                                              name="message" 
+                                              data-validation='{"maxLength": 500}'
+                                              rows="4"
+                                              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                                              placeholder="Tell us about your interest in Uganda Tech Connect..."></textarea>
+                                </div>
+
+                                <div class="flex items-center">
+                                    <input type="checkbox" 
+                                           id="demo-terms"
+                                           name="accept_terms" 
+                                           data-validation='{"required": true}'
+                                           class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                                    <label for="demo-terms" class="ml-2 text-sm text-gray-600">
+                                        I accept the <a href="#" class="text-primary-600 hover:text-primary-800">terms and conditions</a> *
+                                    </label>
+                                </div>
+
+                                <div class="flex justify-end space-x-3">
+                                    <button type="button" 
+                                            onclick="document.querySelector('form[data-enhance]').reset()"
+                                            class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                                        Reset Form
+                                    </button>
+                                    <button type="submit" 
+                                            class="px-6 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors">
+                                        Submit Application
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                         
                         <div class="p-4 bg-gray-50 rounded-lg">
                             <p class="text-gray-700">
                                 <i class="fa-solid fa-info-circle text-info-500 mr-2"></i>
-                                This is a demonstration of the enhanced Uganda Tech Connect platform with Tailwind CSS integration. 
-                                The design maintains all existing functionality while providing a modern, responsive, and optimized user experience.
+                                This demonstration showcases the enhanced Uganda Tech Connect platform with:
                             </p>
+                            <ul class="list-disc list-inside text-gray-600 mt-2 space-y-1">
+                                <li><strong>Tailwind CSS</strong> - Modern, responsive design system</li>
+                                <li><strong>TypeScript</strong> - Type-safe JavaScript with enhanced IDE support</li>
+                                <li><strong>Advanced Form Validation</strong> - Real-time validation with progress tracking</li>
+                                <li><strong>API Integration</strong> - Type-safe API calls with proper error handling</li>
+                                <li><strong>Enhanced UX</strong> - Loading states, animations, and accessibility features</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -463,6 +574,60 @@
             if (!mobileButton && !mobileMenu.contains(event.target) && !mobileMenu.classList.contains('hidden')) {
                 toggleMobileMenu();
             }
+        });
+
+        // TypeScript Integration Test Functions
+        function testTypeScriptAlert(type, message) {
+            if (window.UgandaTechConnect) {
+                switch(type) {
+                    case 'success':
+                        window.UgandaTechConnect.showSuccess(message);
+                        break;
+                    case 'error':
+                        window.UgandaTechConnect.showError(message);
+                        break;
+                    case 'warning':
+                        window.UgandaTechConnect.showWarning(message);
+                        break;
+                    case 'info':
+                        window.UgandaTechConnect.showInfo(message);
+                        break;
+                    default:
+                        window.UgandaTechConnect.showInfo(message);
+                }
+            } else {
+                // Fallback for when TypeScript is not loaded
+                alert(`${type.toUpperCase()}: ${message}`);
+                console.log('TypeScript modules not loaded, using fallback');
+            }
+        }
+
+        // Test API functionality (mock)
+        function testApiCall() {
+            if (window.UgandaTechConnectAPI) {
+                console.log('API services available:', Object.keys(window.UgandaTechConnectAPI));
+                window.UgandaTechConnect.showSuccess('API services are loaded and ready!');
+            } else {
+                console.log('API services not available');
+                window.UgandaTechConnect.showWarning('API services not loaded yet');
+            }
+        }
+
+        // Initialize enhanced form when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Test TypeScript integration
+            setTimeout(() => {
+                if (window.UgandaTechConnect) {
+                    window.UgandaTechConnect.showSuccess('🚀 TypeScript integration successful! All systems operational.');
+                } else {
+                    console.log('TypeScript modules are loading...');
+                }
+            }, 1000);
+
+            // Test API integration after a delay
+            setTimeout(() => {
+                testApiCall();
+            }, 2000);
         });
     </script>
 

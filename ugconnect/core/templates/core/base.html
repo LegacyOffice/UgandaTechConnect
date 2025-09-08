@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,59 +10,7 @@
     
     <title>{% block title %}Uganda Tech Connect - Innovation Platform{% endblock %}</title>
     
-    <!--        // Tailwind Navigation Functions
-        function toggleMobileMenu() {
-            const mobileMenu = document.getElementById('mobile-menu');
-            const icon = document.getElementById('mobile-menu-icon');
-            
-            if (mobileMenu.classList.contains('hidden')) {
-                mobileMenu.classList.remove('hidden');
-                mobileMenu.classList.add('animate-slideUp');
-                icon.classList.remove('fa-bars');
-                icon.classList.add('fa-times');
-            } else {
-                mobileMenu.classList.add('hidden');
-                mobileMenu.classList.remove('animate-slideUp');
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
-            }
-        }
-
-        function toggleSearch() {
-            const searchBar = document.getElementById('search-bar');
-            const searchInput = searchBar.querySelector('input');
-            
-            if (searchBar.classList.contains('hidden')) {
-                searchBar.classList.remove('hidden');
-                searchBar.classList.add('animate-slideUp');
-                setTimeout(() => searchInput.focus(), 100);
-            } else {
-                searchBar.classList.add('hidden');
-                searchBar.classList.remove('animate-slideUp');
-            }
-        }
-
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', function(event) {
-            const mobileMenu = document.getElementById('mobile-menu');
-            const mobileButton = event.target.closest('button[onclick="toggleMobileMenu()"]');
-            
-            if (!mobileButton && !mobileMenu.contains(event.target) && !mobileMenu.classList.contains('hidden')) {
-                toggleMobileMenu();
-            }
-        });
-
-        // Auto-hide alerts after 5 seconds
-        document.addEventListener('DOMContentLoaded', function() {
-            const alerts = document.querySelectorAll('.alert');
-            alerts.forEach(alert => {
-                setTimeout(() => {
-                    if (alert && alert.parentNode) {
-                        alert.remove();
-                    }
-                }, 5000);
-            });
-        });>
+    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🇺🇬</text></svg>">
     
     <!-- Tailwind CSS -->
@@ -199,6 +148,128 @@
             color: #333;
         }
         
+        /* Home Page Enhancements */
+        .floating-element {
+            animation: floatAnimation 3s ease-in-out infinite;
+        }
+        
+        .tech-orbit {
+            animation: orbitAnimation 8s linear infinite;
+        }
+        
+        .animate-fadeIn {
+            animation: fadeInAnimation 1s ease-out forwards;
+        }
+        
+        .animate-slideUp {
+            animation: slideUpAnimation 0.8s ease-out forwards;
+        }
+        
+        .animate-fadeInUp {
+            animation: fadeInUpAnimation 1s ease-out forwards;
+        }
+        
+        .feature-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .feature-tab:not(.active) {
+            color: #6b7280;
+        }
+        
+        .feature-tab:not(.active):hover {
+            background-color: #e5e7eb;
+            color: #374151;
+        }
+        
+        .counter {
+            font-variant-numeric: tabular-nums;
+        }
+        
+        /* Custom Keyframe Animations */
+        @keyframes floatAnimation {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg); 
+            }
+            33% { 
+                transform: translateY(-10px) rotate(2deg); 
+            }
+            66% { 
+                transform: translateY(5px) rotate(-1deg); 
+            }
+        }
+        
+        @keyframes orbitAnimation {
+            0% { 
+                transform: rotate(0deg) translateX(50px) rotate(0deg); 
+            }
+            100% { 
+                transform: rotate(360deg) translateX(50px) rotate(-360deg); 
+            }
+        }
+        
+        @keyframes fadeInAnimation {
+            0% { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideUpAnimation {
+            0% { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUpAnimation {
+            0% { 
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            100% { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Loading spinner */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+        
+        /* Progressive Enhancement */
+        .feature-card {
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-8px);
+        }
+        
+        .stat-card {
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-4px);
+        }
+        
         .navbar-brand {
             font-weight: 700;
             font-size: 1.5rem;
@@ -333,6 +404,51 @@
     </style>
     
     {% block extra_css %}{% endblock %}
+    
+    <!-- TypeScript Module Loader -->
+    <script type="module">
+        // Load TypeScript compiled modules
+        import('./dist/js/main.js').then(module => {
+            console.log('✅ Uganda Tech Connect TypeScript modules loaded');
+        }).catch(error => {
+            console.warn('⚠️ TypeScript modules not available, falling back to inline JavaScript:', error);
+            // Fallback to inline JavaScript functions if TypeScript is not available
+            window.UgandaTechConnect = {
+                showAlert: function(config) {
+                    const message = typeof config === 'string' ? config : config.message;
+                    const type = typeof config === 'string' ? 'info' : config.type;
+                    console.log(`${type.toUpperCase()}: ${message}`);
+                },
+                showSuccess: function(message) { this.showAlert({ type: 'success', message }); },
+                showError: function(message) { this.showAlert({ type: 'error', message }); },
+                showWarning: function(message) { this.showAlert({ type: 'warning', message }); },
+                showInfo: function(message) { this.showAlert({ type: 'info', message }); }
+            };
+        });
+    </script>
+    
+    <!-- API Services (TypeScript) -->
+    <script type="module">
+        import('./dist/js/api.js').then(module => {
+            // Make API services globally available
+            window.UgandaTechConnectAPI = {
+                programService: module.programService,
+                facilityService: module.facilityService,
+                equipmentService: module.equipmentService,
+                projectService: module.projectService,
+                serviceService: module.serviceService,
+                participantService: module.participantService,
+                outcomeService: module.outcomeService,
+                searchService: module.searchService,
+                analyticsService: module.analyticsService,
+                handleApiError: module.handleApiError,
+                handleApiSuccess: module.handleApiSuccess
+            };
+            console.log('✅ API Services loaded and available globally');
+        }).catch(error => {
+            console.warn('⚠️ API TypeScript modules not available:', error);
+        });
+    </script>
 </head>
 <body>
     <!-- Navigation - Enhanced with Tailwind CSS -->
@@ -392,12 +508,12 @@
                 <!-- Search and Mobile Menu -->
                 <div class="flex items-center space-x-3">
                     <!-- Search Button -->
-                    <button onclick="toggleSearch()" class="p-2 rounded-lg text-white hover:bg-white hover:bg-opacity-10 transition-colors duration-200">
+                    <button data-search-button onclick="toggleSearch()" class="p-2 rounded-lg text-white hover:bg-white hover:bg-opacity-10 transition-colors duration-200" aria-label="Toggle search">
                         <i class="fa-solid fa-search"></i>
                     </button>
                     
                     <!-- Mobile Menu Button -->
-                    <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg text-white hover:bg-white hover:bg-opacity-10 transition-colors duration-200">
+                    <button data-mobile-menu-button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg text-white hover:bg-white hover:bg-opacity-10 transition-colors duration-200" aria-label="Toggle mobile menu">
                         <i class="fa-solid fa-bars" id="mobile-menu-icon"></i>
                     </button>
                 </div>
@@ -788,6 +904,15 @@
                 });
             });
         });
+    </script>
+    
+    <!-- TypeScript Module Loading -->
+    <script src="{% static 'js/main.js' %}"></script>
+    <script type="module">
+        // Main TypeScript application
+        if (window.UgandaTechConnectApp) {
+            window.ugandaTechConnect = new window.UgandaTechConnectApp();
+        }
     </script>
     
     {% block extra_js %}{% endblock %}

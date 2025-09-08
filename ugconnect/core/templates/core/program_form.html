@@ -1,4 +1,5 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
 {% block title %}
 {% if object %}Edit Program{% else %}Create Program{% endif %} - Uganda Tech Connect
@@ -186,4 +187,139 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Program Form TypeScript Enhancements -->
+<script src="{% static 'js/form-enhancements.js' %}"></script>
+<script type="module">
+    // Program-specific enhancements
+        // Program-specific enhancements
+        const programFormEnhancements = {
+            setupNationalAlignmentValidation() {
+                const alignmentField = document.querySelector('textarea[name*="national_alignment"], textarea[name*="alignment"]');
+                if (alignmentField) {
+                    const keywords = ['Uganda Vision 2040', 'National Development Plan', 'industrial', 'technology', 'innovation', 'digital transformation'];
+                    
+                    alignmentField.addEventListener('blur', () => {
+                        const content = alignmentField.value.toLowerCase();
+                        const matchedKeywords = keywords.filter(keyword => 
+                            content.includes(keyword.toLowerCase())
+                        );
+                        
+                        if (matchedKeywords.length === 0) {
+                            this.showAlignmentSuggestion(alignmentField);
+                        }
+                    });
+                }
+            },
+
+            showAlignmentSuggestion(field) {
+                const suggestion = document.createElement('div');
+                suggestion.className = 'alert alert-info mt-2';
+                suggestion.innerHTML = `
+                    <small>
+                        <i class="fa-solid fa-lightbulb me-1"></i>
+                        Consider mentioning how this program aligns with Uganda Vision 2040 or the National Development Plan
+                    </small>
+                `;
+                
+                const existingSuggestion = field.parentNode.querySelector('.alert-info');
+                if (existingSuggestion) {
+                    existingSuggestion.remove();
+                }
+                
+                field.parentNode.appendChild(suggestion);
+                
+                setTimeout(() => {
+                    suggestion.remove();
+                }, 10000);
+            },
+
+            setupPhaseValidation() {
+                const phasesField = document.querySelector('input[name*="phases"], input[name*="Phases"]');
+                if (phasesField) {
+                    const commonPhases = ['Research', 'Design', 'Development', 'Testing', 'Implementation', 'Evaluation'];
+                    
+                    phasesField.addEventListener('input', (e) => {
+                        const value = e.target.value;
+                        const phases = value.split(',').map(p => p.trim());
+                        
+                        if (phases.length > 0 && phases[0].length > 2) {
+                            const suggestions = commonPhases.filter(phase => 
+                                !phases.some(p => p.toLowerCase().includes(phase.toLowerCase()))
+                            );
+                            
+                            if (suggestions.length > 0) {
+                                console.log('Phase suggestions:', suggestions.slice(0, 3));
+                            }
+                        }
+                    });
+                }
+            },
+
+            setupCollaborationMetrics() {
+                const form = document.querySelector('form');
+                if (form) {
+                    form.addEventListener('submit', (e) => {
+                        const programName = document.querySelector('input[name*="name"]')?.value || '';
+                        const focusAreas = document.querySelector('input[name*="focus_areas"]')?.value || '';
+                        
+                        console.log('📊 Program metrics:', {
+                            name: programName,
+                            focusAreaCount: focusAreas.split(',').length,
+                            estimatedImpact: this.calculateEstimatedImpact(focusAreas)
+                        });
+                    });
+                }
+            },
+
+            calculateEstimatedImpact(focusAreas) {
+                const highImpactAreas = ['AI', 'IoT', 'blockchain', 'renewable energy', 'health tech'];
+                const areas = focusAreas.toLowerCase().split(',');
+                const highImpactCount = areas.filter(area => 
+                    highImpactAreas.some(highArea => area.includes(highArea))
+                ).length;
+                
+                return highImpactCount > 0 ? 'High' : 'Medium';
+            },
+
+            setupDurationEstimation() {
+                const startDateField = document.querySelector('input[name*="start"], input[type="date"]');
+                const phasesField = document.querySelector('input[name*="phases"]');
+                
+                if (startDateField && phasesField) {
+                    const updateEstimation = () => {
+                        const phases = phasesField.value.split(',').filter(p => p.trim());
+                        const estimatedMonths = phases.length * 3; // Estimate 3 months per phase
+                        
+                        let estimationDiv = document.querySelector('.duration-estimation');
+                        if (!estimationDiv) {
+                            estimationDiv = document.createElement('div');
+                            estimationDiv.className = 'duration-estimation alert alert-secondary mt-2';
+                            phasesField.parentNode.appendChild(estimationDiv);
+                        }
+                        
+                        estimationDiv.innerHTML = `
+                            <small>
+                                <i class="fa-solid fa-clock me-1"></i>
+                                Estimated duration: ${estimatedMonths} months (${phases.length} phases × 3 months avg)
+                            </small>
+                        `;
+                    };
+                    
+                    phasesField.addEventListener('input', updateEstimation);
+                    startDateField.addEventListener('change', updateEstimation);
+                }
+            }
+        };
+
+        // Initialize program-specific enhancements
+        programFormEnhancements.setupNationalAlignmentValidation();
+        programFormEnhancements.setupPhaseValidation();
+        programFormEnhancements.setupCollaborationMetrics();
+        programFormEnhancements.setupDurationEstimation();
+        
+        console.log('✅ Program form enhancements loaded');
+</script>
 {% endblock %}

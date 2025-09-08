@@ -1,0 +1,153 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header Section -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Innovation Projects</h1>
+            <p class="text-gray-600">Discover and manage cutting-edge projects driving Uganda's technological transformation</p>
+        </div>
+        <div class="flex gap-3">
+            <button onclick="exportProjects()" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                <i class="fa-solid fa-download mr-2"></i>Export
+            </button>
+            <a href="{% url 'core:project_create' %}" class="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
+                <i class="fa-solid fa-plus mr-2"></i>New Project
+            </a>
+        </div>
+    </div>
+
+    <!-- Filters and Search -->
+    <div class="bg-white rounded-2xl shadow-lg p-6 mb-8" data-enhance="filters">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Search -->
+            <div class="lg:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Search Projects</label>
+                <div class="relative">
+                    <input type="text" id="project-search" placeholder="Search by title, description, or tags..." 
+                           class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                           data-search="projects">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fa-solid fa-search text-gray-400"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Stage Filter -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Development Stage</label>
+                <select id="stage-filter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                    <option value="">All Stages</option>
+                    <option value="concept">Concept</option>
+                    <option value="development">Development</option>
+                    <option value="prototype">Prototype</option>
+                    <option value="testing">Testing</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+            
+            <!-- Category Filter -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Innovation Focus</label>
+                <select id="category-filter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                    <option value="">All Categories</option>
+                    <option value="ai">Artificial Intelligence</option>
+                    <option value="iot">Internet of Things</option>
+                    <option value="mobile">Mobile Technology</option>
+                    <option value="web">Web Development</option>
+                    <option value="blockchain">Blockchain</option>
+                    <option value="fintech">Financial Technology</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Filter Summary -->
+        <div class="mt-4 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span class="text-sm text-gray-500">
+                    Showing <span id="visible-count">{{ projects|length }}</span> of <span id="total-count">{{ projects|length }}</span> projects
+                </span>
+                <div class="flex gap-2" id="active-filters"></div>
+            </div>
+            <button onclick="clearAllFilters()" class="text-sm text-primary-600 hover:text-primary-800">Clear all filters</button>
+        </div>
+    </div>
+
+    <!-- Projects Grid -->
+    <div class="space-y-6" data-enhance="project-list">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Program</th>
+                            <th>Facility</th>
+                            <th>Nature</th>
+                            <th>Innovation Focus</th>
+                            <th>Stage</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for project in projects %}
+                        <tr>
+                            <td>{{ project.Title }}</td>
+                            <td>{{ project.ProgramId }}</td>
+                            <td>{{ project.FacilityId }}</td>
+                            <td>{{ project.get_NatureOfProject_display }}</td>
+                            <td>{{ project.get_InnovationFocus_display }}</td>
+                            <td>{{ project.get_PrototypeStage_display }}</td>
+                            <td>
+                                <a href="{% url 'core:project_detail' project.ProjectId %}" class="btn btn-sm btn-info">
+                                    <i class="fa-solid fa-eye"></i>
+                                </a>
+                                <a href="{% url 'core:project_update' project.ProjectId %}" class="btn btn-sm btn-warning">
+                                    <i class="fa-solid fa-edit"></i>
+                                </a>
+                                <a href="{% url 'core:project_delete' project.ProjectId %}" class="btn btn-sm btn-danger">
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center">No projects found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Pagination -->
+            {% if is_paginated %}
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                    <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                        <a class="page-link" href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">{{ num }}</a>
+                    </li>
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

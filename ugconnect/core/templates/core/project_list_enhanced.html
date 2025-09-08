@@ -1,0 +1,383 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header Section -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Innovation Projects</h1>
+            <p class="text-gray-600">Discover and manage cutting-edge projects driving Uganda's technological transformation</p>
+        </div>
+        <div class="flex gap-3">
+            <button onclick="exportProjects()" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                <i class="fa-solid fa-download mr-2"></i>Export
+            </button>
+            <a href="{% url 'core:project_create' %}" class="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
+                <i class="fa-solid fa-plus mr-2"></i>New Project
+            </a>
+        </div>
+    </div>
+
+    <!-- Filters and Search -->
+    <div class="bg-white rounded-2xl shadow-lg p-6 mb-8" data-enhance="filters">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Search -->
+            <div class="lg:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Search Projects</label>
+                <div class="relative">
+                    <input type="text" id="project-search" placeholder="Search by title, description, or tags..." 
+                           class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                           data-search="projects">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fa-solid fa-search text-gray-400"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Stage Filter -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Development Stage</label>
+                <select id="stage-filter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                    <option value="">All Stages</option>
+                    <option value="concept">Concept</option>
+                    <option value="development">Development</option>
+                    <option value="prototype">Prototype</option>
+                    <option value="testing">Testing</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+            
+            <!-- Category Filter -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Innovation Focus</label>
+                <select id="category-filter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                    <option value="">All Categories</option>
+                    <option value="ai">Artificial Intelligence</option>
+                    <option value="iot">Internet of Things</option>
+                    <option value="mobile">Mobile Technology</option>
+                    <option value="web">Web Development</option>
+                    <option value="blockchain">Blockchain</option>
+                    <option value="fintech">Financial Technology</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Filter Summary -->
+        <div class="mt-4 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span class="text-sm text-gray-500">
+                    Showing <span id="visible-count">{{ projects|length }}</span> of <span id="total-count">{{ projects|length }}</span> projects
+                </span>
+                <div class="flex gap-2" id="active-filters"></div>
+            </div>
+            <button onclick="clearAllFilters()" class="text-sm text-primary-600 hover:text-primary-800">Clear all filters</button>
+        </div>
+    </div>
+
+    <!-- Projects Grid -->
+    <div class="space-y-6" data-enhance="project-list">
+        {% for project in projects %}
+        <div class="project-card bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-6 border-l-4 border-primary-500" 
+             data-project-id="{{ project.ProjectId }}"
+             data-stage="{{ project.PrototypeStage|default:'concept' }}"
+             data-focus="{{ project.InnovationFocus|default:'general' }}"
+             data-title="{{ project.Title|lower }}"
+             data-description="{{ project.Description|default:''|lower }}">
+            
+            <div class="flex justify-between items-start mb-4">
+                <div class="flex-1">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2 hover:text-primary-600 transition-colors">
+                        <a href="{% url 'core:project_detail' project.ProjectId %}">{{ project.Title }}</a>
+                    </h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        {{ project.Description|truncatewords:25|default:"No description available." }}
+                    </p>
+                </div>
+                
+                <!-- Stage Badge -->
+                <div class="ml-4">
+                    <span class="px-3 py-1 text-xs font-semibold rounded-full stage-badge
+                        {% if project.PrototypeStage == 'completed' %}bg-green-100 text-green-800
+                        {% elif project.PrototypeStage == 'testing' %}bg-blue-100 text-blue-800
+                        {% elif project.PrototypeStage == 'prototype' %}bg-yellow-100 text-yellow-800
+                        {% elif project.PrototypeStage == 'development' %}bg-purple-100 text-purple-800
+                        {% else %}bg-gray-100 text-gray-800{% endif %}">
+                        {{ project.get_PrototypeStage_display|default:"Concept" }}
+                    </span>
+                </div>
+            </div>
+            
+            <!-- Project Metadata -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div class="flex items-center text-sm text-gray-500">
+                    <i class="fa-solid fa-diagram-project text-primary-500 mr-2"></i>
+                    <span>{{ project.ProgramId|default:"No Program" }}</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-500">
+                    <i class="fa-solid fa-building text-green-500 mr-2"></i>
+                    <span>{{ project.FacilityId|default:"No Facility" }}</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-500">
+                    <i class="fa-solid fa-lightbulb text-yellow-500 mr-2"></i>
+                    <span>{{ project.get_InnovationFocus_display|default:"General" }}</span>
+                </div>
+            </div>
+            
+            <!-- Progress Bar -->
+            {% if project.PrototypeStage %}
+            <div class="mb-4">
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-sm text-gray-600">Progress</span>
+                    <span class="text-sm font-semibold text-gray-800 progress-percentage">
+                        {% if project.PrototypeStage == 'completed' %}100%
+                        {% elif project.PrototypeStage == 'testing' %}80%
+                        {% elif project.PrototypeStage == 'prototype' %}60%
+                        {% elif project.PrototypeStage == 'development' %}40%
+                        {% else %}20%{% endif %}
+                    </span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-gradient-to-r from-primary-500 to-primary-600 h-2 rounded-full transition-all duration-1000 progress-bar
+                        {% if project.PrototypeStage == 'completed' %}w-full
+                        {% elif project.PrototypeStage == 'testing' %}w-4/5
+                        {% elif project.PrototypeStage == 'prototype' %}w-3/5
+                        {% elif project.PrototypeStage == 'development' %}w-2/5
+                        {% else %}w-1/5{% endif %}"></div>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Action Buttons -->
+            <div class="flex justify-between items-center pt-4 border-t border-gray-100">
+                <div class="flex gap-2">
+                    <a href="{% url 'core:project_detail' project.ProjectId %}" 
+                       class="inline-flex items-center px-3 py-2 text-sm font-medium text-primary-600 hover:text-primary-800 hover:bg-primary-50 rounded-lg transition-colors">
+                        <i class="fa-solid fa-eye mr-2"></i>View Details
+                    </a>
+                    <a href="{% url 'core:project_update' project.ProjectId %}" 
+                       class="inline-flex items-center px-3 py-2 text-sm font-medium text-yellow-600 hover:text-yellow-800 hover:bg-yellow-50 rounded-lg transition-colors">
+                        <i class="fa-solid fa-edit mr-2"></i>Edit
+                    </a>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="flex items-center gap-2">
+                    <button onclick="toggleFavorite('{{ project.ProjectId }}')" 
+                            class="p-2 text-gray-400 hover:text-red-500 transition-colors favorite-btn"
+                            data-project-id="{{ project.ProjectId }}">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+                    <button onclick="shareProject('{{ project.ProjectId }}')" 
+                            class="p-2 text-gray-400 hover:text-blue-500 transition-colors">
+                        <i class="fa-solid fa-share-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <!-- Empty State -->
+        <div class="text-center py-16">
+            <div class="max-w-md mx-auto">
+                <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fa-solid fa-folder-open text-4xl text-gray-400"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">No Projects Found</h3>
+                <p class="text-gray-600 mb-8">Start building Uganda's tech future by creating your first innovation project.</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="{% url 'core:project_create' %}" 
+                       class="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
+                        <i class="fa-solid fa-plus mr-2"></i>Create Project
+                    </a>
+                    <button onclick="showProjectTemplate()" 
+                            class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                        <i class="fa-solid fa-template mr-2"></i>Use Template
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Enhanced Project List Functionality -->
+<script>
+    // Project filtering and search functionality
+    window.clearAllFilters = function() {
+        document.getElementById('project-search').value = '';
+        document.getElementById('stage-filter').value = '';
+        document.getElementById('category-filter').value = '';
+        filterProjects();
+        updateActiveFilters();
+    };
+    
+    window.exportProjects = function() {
+        // Simple CSV export
+        const projects = document.querySelectorAll('.project-card[style="display: block"], .project-card:not([style])');
+        let csvContent = "Title,Stage,Program,Facility,Focus\n";
+        
+        projects.forEach(card => {
+            const title = card.querySelector('h3 a').textContent;
+            const stage = card.querySelector('.stage-badge').textContent.trim();
+            const metadata = card.querySelectorAll('.grid .flex span');
+            const program = metadata[0] ? metadata[0].textContent : '';
+            const facility = metadata[1] ? metadata[1].textContent : '';
+            const focus = metadata[2] ? metadata[2].textContent : '';
+            
+            csvContent += `"${title}","${stage}","${program}","${facility}","${focus}"\n`;
+        });
+        
+        // Download CSV
+        const blob = new Blob([csvContent], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'uganda-tech-projects.csv';
+        a.click();
+        window.URL.revokeObjectURL(url);
+    };
+    
+    window.toggleFavorite = function(projectId) {
+        const btn = document.querySelector(`.favorite-btn[data-project-id="${projectId}"]`);
+        const icon = btn.querySelector('i');
+        
+        if (icon.classList.contains('fa-regular')) {
+            icon.classList.remove('fa-regular');
+            icon.classList.add('fa-solid');
+            btn.classList.add('text-red-500');
+        } else {
+            icon.classList.remove('fa-solid');
+            icon.classList.add('fa-regular');
+            btn.classList.remove('text-red-500');
+        }
+    };
+    
+    window.shareProject = function(projectId) {
+        const projectCard = document.querySelector(`[data-project-id="${projectId}"]`);
+        const title = projectCard.querySelector('h3 a').textContent;
+        const url = window.location.origin + projectCard.querySelector('h3 a').href;
+        
+        if (navigator.share) {
+            navigator.share({
+                title: `Uganda Tech Connect - ${title}`,
+                text: `Check out this innovative project: ${title}`,
+                url: url
+            });
+        } else {
+            // Fallback - copy to clipboard
+            navigator.clipboard.writeText(url).then(() => {
+                alert('Project URL copied to clipboard!');
+            });
+        }
+    };
+    
+    window.showProjectTemplate = function() {
+        alert('Project templates feature coming soon!');
+    };
+    
+    function filterProjects() {
+        const search = document.getElementById('project-search').value.toLowerCase();
+        const stage = document.getElementById('stage-filter').value;
+        const category = document.getElementById('category-filter').value;
+        
+        const cards = document.querySelectorAll('.project-card');
+        let visibleCount = 0;
+        
+        cards.forEach(card => {
+            const title = card.dataset.title || '';
+            const description = card.dataset.description || '';
+            const cardStage = card.dataset.stage || '';
+            const cardCategory = card.dataset.focus || '';
+            
+            const matchesSearch = !search || title.includes(search) || description.includes(search);
+            const matchesStage = !stage || cardStage === stage;
+            const matchesCategory = !category || cardCategory.includes(category);
+            
+            if (matchesSearch && matchesStage && matchesCategory) {
+                card.style.display = 'block';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+        
+        document.getElementById('visible-count').textContent = visibleCount;
+    }
+    
+    function updateActiveFilters() {
+        const search = document.getElementById('project-search').value;
+        const stage = document.getElementById('stage-filter').value;
+        const category = document.getElementById('category-filter').value;
+        const filtersContainer = document.getElementById('active-filters');
+        
+        filtersContainer.innerHTML = '';
+        
+        if (search) {
+            addFilterTag(filtersContainer, `Search: ${search}`, 'project-search');
+        }
+        if (stage) {
+            const stageText = document.getElementById('stage-filter').selectedOptions[0].text;
+            addFilterTag(filtersContainer, `Stage: ${stageText}`, 'stage-filter');
+        }
+        if (category) {
+            const categoryText = document.getElementById('category-filter').selectedOptions[0].text;
+            addFilterTag(filtersContainer, `Focus: ${categoryText}`, 'category-filter');
+        }
+    }
+    
+    function addFilterTag(container, text, fieldId) {
+        const tag = document.createElement('span');
+        tag.className = 'inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-primary-100 text-primary-800';
+        tag.innerHTML = `
+            ${text}
+            <button onclick="clearFilter('${fieldId}')" class="ml-1 text-primary-600 hover:text-primary-800">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        `;
+        container.appendChild(tag);
+    }
+    
+    window.clearFilter = function(fieldId) {
+        document.getElementById(fieldId).value = '';
+        filterProjects();
+        updateActiveFilters();
+    };
+    
+    // Initialize event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('project-search');
+        const stageFilter = document.getElementById('stage-filter');
+        const categoryFilter = document.getElementById('category-filter');
+        
+        if (searchInput) {
+            searchInput.addEventListener('input', () => {
+                filterProjects();
+                updateActiveFilters();
+            });
+        }
+        
+        if (stageFilter) {
+            stageFilter.addEventListener('change', () => {
+                filterProjects();
+                updateActiveFilters();
+            });
+        }
+        
+        if (categoryFilter) {
+            categoryFilter.addEventListener('change', () => {
+                filterProjects();
+                updateActiveFilters();
+            });
+        }
+        
+        // Initialize progress bar animations
+        setTimeout(() => {
+            document.querySelectorAll('.progress-bar').forEach(bar => {
+                bar.style.opacity = '1';
+                bar.style.transform = 'scaleX(1)';
+            });
+        }, 500);
+    });
+</script>
+{% endblock %}

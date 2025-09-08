@@ -1,24 +1,486 @@
 {% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}{{ facility.name }} - Facility Details{% endblock %}
+
+{% block extra_css %}
+<style>
+    .facility-hero { 
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 3rem 0;
+        margin-bottom: 2rem;
+    }
+    .facility-stats { background: #f8f9fa; border-radius: 10px; padding: 1.5rem; }
+    .stat-card { text-align: center; padding: 1rem; }
+    .stat-number { font-size: 2rem; font-weight: bold; color: #495057; }
+    .stat-label { color: #6c757d; font-size: 0.875rem; }
+    .detail-content { transition: all 0.3s ease; }
+    .gallery-container { position: relative; }
+    .gallery-image { 
+        cursor: pointer; 
+        transition: transform 0.3s ease;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .gallery-image:hover { transform: scale(1.05); }
+    .contact-card { 
+        background: white; 
+        border-radius: 10px; 
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        padding: 1.5rem;
+    }
+    .programs-grid { 
+        display: grid; 
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+        gap: 1rem; 
+    }
+    .program-card { 
+        border: 1px solid #dee2e6; 
+        border-radius: 8px; 
+        padding: 1rem;
+        transition: all 0.3s ease;
+    }
+    .program-card:hover { 
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+        transform: translateY(-2px);
+    }
+    .favorite-btn { border: none; background: transparent; font-size: 1.5rem; }
+    .favorite-btn.active { color: #dc3545; }
+    .share-btn { border: none; background: transparent; font-size: 1.2rem; }
+    .reading-progress { 
+        position: fixed; 
+        top: 0; 
+        left: 0; 
+        width: 0%; 
+        height: 3px; 
+        background: #007bff;
+        z-index: 1000;
+        transition: width 0.1s ease;
+    }
+    .lightbox { 
+        position: fixed; 
+        top: 0; 
+        left: 0; 
+        width: 100%; 
+        height: 100%; 
+        background: rgba(0,0,0,0.9);
+        z-index: 2000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+    }
+    .lightbox-content { 
+        max-width: 90%; 
+        max-height: 90%; 
+        object-fit: contain;
+    }
+    .lightbox-nav { 
+        position: absolute; 
+        top: 50%; 
+        transform: translateY(-50%);
+        background: rgba(255,255,255,0.8);
+        border: none;
+        padding: 1rem;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+    .lightbox-prev { left: 20px; }
+    .lightbox-next { right: 20px; }
+    .lightbox-close { 
+        position: absolute; 
+        top: 20px; 
+        right: 20px; 
+        background: rgba(255,255,255,0.8);
+        border: none;
+        padding: 0.5rem;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="card">
-    <div class="card-header">
-        <h3>{{ facility.name }}</h3>
+<!-- Reading Progress Bar -->
+<div class="reading-progress" id="reading-progress"></div>
+
+<div class="container-fluid" data-page-type="facility-detail">
+    <!-- Hero Section -->
+    <div class="facility-hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="display-4 mb-3">{{ facility.name }}</h1>
+                    <p class="lead">{{ facility.description|truncatewords:30 }}</p>
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="badge bg-light text-dark px-3 py-2">
+                            <i class="fas fa-map-marker-alt me-2"></i>{{ facility.location }}
+                        </span>
+                        <span class="badge bg-light text-dark px-3 py-2">
+                            <i class="fas fa-building me-2"></i>{{ facility.type }}
+                        </span>
+                        <span class="badge bg-light text-dark px-3 py-2">
+                            <i class="fas fa-users me-2"></i>Capacity: {{ facility.capacity }}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-4 text-end">
+                    <div class="btn-group mb-3">
+                        <button id="favorite-btn" class="favorite-btn" title="Add to Favorites">
+                            <i class="far fa-heart"></i>
+                        </button>
+                        <button id="share-btn" class="share-btn" title="Share Facility" 
+                                data-bs-toggle="modal" data-bs-target="#shareModal">
+                            <i class="fas fa-share-alt"></i>
+                        </button>
+                        <button id="print-btn" class="share-btn" title="Print Details">
+                            <i class="fas fa-print"></i>
+                        </button>
+                        <button id="fullscreen-btn" class="share-btn" title="Fullscreen Mode">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="card-body">
-        <p><strong>Description:</strong> {{ facility.description }}</p>
-        <p><strong>Location:</strong> {{ facility.location }}</p>
-        <p><strong>Type:</strong> {{ facility.type }}</p>
-        <p><strong>Capacity:</strong> {{ facility.capacity }}</p>
-        <p><strong>Resources:</strong> {{ facility.resources }}</p>
-        <p><strong>Contact Email:</strong> {{ facility.contact_email }}</p>
-        <p><strong>Contact Phone:</strong> {{ facility.contact_phone }}</p>
-        <p><strong>Programs:</strong> {{ facility.programs.all|join:", " }}</p>
-    </div>
-    <div class="card-footer">
-        <a href="{% url 'core:facility_update' facility.pk %}" class="btn btn-warning">Edit</a>
-        <a href="{% url 'core:facility_delete' facility.pk %}" class="btn btn-danger">Delete</a>
-        <a href="{% url 'core:facility_list' %}" class="btn btn-secondary">Back</a>
+
+    <div class="container">
+        <!-- Facility Statistics -->
+        <div class="facility-stats mb-4">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-number" id="equipment-count">{{ facility.equipment_set.count }}</div>
+                        <div class="stat-label">Equipment Items</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-number" id="programs-count">{{ facility.programs.count }}</div>
+                        <div class="stat-label">Active Programs</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-number" id="utilization-rate">85%</div>
+                        <div class="stat-label">Utilization Rate</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-number" id="satisfaction-score">4.8</div>
+                        <div class="stat-label">Satisfaction Score</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Main Content -->
+            <div class="col-lg-8">
+                <!-- Facility Details -->
+                <div class="card mb-4 detail-content">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Facility Details</h5>
+                        <div class="btn-group btn-group-sm">
+                            <a href="{% url 'core:facility_update' facility.pk %}" class="btn btn-outline-warning">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <button class="btn btn-outline-danger delete-confirm" 
+                                    data-url="{% url 'core:facility_delete' facility.pk %}">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-muted">Description</h6>
+                                <p class="mb-3">{{ facility.description }}</p>
+                                
+                                <h6 class="text-muted">Location & Address</h6>
+                                <p class="mb-3">
+                                    <i class="fas fa-map-marker-alt text-danger me-2"></i>
+                                    {{ facility.location }}
+                                </p>
+                                
+                                <h6 class="text-muted">Facility Type</h6>
+                                <p class="mb-3">
+                                    <span class="badge bg-primary">{{ facility.type }}</span>
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-muted">Capacity</h6>
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="progress flex-grow-1 me-3">
+                                        <div class="progress-bar" role="progressbar" 
+                                             style="width: 70%" aria-valuenow="70" 
+                                             aria-valuemin="0" aria-valuemax="100">
+                                        </div>
+                                    </div>
+                                    <span class="fw-bold">{{ facility.capacity }} people</span>
+                                </div>
+                                
+                                <h6 class="text-muted">Available Resources</h6>
+                                <div class="mb-3">
+                                    {% if facility.resources %}
+                                    <span class="badge bg-info me-1">{{ facility.resources }}</span>
+                                    {% else %}
+                                    <span class="text-muted">No resources listed</span>
+                                    {% endif %}
+                                </div>
+                                
+                                <h6 class="text-muted">Operational Hours</h6>
+                                <p class="text-success mb-0">
+                                    <i class="fas fa-clock me-2"></i>
+                                    Monday - Friday: 8:00 AM - 6:00 PM<br>
+                                    Saturday: 9:00 AM - 4:00 PM<br>
+                                    Sunday: Closed
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Photo Gallery -->
+                <div class="card mb-4 detail-content">
+                    <div class="card-header">
+                        <h5 class="mb-0">Photo Gallery</h5>
+                    </div>
+                    <div class="card-body gallery-container">
+                        <div class="row g-2">
+                            <!-- Placeholder images - in real app, these would be from model -->
+                            <div class="col-md-4">
+                                <img src="{% static 'images/image.png' %}" 
+                                     class="img-fluid gallery-image" 
+                                     alt="Facility exterior view"
+                                     data-caption="Exterior view of {{ facility.name }}">
+                            </div>
+                            <div class="col-md-4">
+                                <img src="{% static 'images/image.png' %}" 
+                                     class="img-fluid gallery-image" 
+                                     alt="Interior workspace"
+                                     data-caption="Main workspace area">
+                            </div>
+                            <div class="col-md-4">
+                                <img src="{% static 'images/image.png' %}" 
+                                     class="img-fluid gallery-image" 
+                                     alt="Equipment area"
+                                     data-caption="Equipment and resources area">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Equipment List -->
+                <div class="card mb-4 detail-content">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Equipment Available</h5>
+                        <a href="{% url 'core:equipment_create' %}" class="btn btn-sm btn-success">
+                            <i class="fas fa-plus"></i> Add Equipment
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        {% if facility.equipment_set.all %}
+                        <div class="row">
+                            {% for equipment in facility.equipment_set.all %}
+                            <div class="col-md-6 mb-3">
+                                <div class="border rounded p-3">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="mb-1">{{ equipment.name }}</h6>
+                                            <p class="text-muted small mb-2">{{ equipment.get_usage_domain_display }}</p>
+                                            <span class="badge bg-{{ equipment.is_operational|yesno:'success,warning' }}">
+                                                {{ equipment.is_operational|yesno:'Available,Maintenance' }}
+                                            </span>
+                                        </div>
+                                        <a href="{% url 'core:equipment_detail' equipment.pk %}" 
+                                           class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div class="text-center text-muted py-4">
+                            <i class="fas fa-tools fa-2x mb-3"></i>
+                            <p>No equipment registered for this facility yet.</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Programs -->
+                <div class="card detail-content">
+                    <div class="card-header">
+                        <h5 class="mb-0">Associated Programs</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if facility.programs.all %}
+                        <div class="programs-grid">
+                            {% for program in facility.programs.all %}
+                            <div class="program-card">
+                                <h6>{{ program.name }}</h6>
+                                <p class="text-muted small mb-2">{{ program.description|truncatewords:15 }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="badge bg-success">Active</span>
+                                    <a href="{% url 'core:program_detail' program.pk %}" 
+                                       class="btn btn-sm btn-outline-primary">
+                                        View Program
+                                    </a>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div class="text-center text-muted py-4">
+                            <i class="fas fa-project-diagram fa-2x mb-3"></i>
+                            <p>No programs associated with this facility yet.</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- Contact Information -->
+                <div class="contact-card mb-4">
+                    <h5 class="mb-3">Contact Information</h5>
+                    <div class="mb-3">
+                        <i class="fas fa-envelope text-primary me-2"></i>
+                        <a href="mailto:{{ facility.contact_email }}" class="text-decoration-none">
+                            {{ facility.contact_email }}
+                        </a>
+                    </div>
+                    <div class="mb-3">
+                        <i class="fas fa-phone text-primary me-2"></i>
+                        <a href="tel:{{ facility.contact_phone }}" class="text-decoration-none">
+                            {{ facility.contact_phone }}
+                        </a>
+                    </div>
+                    <button class="btn btn-primary w-100 mb-2">
+                        <i class="fas fa-calendar-plus me-2"></i>Book Facility
+                    </button>
+                    <button class="btn btn-outline-primary w-100" id="get-directions-btn">
+                        <i class="fas fa-directions me-2"></i>Get Directions
+                    </button>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0">Quick Actions</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-outline-info btn-sm">
+                                <i class="fas fa-download me-2"></i>Download Brochure
+                            </button>
+                            <button class="btn btn-outline-warning btn-sm">
+                                <i class="fas fa-exclamation-triangle me-2"></i>Report Issue
+                            </button>
+                            <button class="btn btn-outline-success btn-sm">
+                                <i class="fas fa-star me-2"></i>Leave Review
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Related Facilities -->
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0">Related Facilities</h6>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted small">Other facilities in the same area or type:</p>
+                        <!-- This would be populated dynamically -->
+                        <div class="small">
+                            <div class="border-bottom pb-2 mb-2">
+                                <strong>Tech Hub Kampala</strong><br>
+                                <span class="text-muted">2.3 km away</span>
+                            </div>
+                            <div class="border-bottom pb-2 mb-2">
+                                <strong>Innovation Center</strong><br>
+                                <span class="text-muted">4.1 km away</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="text-center mt-4 mb-5">
+            <a href="{% url 'core:facility_list' %}" class="btn btn-secondary me-2">
+                <i class="fas fa-arrow-left me-2"></i>Back to Facilities
+            </a>
+            <a href="{% url 'core:facility_update' facility.pk %}" class="btn btn-warning me-2">
+                <i class="fas fa-edit me-2"></i>Edit Facility
+            </a>
+        </div>
     </div>
 </div>
+
+<!-- Image Lightbox -->
+<div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightbox-close">
+        <i class="fas fa-times"></i>
+    </button>
+    <button class="lightbox-nav lightbox-prev" id="lightbox-prev">
+        <i class="fas fa-chevron-left"></i>
+    </button>
+    <img class="lightbox-content" id="lightbox-img" src="" alt="">
+    <button class="lightbox-nav lightbox-next" id="lightbox-next">
+        <i class="fas fa-chevron-right"></i>
+    </button>
+    <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); 
+                color: white; text-align: center;">
+        <p id="lightbox-caption"></p>
+        <p id="lightbox-counter"></p>
+    </div>
+</div>
+
+<!-- Share Modal -->
+<div class="modal fade" id="shareModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Share Facility</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Share URL:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="share-url" 
+                               value="{{ request.build_absolute_uri }}" readonly>
+                        <button class="btn btn-outline-secondary" id="copy-url">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="d-grid gap-2">
+                    <button class="btn btn-primary" id="share-email">
+                        <i class="fas fa-envelope me-2"></i>Share via Email
+                    </button>
+                    <button class="btn btn-info" id="share-twitter">
+                        <i class="fab fa-twitter me-2"></i>Share on Twitter
+                    </button>
+                    <button class="btn btn-success" id="share-whatsapp">
+                        <i class="fab fa-whatsapp me-2"></i>Share on WhatsApp
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/compiled/main.js' %}"></script>
 {% endblock %}
