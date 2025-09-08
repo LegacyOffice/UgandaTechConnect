@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uganda Tech Connect - Tailwind CSS Test</title>
+    
+    <!-- Tailwind CSS CDN with Custom Configuration -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        secondary: {
+                            50: '#fdf4ff',
+                            100: '#fae8ff',
+                            200: '#f5d0fe',
+                            300: '#f0abfc',
+                            400: '#e879f9',
+                            500: '#d946ef',
+                            600: '#c026d3',
+                            700: '#a21caf',
+                            800: '#86198f',
+                            900: '#701a75',
+                        },
+                        success: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        },
+                        warning: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            300: '#fcd34d',
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                            800: '#92400e',
+                            900: '#78350f',
+                        },
+                        danger: {
+                            50: '#fef2f2',
+                            100: '#fee2e2',
+                            200: '#fecaca',
+                            300: '#fca5a5',
+                            400: '#f87171',
+                            500: '#ef4444',
+                            600: '#dc2626',
+                            700: '#b91c1c',
+                            800: '#991b1b',
+                            900: '#7f1d1d',
+                        },
+                        info: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    animation: {
+                        'fadeIn': 'fadeIn 0.5s ease-in-out',
+                        'slideUp': 'slideUp 0.3s ease-out',
+                        'bounce-subtle': 'bounce-subtle 2s infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        'bounce-subtle': {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-5px)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50 font-sans">
+    
+    <!-- Enhanced Navigation with Tailwind CSS -->
+    <nav class="bg-gradient-to-r from-primary-500 to-secondary-500 shadow-lg sticky top-0 z-50 backdrop-blur-sm bg-opacity-95">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo and Brand -->
+                <div class="flex items-center space-x-4">
+                    <a href="#" class="flex items-center space-x-2 text-white hover:text-gray-100 transition-colors duration-200">
+                        <div class="w-8 h-8 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+                            <i class="fa-solid fa-microchip text-sm"></i>
+                        </div>
+                        <span class="font-bold text-lg hidden sm:block">Uganda Tech Connect</span>
+                        <span class="font-bold text-lg sm:hidden">UTC</span>
+                    </a>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="#" 
+                       class="flex items-center space-x-1 px-3 py-2 rounded-lg text-white hover:bg-white hover:bg-opacity-10 transition-all duration-200 hover:-translate-y-0.5">
+                        <i class="fa-solid fa-diagram-project text-sm"></i>
+                        <span class="font-medium">Programs</span>
+                    </a>
+                    <a href="#" 
+                       class="flex items-center space-x-1 px-3 py-2 rounded-lg text-white hover:bg-white hover:bg-opacity-10 transition-all duration-200 hover:-translate-y-0.5">
+                        <i class="fa-solid fa-building text-sm"></i>
+                        <span class="font-medium">Facilities</span>
+                    </a>
+                    <a href="#" 
+                       class="flex items-center space-x-1 px-3 py-2 rounded-lg text-white hover:bg-white hover:bg-opacity-10 transition-all duration-200 hover:-translate-y-0.5">
+                        <i class="fa-solid fa-cogs text-sm"></i>
+                        <span class="font-medium">Equipment</span>
+                    </a>
+                    <a href="#" 
+                       class="flex items-center space-x-1 px-3 py-2 rounded-lg text-white hover:bg-white hover:bg-opacity-10 transition-all duration-200 hover:-translate-y-0.5">
+                        <i class="fa-solid fa-lightbulb text-sm"></i>
+                        <span class="font-medium">Projects</span>
+                    </a>
+                    <a href="#" 
+                       class="flex items-center space-x-1 px-3 py-2 rounded-lg text-white hover:bg-white hover:bg-opacity-10 transition-all duration-200 hover:-translate-y-0.5">
+                        <i class="fa-solid fa-hand-holding-heart text-sm"></i>
+                        <span class="font-medium">Services</span>
+                    </a>
+                    <a href="#" 
+                       class="flex items-center space-x-1 px-3 py-2 rounded-lg text-white hover:bg-white hover:bg-opacity-10 transition-all duration-200 hover:-translate-y-0.5">
+                        <i class="fa-solid fa-users text-sm"></i>
+                        <span class="font-medium">Participants</span>
+                    </a>
+                    <a href="#" 
+                       class="flex items-center space-x-1 px-3 py-2 rounded-lg text-white hover:bg-white hover:bg-opacity-10 transition-all duration-200 hover:-translate-y-0.5">
+                        <i class="fa-solid fa-trophy text-sm"></i>
+                        <span class="font-medium">Outcomes</span>
+                    </a>
+                </div>
+
+                <!-- Search and Mobile Menu -->
+                <div class="flex items-center space-x-3">
+                    <!-- Search Button -->
+                    <button onclick="toggleSearch()" class="p-2 rounded-lg text-white hover:bg-white hover:bg-opacity-10 transition-colors duration-200">
+                        <i class="fa-solid fa-search"></i>
+                    </button>
+                    
+                    <!-- Mobile Menu Button -->
+                    <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg text-white hover:bg-white hover:bg-opacity-10 transition-colors duration-200">
+                        <i class="fa-solid fa-bars" id="mobile-menu-icon"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden pb-4 pt-2">
+                <div class="space-y-1">
+                    <a href="#" 
+                       class="flex items-center space-x-2 px-4 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded-lg transition-colors duration-200">
+                        <i class="fa-solid fa-diagram-project w-5"></i>
+                        <span>Programs</span>
+                    </a>
+                    <a href="#" 
+                       class="flex items-center space-x-2 px-4 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded-lg transition-colors duration-200">
+                        <i class="fa-solid fa-building w-5"></i>
+                        <span>Facilities</span>
+                    </a>
+                    <a href="#" 
+                       class="flex items-center space-x-2 px-4 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded-lg transition-colors duration-200">
+                        <i class="fa-solid fa-cogs w-5"></i>
+                        <span>Equipment</span>
+                    </a>
+                    <a href="#" 
+                       class="flex items-center space-x-2 px-4 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded-lg transition-colors duration-200">
+                        <i class="fa-solid fa-lightbulb w-5"></i>
+                        <span>Projects</span>
+                    </a>
+                    <a href="#" 
+                       class="flex items-center space-x-2 px-4 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded-lg transition-colors duration-200">
+                        <i class="fa-solid fa-hand-holding-heart w-5"></i>
+                        <span>Services</span>
+                    </a>
+                    <a href="#" 
+                       class="flex items-center space-x-2 px-4 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded-lg transition-colors duration-200">
+                        <i class="fa-solid fa-users w-5"></i>
+                        <span>Participants</span>
+                    </a>
+                    <a href="#" 
+                       class="flex items-center space-x-2 px-4 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded-lg transition-colors duration-200">
+                        <i class="fa-solid fa-trophy w-5"></i>
+                        <span>Outcomes</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Search Bar (Hidden by default) -->
+            <div id="search-bar" class="hidden pb-4 pt-2 border-t border-white border-opacity-20 mt-4">
+                <form action="#" method="get" class="flex space-x-2">
+                    <input type="text" name="q" placeholder="Search..." 
+                           class="flex-1 px-4 py-2 rounded-lg bg-white bg-opacity-10 text-white placeholder-gray-300 border border-white border-opacity-20 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50">
+                    <button type="submit" class="px-6 py-2 bg-white bg-opacity-20 text-white rounded-lg hover:bg-opacity-30 transition-colors duration-200">
+                        <i class="fa-solid fa-search"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="min-h-screen bg-gray-50">
+        <!-- Enhanced Alert Messages Demo -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+            <div class="mb-4 p-4 rounded-lg shadow-md animate-slideUp bg-success-50 border border-success-200 text-success-800">
+                <div class="flex items-start justify-between">
+                    <div class="flex items-start space-x-3">
+                        <div class="flex-shrink-0">
+                            <i class="fa-solid fa-check-circle text-success-500"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-medium">Tailwind CSS integration successful!</p>
+                        </div>
+                    </div>
+                    <button type="button" class="flex-shrink-0 ml-3 p-1 rounded-md hover:bg-black hover:bg-opacity-5 transition-colors duration-200" onclick="this.parentElement.parentElement.remove()">
+                        <i class="fa-solid fa-times text-sm opacity-60"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Page Content with enhanced styling -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <div class="p-8">
+                    <h1 class="text-3xl font-bold text-gray-900 mb-6">
+                        <i class="fa-solid fa-rocket text-primary-500 mr-3"></i>
+                        Tailwind CSS Integration Test
+                    </h1>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                        <!-- Feature Cards -->
+                        <div class="bg-gradient-to-br from-primary-50 to-primary-100 p-6 rounded-lg border border-primary-200 hover:shadow-md transition-shadow duration-200">
+                            <div class="w-12 h-12 bg-primary-500 rounded-lg flex items-center justify-center mb-4">
+                                <i class="fa-solid fa-palette text-white"></i>
+                            </div>
+                            <h3 class="font-semibold text-gray-900 mb-2">Modern Design</h3>
+                            <p class="text-gray-600">Beautiful, responsive design with Tailwind CSS utilities.</p>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-secondary-50 to-secondary-100 p-6 rounded-lg border border-secondary-200 hover:shadow-md transition-shadow duration-200">
+                            <div class="w-12 h-12 bg-secondary-500 rounded-lg flex items-center justify-center mb-4">
+                                <i class="fa-solid fa-mobile-alt text-white"></i>
+                            </div>
+                            <h3 class="font-semibold text-gray-900 mb-2">Responsive Layout</h3>
+                            <p class="text-gray-600">Optimized for all devices with mobile-first approach.</p>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-success-50 to-success-100 p-6 rounded-lg border border-success-200 hover:shadow-md transition-shadow duration-200">
+                            <div class="w-12 h-12 bg-success-500 rounded-lg flex items-center justify-center mb-4">
+                                <i class="fa-solid fa-zap text-white"></i>
+                            </div>
+                            <h3 class="font-semibold text-gray-900 mb-2">High Performance</h3>
+                            <p class="text-gray-600">Optimized CSS with utility-first approach for better performance.</p>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Elements Demo -->
+                    <div class="space-y-6">
+                        <h2 class="text-xl font-semibold text-gray-900">Interactive Elements</h2>
+                        
+                        <div class="flex flex-wrap gap-3">
+                            <button class="px-6 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors duration-200 hover:-translate-y-0.5 transform">
+                                Primary Button
+                            </button>
+                            <button class="px-6 py-2 bg-secondary-500 text-white rounded-lg hover:bg-secondary-600 transition-colors duration-200 hover:-translate-y-0.5 transform">
+                                Secondary Button
+                            </button>
+                            <button class="px-6 py-2 bg-success-500 text-white rounded-lg hover:bg-success-600 transition-colors duration-200 hover:-translate-y-0.5 transform">
+                                Success Button
+                            </button>
+                            <button class="px-6 py-2 bg-warning-500 text-white rounded-lg hover:bg-warning-600 transition-colors duration-200 hover:-translate-y-0.5 transform">
+                                Warning Button
+                            </button>
+                        </div>
+                        
+                        <div class="p-4 bg-gray-50 rounded-lg">
+                            <p class="text-gray-700">
+                                <i class="fa-solid fa-info-circle text-info-500 mr-2"></i>
+                                This is a demonstration of the enhanced Uganda Tech Connect platform with Tailwind CSS integration. 
+                                The design maintains all existing functionality while providing a modern, responsive, and optimized user experience.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Enhanced Footer with Tailwind CSS -->
+    <footer class="bg-gradient-to-r from-gray-900 to-primary-900 text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Company Info -->
+                <div class="lg:col-span-2">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-10 h-10 bg-gradient-to-br from-primary-400 to-secondary-400 rounded-xl flex items-center justify-center">
+                            <i class="fa-solid fa-microchip text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold">Uganda Tech Connect</h3>
+                    </div>
+                    <p class="text-gray-300 mb-6 leading-relaxed max-w-md">
+                        Fostering innovation, collaboration, and skill development in emerging technology domains while aligning with Uganda's national development priorities.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 bg-white bg-opacity-10 rounded-lg flex items-center justify-center hover:bg-opacity-20 transition-all duration-200 hover:-translate-y-0.5" title="LinkedIn">
+                            <i class="fa-brands fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-white bg-opacity-10 rounded-lg flex items-center justify-center hover:bg-opacity-20 transition-all duration-200 hover:-translate-y-0.5" title="Twitter">
+                            <i class="fa-brands fa-twitter"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-white bg-opacity-10 rounded-lg flex items-center justify-center hover:bg-opacity-20 transition-all duration-200 hover:-translate-y-0.5" title="GitHub">
+                            <i class="fa-brands fa-github"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-white bg-opacity-10 rounded-lg flex items-center justify-center hover:bg-opacity-20 transition-all duration-200 hover:-translate-y-0.5" title="Email">
+                            <i class="fa-solid fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">Quick Links</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-200 hover:translate-x-1 transform inline-block">Programs</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-200 hover:translate-x-1 transform inline-block">Facilities</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-200 hover:translate-x-1 transform inline-block">Equipment</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-200 hover:translate-x-1 transform inline-block">Projects</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-200 hover:translate-x-1 transform inline-block">Services</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-200 hover:translate-x-1 transform inline-block">Outcomes</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact Info -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">Contact Info</h4>
+                    <ul class="space-y-4">
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-primary-500 bg-opacity-20 rounded-md flex items-center justify-center">
+                                <i class="fa-solid fa-map-marker-alt text-primary-400 text-sm"></i>
+                            </div>
+                            <span class="text-gray-300">Kampala, Uganda</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-primary-500 bg-opacity-20 rounded-md flex items-center justify-center">
+                                <i class="fa-solid fa-envelope text-primary-400 text-sm"></i>
+                            </div>
+                            <a href="mailto:info@ugandatechconnect.org" class="text-gray-300 hover:text-white transition-colors duration-200">
+                                info@ugandatechconnect.org
+                            </a>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-primary-500 bg-opacity-20 rounded-md flex items-center justify-center">
+                                <i class="fa-solid fa-phone text-primary-400 text-sm"></i>
+                            </div>
+                            <span class="text-gray-300">+256 XXX XXX XXX</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="border-t border-gray-700 mt-12 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                    <p class="text-gray-400 text-sm">
+                        &copy; 2025 Uganda Tech Connect. All rights reserved.
+                    </p>
+                    <div class="flex items-center space-x-2 text-sm text-gray-400">
+                        <span>Built with</span>
+                        <i class="fa-solid fa-heart text-red-500 animate-bounce-subtle"></i>
+                        <span>for Uganda's tech ecosystem</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Tailwind Navigation Functions
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('mobile-menu-icon');
+            
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.remove('hidden');
+                mobileMenu.classList.add('animate-slideUp');
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                mobileMenu.classList.add('hidden');
+                mobileMenu.classList.remove('animate-slideUp');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        }
+
+        function toggleSearch() {
+            const searchBar = document.getElementById('search-bar');
+            const searchInput = searchBar.querySelector('input');
+            
+            if (searchBar.classList.contains('hidden')) {
+                searchBar.classList.remove('hidden');
+                searchBar.classList.add('animate-slideUp');
+                setTimeout(() => searchInput.focus(), 100);
+            } else {
+                searchBar.classList.add('hidden');
+                searchBar.classList.remove('animate-slideUp');
+            }
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileButton = event.target.closest('button[onclick="toggleMobileMenu()"]');
+            
+            if (!mobileButton && !mobileMenu.contains(event.target) && !mobileMenu.classList.contains('hidden')) {
+                toggleMobileMenu();
+            }
+        });
+    </script>
+
+</body>
+</html>

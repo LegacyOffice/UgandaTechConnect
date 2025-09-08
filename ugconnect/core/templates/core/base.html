@@ -9,10 +9,169 @@
     
     <title>{% block title %}Uganda Tech Connect - Innovation Platform{% endblock %}</title>
     
-    <!-- Favicon -->
+    <!--        // Tailwind Navigation Functions
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('mobile-menu-icon');
+            
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.remove('hidden');
+                mobileMenu.classList.add('animate-slideUp');
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                mobileMenu.classList.add('hidden');
+                mobileMenu.classList.remove('animate-slideUp');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        }
+
+        function toggleSearch() {
+            const searchBar = document.getElementById('search-bar');
+            const searchInput = searchBar.querySelector('input');
+            
+            if (searchBar.classList.contains('hidden')) {
+                searchBar.classList.remove('hidden');
+                searchBar.classList.add('animate-slideUp');
+                setTimeout(() => searchInput.focus(), 100);
+            } else {
+                searchBar.classList.add('hidden');
+                searchBar.classList.remove('animate-slideUp');
+            }
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileButton = event.target.closest('button[onclick="toggleMobileMenu()"]');
+            
+            if (!mobileButton && !mobileMenu.contains(event.target) && !mobileMenu.classList.contains('hidden')) {
+                toggleMobileMenu();
+            }
+        });
+
+        // Auto-hide alerts after 5 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    if (alert && alert.parentNode) {
+                        alert.remove();
+                    }
+                }, 5000);
+            });
+        });>
     <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🇺🇬</text></svg>">
     
-    <!-- Bootstrap CSS -->
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f4ff',
+                            100: '#e0eaff',
+                            200: '#c7d8ff',
+                            300: '#a4bcff',
+                            400: '#8197ff',
+                            500: '#667eea',
+                            600: '#5b6ce8',
+                            700: '#5058d4',
+                            800: '#4247aa',
+                            900: '#3a4087',
+                        },
+                        secondary: {
+                            50: '#f7f4ff',
+                            100: '#efe8ff',
+                            200: '#e1d4ff',
+                            300: '#ccb2ff',
+                            400: '#b185ff',
+                            500: '#764ba2',
+                            600: '#6b4298',
+                            700: '#5d3985',
+                            800: '#4f316e',
+                            900: '#42295c',
+                        },
+                        success: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            200: '#a7f3d0',
+                            300: '#6ee7b7',
+                            400: '#34d399',
+                            500: '#06d6a0',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        },
+                        warning: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            300: '#fcd34d',
+                            400: '#fbbf24',
+                            500: '#ffd166',
+                            600: '#d97706',
+                            700: '#b45309',
+                            800: '#92400e',
+                            900: '#78350f',
+                        },
+                        danger: {
+                            50: '#fef2f2',
+                            100: '#fee2e2',
+                            200: '#fecaca',
+                            300: '#fca5a5',
+                            400: '#f87171',
+                            500: '#f72585',
+                            600: '#dc2626',
+                            700: '#b91c1c',
+                            800: '#991b1b',
+                            900: '#7f1d1d',
+                        },
+                        info: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#4cc9f0',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.3s ease-out',
+                        'bounce-subtle': 'bounceSubtle 2s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(10px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        bounceSubtle: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-5px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Bootstrap CSS (for compatibility) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     
     <!-- Font Awesome -->
@@ -176,8 +335,130 @@
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <!-- Navigation - Enhanced with Tailwind CSS -->
+    <nav class="bg-gradient-to-r from-primary-500 to-secondary-500 shadow-lg sticky top-0 z-50 backdrop-blur-sm bg-opacity-95">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo and Brand -->
+                <div class="flex items-center space-x-4">
+                    <a href="{% url 'core:home' %}" class="flex items-center space-x-2 text-white hover:text-gray-100 transition-colors duration-200">
+                        <div class="w-8 h-8 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+                            <i class="fa-solid fa-microchip text-sm"></i>
+                        </div>
+                        <span class="font-bold text-lg hidden sm:block">Uganda Tech Connect</span>
+                        <span class="font-bold text-lg sm:hidden">UTC</span>
+                    </a>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="{% url 'core:program_list' %}" 
+                       class="flex items-center space-x-1 px-3 py-2 rounded-lg text-white hover:bg-white hover:bg-opacity-10 transition-all duration-200 hover:-translate-y-0.5">
+                        <i class="fa-solid fa-diagram-project text-sm"></i>
+                        <span class="font-medium">Programs</span>
+                    </a>
+                    <a href="{% url 'core:facility_list' %}" 
+                       class="flex items-center space-x-1 px-3 py-2 rounded-lg text-white hover:bg-white hover:bg-opacity-10 transition-all duration-200 hover:-translate-y-0.5">
+                        <i class="fa-solid fa-building text-sm"></i>
+                        <span class="font-medium">Facilities</span>
+                    </a>
+                    <a href="{% url 'core:equipment_list' %}" 
+                       class="flex items-center space-x-1 px-3 py-2 rounded-lg text-white hover:bg-white hover:bg-opacity-10 transition-all duration-200 hover:-translate-y-0.5">
+                        <i class="fa-solid fa-cogs text-sm"></i>
+                        <span class="font-medium">Equipment</span>
+                    </a>
+                    <a href="{% url 'core:project_list' %}" 
+                       class="flex items-center space-x-1 px-3 py-2 rounded-lg text-white hover:bg-white hover:bg-opacity-10 transition-all duration-200 hover:-translate-y-0.5">
+                        <i class="fa-solid fa-lightbulb text-sm"></i>
+                        <span class="font-medium">Projects</span>
+                    </a>
+                    <a href="{% url 'core:service_list' %}" 
+                       class="flex items-center space-x-1 px-3 py-2 rounded-lg text-white hover:bg-white hover:bg-opacity-10 transition-all duration-200 hover:-translate-y-0.5">
+                        <i class="fa-solid fa-hand-holding-heart text-sm"></i>
+                        <span class="font-medium">Services</span>
+                    </a>
+                    <a href="{% url 'core:participant_list' %}" 
+                       class="flex items-center space-x-1 px-3 py-2 rounded-lg text-white hover:bg-white hover:bg-opacity-10 transition-all duration-200 hover:-translate-y-0.5">
+                        <i class="fa-solid fa-users text-sm"></i>
+                        <span class="font-medium">Participants</span>
+                    </a>
+                    <a href="{% url 'core:outcome_list' %}" 
+                       class="flex items-center space-x-1 px-3 py-2 rounded-lg text-white hover:bg-white hover:bg-opacity-10 transition-all duration-200 hover:-translate-y-0.5">
+                        <i class="fa-solid fa-trophy text-sm"></i>
+                        <span class="font-medium">Outcomes</span>
+                    </a>
+                </div>
+
+                <!-- Search and Mobile Menu -->
+                <div class="flex items-center space-x-3">
+                    <!-- Search Button -->
+                    <button onclick="toggleSearch()" class="p-2 rounded-lg text-white hover:bg-white hover:bg-opacity-10 transition-colors duration-200">
+                        <i class="fa-solid fa-search"></i>
+                    </button>
+                    
+                    <!-- Mobile Menu Button -->
+                    <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg text-white hover:bg-white hover:bg-opacity-10 transition-colors duration-200">
+                        <i class="fa-solid fa-bars" id="mobile-menu-icon"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden pb-4 pt-2">
+                <div class="space-y-1">
+                    <a href="{% url 'core:program_list' %}" 
+                       class="flex items-center space-x-2 px-4 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded-lg transition-colors duration-200">
+                        <i class="fa-solid fa-diagram-project w-5"></i>
+                        <span>Programs</span>
+                    </a>
+                    <a href="{% url 'core:facility_list' %}" 
+                       class="flex items-center space-x-2 px-4 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded-lg transition-colors duration-200">
+                        <i class="fa-solid fa-building w-5"></i>
+                        <span>Facilities</span>
+                    </a>
+                    <a href="{% url 'core:equipment_list' %}" 
+                       class="flex items-center space-x-2 px-4 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded-lg transition-colors duration-200">
+                        <i class="fa-solid fa-cogs w-5"></i>
+                        <span>Equipment</span>
+                    </a>
+                    <a href="{% url 'core:project_list' %}" 
+                       class="flex items-center space-x-2 px-4 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded-lg transition-colors duration-200">
+                        <i class="fa-solid fa-lightbulb w-5"></i>
+                        <span>Projects</span>
+                    </a>
+                    <a href="{% url 'core:service_list' %}" 
+                       class="flex items-center space-x-2 px-4 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded-lg transition-colors duration-200">
+                        <i class="fa-solid fa-hand-holding-heart w-5"></i>
+                        <span>Services</span>
+                    </a>
+                    <a href="{% url 'core:participant_list' %}" 
+                       class="flex items-center space-x-2 px-4 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded-lg transition-colors duration-200">
+                        <i class="fa-solid fa-users w-5"></i>
+                        <span>Participants</span>
+                    </a>
+                    <a href="{% url 'core:outcome_list' %}" 
+                       class="flex items-center space-x-2 px-4 py-2 text-white hover:bg-white hover:bg-opacity-10 rounded-lg transition-colors duration-200">
+                        <i class="fa-solid fa-trophy w-5"></i>
+                        <span>Outcomes</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Search Bar (Hidden by default) -->
+            <div id="search-bar" class="hidden pb-4 pt-2 border-t border-white border-opacity-20 mt-4">
+                <form action="#" method="get" class="flex space-x-2">
+                    <input type="text" name="q" placeholder="Search..." 
+                           class="flex-1 px-4 py-2 rounded-lg bg-white bg-opacity-10 text-white placeholder-gray-300 border border-white border-opacity-20 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50">
+                    <button type="submit" class="px-6 py-2 bg-white bg-opacity-20 text-white rounded-lg hover:bg-opacity-30 transition-colors duration-200">
+                        <i class="fa-solid fa-search"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Legacy Bootstrap Navigation (Hidden, for fallback) -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top d-none">
         <div class="container-fluid">
             <a class="navbar-brand d-flex align-items-center" href="{% url 'core:home' %}">
                 <i class="fa-solid fa-microchip me-2"></i>
@@ -212,7 +493,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'core:service_list' %}">
-                            <i class="fa-solid fa-tools me-1"></i>Services
+                            <i class="fa-solid fa-hand-holding-heart me-1"></i>Services
                         </a>
                     </li>
                     <li class="nav-item">
@@ -241,26 +522,155 @@
     </nav>
 
     <!-- Main Content -->
-    <main>
+    <main class="min-h-screen bg-gray-50">
         <!-- Alert Messages -->
         {% if messages %}
-            <div class="container mt-3">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
                 {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                        <i class="fa-solid fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-triangle{% elif message.tags == 'warning' %}exclamation-circle{% else %}info-circle{% endif %} me-2"></i>
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <div class="mb-4 p-4 rounded-lg shadow-md animate-slideUp
+                        {% if message.tags == 'success' %}bg-success-50 border border-success-200 text-success-800
+                        {% elif message.tags == 'error' %}bg-danger-50 border border-danger-200 text-danger-800
+                        {% elif message.tags == 'warning' %}bg-warning-50 border border-warning-200 text-warning-800
+                        {% else %}bg-info-50 border border-info-200 text-info-800{% endif %}">
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-start space-x-3">
+                                <div class="flex-shrink-0">
+                                    <i class="fa-solid fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-triangle{% elif message.tags == 'warning' %}exclamation-circle{% else %}info-circle{% endif %} 
+                                    {% if message.tags == 'success' %}text-success-500
+                                    {% elif message.tags == 'error' %}text-danger-500
+                                    {% elif message.tags == 'warning' %}text-warning-500
+                                    {% else %}text-info-500{% endif %}"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-medium">{{ message }}</p>
+                                </div>
+                            </div>
+                            <button type="button" class="flex-shrink-0 ml-3 p-1 rounded-md hover:bg-black hover:bg-opacity-5 transition-colors duration-200" onclick="this.parentElement.parentElement.remove()">
+                                <i class="fa-solid fa-times text-sm opacity-60"></i>
+                            </button>
+                        </div>
                     </div>
                 {% endfor %}
             </div>
         {% endif %}
         
-        <!-- Page Content -->
-        {% block content %}{% endblock %}
+        <!-- Page Content with enhanced styling -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+
+        <!-- Legacy Bootstrap Content Container (Hidden, for fallback) -->
+        <div class="d-none">
+            <!-- Alert Messages -->
+            {% if messages %}
+                <div class="container mt-3">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            <i class="fa-solid fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-triangle{% elif message.tags == 'warning' %}exclamation-circle{% else %}info-circle{% endif %} me-2"></i>
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            <!-- Page Content -->
+            {% block bootstrap_content %}{% endblock %}
+        </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="footer mt-auto py-5">
+    <!-- Enhanced Footer with Tailwind CSS -->
+    <footer class="bg-gradient-to-r from-gray-900 to-primary-900 text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Company Info -->
+                <div class="lg:col-span-2">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-10 h-10 bg-gradient-to-br from-primary-400 to-secondary-400 rounded-xl flex items-center justify-center">
+                            <i class="fa-solid fa-microchip text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold">Uganda Tech Connect</h3>
+                    </div>
+                    <p class="text-gray-300 mb-6 leading-relaxed max-w-md">
+                        Fostering innovation, collaboration, and skill development in emerging technology domains while aligning with Uganda's national development priorities.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 bg-white bg-opacity-10 rounded-lg flex items-center justify-center hover:bg-opacity-20 transition-all duration-200 hover:-translate-y-0.5" title="LinkedIn">
+                            <i class="fa-brands fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-white bg-opacity-10 rounded-lg flex items-center justify-center hover:bg-opacity-20 transition-all duration-200 hover:-translate-y-0.5" title="Twitter">
+                            <i class="fa-brands fa-twitter"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-white bg-opacity-10 rounded-lg flex items-center justify-center hover:bg-opacity-20 transition-all duration-200 hover:-translate-y-0.5" title="GitHub">
+                            <i class="fa-brands fa-github"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-white bg-opacity-10 rounded-lg flex items-center justify-center hover:bg-opacity-20 transition-all duration-200 hover:-translate-y-0.5" title="Email">
+                            <i class="fa-solid fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">Quick Links</h4>
+                    <ul class="space-y-3">
+                        <li><a href="{% url 'core:program_list' %}" class="text-gray-300 hover:text-white transition-colors duration-200 hover:translate-x-1 transform inline-block">Programs</a></li>
+                        <li><a href="{% url 'core:facility_list' %}" class="text-gray-300 hover:text-white transition-colors duration-200 hover:translate-x-1 transform inline-block">Facilities</a></li>
+                        <li><a href="{% url 'core:equipment_list' %}" class="text-gray-300 hover:text-white transition-colors duration-200 hover:translate-x-1 transform inline-block">Equipment</a></li>
+                        <li><a href="{% url 'core:project_list' %}" class="text-gray-300 hover:text-white transition-colors duration-200 hover:translate-x-1 transform inline-block">Projects</a></li>
+                        <li><a href="{% url 'core:service_list' %}" class="text-gray-300 hover:text-white transition-colors duration-200 hover:translate-x-1 transform inline-block">Services</a></li>
+                        <li><a href="{% url 'core:outcome_list' %}" class="text-gray-300 hover:text-white transition-colors duration-200 hover:translate-x-1 transform inline-block">Outcomes</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact Info -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">Contact Info</h4>
+                    <ul class="space-y-4">
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-primary-500 bg-opacity-20 rounded-md flex items-center justify-center">
+                                <i class="fa-solid fa-map-marker-alt text-primary-400 text-sm"></i>
+                            </div>
+                            <span class="text-gray-300">Kampala, Uganda</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-primary-500 bg-opacity-20 rounded-md flex items-center justify-center">
+                                <i class="fa-solid fa-envelope text-primary-400 text-sm"></i>
+                            </div>
+                            <a href="mailto:info@ugandatechconnect.org" class="text-gray-300 hover:text-white transition-colors duration-200">
+                                info@ugandatechconnect.org
+                            </a>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-primary-500 bg-opacity-20 rounded-md flex items-center justify-center">
+                                <i class="fa-solid fa-phone text-primary-400 text-sm"></i>
+                            </div>
+                            <span class="text-gray-300">+256 XXX XXX XXX</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="border-t border-gray-700 mt-12 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                    <p class="text-gray-400 text-sm">
+                        &copy; 2025 Uganda Tech Connect. All rights reserved.
+                    </p>
+                    <div class="flex items-center space-x-2 text-sm text-gray-400">
+                        <span>Built with</span>
+                        <i class="fa-solid fa-heart text-red-500 animate-bounce-subtle"></i>
+                        <span>for Uganda's tech ecosystem</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Legacy Bootstrap Footer (Hidden, for fallback) -->
+    <footer class="footer mt-auto py-5 d-none">
         <div class="container">
             <div class="row">
                 <div class="col-md-6 mb-4">
