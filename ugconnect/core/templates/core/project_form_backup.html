@@ -1,0 +1,512 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}
+{% if object %}Edit Project{% else %}Add Project{% endif %} - Uganda Tech Connect
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="fw-bold mb-1">
+                        <i class="fa-solid fa-lightbulb text-info me-2"></i>
+                        {% if object %}Edit Project{% else %}Create New Project{% endif %}
+                    </h2>
+                    <p class="text-muted mb-0">
+                        {% if object %}Update project details and development status{% else %}Register a new innovation project in the Uganda Tech Connect platform{% endif %}
+                    </p>
+                </div>
+                <a href="{% url 'core:project_list' %}" class="btn btn-outline-secondary">
+                    <i class="fa-solid fa-arrow-left me-2"></i>Back to Projects
+                </a>
+            </div>
+
+            <!-- Form Card -->
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-info bg-opacity-10 border-0">
+                    <h5 class="card-title mb-0">
+                        <i class="fa-solid fa-edit me-2"></i>Project Information
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" novalidate data-enhance="form" data-auto-save="true" data-progress-tracking="true">
+                        {% csrf_token %}
+                        
+                        <!-- Form Progress Indicator -->
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <small class="text-muted">Form Progress</small>
+                                <small class="text-muted"><span id="form-progress">0</span>% Complete</small>
+                            </div>
+                            <div class="progress" style="height: 6px;">
+                                <div class="progress-bar bg-info" role="progressbar" style="width: 0%" id="form-progress-bar"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Error Messages -->
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger mb-4" role="alert">
+                                <i class="fa-solid fa-exclamation-triangle me-2"></i>
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+
+                        <!-- Project Overview Section -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h6 class="fw-bold text-primary border-bottom pb-2 mb-3">
+                                    <i class="fa-solid fa-info-circle me-2"></i>Project Overview
+                                </h6>
+                            </div>
+
+                            <!-- Project Title -->
+                            <div class="col-md-8 mb-3">
+                                <label for="{{ form.Title.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-heading text-primary me-1"></i>
+                                    Project Title <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" 
+                                       class="form-control {% if form.Title.errors %}is-invalid{% endif %}" 
+                                       id="{{ form.Title.id_for_label }}" 
+                                       name="{{ form.Title.name }}" 
+                                       value="{{ form.Title.value|default:'' }}"
+                                       placeholder="Smart Agriculture IoT System"
+                                       data-validate="required,minLength:3,maxLength:200"
+                                       data-counter="true"
+                                       maxlength="200"
+                                       autocomplete="off">
+                                {% if form.Title.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.Title.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.Title.help_text %}
+                                    <div class="form-text">{{ form.Title.help_text }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Category -->
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.Category.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-folder text-success me-1"></i>
+                                    Category <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-select {% if form.Category.errors %}is-invalid{% endif %}" 
+                                        id="{{ form.Category.id_for_label }}" 
+                                        name="{{ form.Category.name }}"
+                                        data-validate="required"
+                                        data-search="true">
+                                    <option value="">Select Category</option>
+                                    {% for value, label in form.Category.field.choices %}
+                                        {% if value %}
+                                            <option value="{{ value }}" 
+                                                    {% if value == form.Category.value %}selected{% endif %}>
+                                                {{ label }}
+                                            </option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                                {% if form.Category.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.Category.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.Category.help_text %}
+                                    <div class="form-text">{{ form.Category.help_text }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Project Description -->
+                            <div class="col-12 mb-3">
+                                <label for="{{ form.Description.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-align-left text-info me-1"></i>
+                                    Project Description <span class="text-danger">*</span>
+                                </label>
+                                <textarea class="form-control {% if form.Description.errors %}is-invalid{% endif %}" 
+                                          id="{{ form.Description.id_for_label }}" 
+                                          name="{{ form.Description.name }}" 
+                                          rows="4"
+                                          placeholder="Provide a comprehensive description of the project, its objectives, and expected outcomes..."
+                                          data-validate="required,minLength:50,maxLength:2000"
+                                          data-counter="true" 
+                                          data-auto-resize="true"
+                                          data-suggestions="true"
+                                          maxlength="2000">{{ form.Description.value|default:'' }}</textarea>
+                                <div class="form-text d-flex justify-content-between">
+                                    <span class="text-muted">Provide comprehensive details about your project</span>
+                                    <span class="character-count">0/2000</span>
+                                </div>
+                                {% if form.Description.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.Description.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.Description.help_text %}
+                                    <div class="form-text">{{ form.Description.help_text }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Innovation Details Section -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h6 class="fw-bold text-success border-bottom pb-2 mb-3">
+                                    <i class="fa-solid fa-lightbulb me-2"></i>Innovation Details
+                                </h6>
+                            </div>
+
+                            <!-- Program -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.ProgramId.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-graduation-cap text-success me-1"></i>
+                                    Associated Program <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-select {% if form.ProgramId.errors %}is-invalid{% endif %}" 
+                                        id="{{ form.ProgramId.id_for_label }}" 
+                                        name="{{ form.ProgramId.name }}">
+                                    <option value="">Select Program</option>
+                                    {% for choice in form.ProgramId.field.queryset %}
+                                        <option value="{{ choice.pk }}" 
+                                                {% if choice.pk == form.ProgramId.value %}selected{% endif %}>
+                                            {{ choice.name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                {% if form.ProgramId.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.ProgramId.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.ProgramId.help_text %}
+                                    <div class="form-text">{{ form.ProgramId.help_text }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Facility -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.FacilityId.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-building text-warning me-1"></i>
+                                    Primary Facility <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-select {% if form.FacilityId.errors %}is-invalid{% endif %}" 
+                                        id="{{ form.FacilityId.id_for_label }}" 
+                                        name="{{ form.FacilityId.name }}">
+                                    <option value="">Select Facility</option>
+                                    {% for choice in form.FacilityId.field.queryset %}
+                                        <option value="{{ choice.pk }}" 
+                                                {% if choice.pk == form.FacilityId.value %}selected{% endif %}>
+                                            {{ choice.name }} - {{ choice.location }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                {% if form.FacilityId.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.FacilityId.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.FacilityId.help_text %}
+                                    <div class="form-text">{{ form.FacilityId.help_text }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Nature of Project -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.NatureOfProject.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-flask text-info me-1"></i>
+                                    Nature of Project
+                                </label>
+                                <input type="text" 
+                                       class="form-control {% if form.NatureOfProject.errors %}is-invalid{% endif %}" 
+                                       id="{{ form.NatureOfProject.id_for_label }}" 
+                                       name="{{ form.NatureOfProject.name }}" 
+                                       value="{{ form.NatureOfProject.value|default:'' }}"
+                                       placeholder="Research & Development, Innovation, Prototype">
+                                {% if form.NatureOfProject.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.NatureOfProject.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.NatureOfProject.help_text %}
+                                    <div class="form-text">{{ form.NatureOfProject.help_text }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Key Innovation -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.KeyInnovation.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-star text-warning me-1"></i>
+                                    Key Innovation
+                                </label>
+                                <input type="text" 
+                                       class="form-control {% if form.KeyInnovation.errors %}is-invalid{% endif %}" 
+                                       id="{{ form.KeyInnovation.id_for_label }}" 
+                                       name="{{ form.KeyInnovation.name }}" 
+                                       value="{{ form.KeyInnovation.value|default:'' }}"
+                                       placeholder="AI-powered optimization, Blockchain integration">
+                                {% if form.KeyInnovation.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.KeyInnovation.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.KeyInnovation.help_text %}
+                                    <div class="form-text">{{ form.KeyInnovation.help_text }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Development Timeline Section -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h6 class="fw-bold text-warning border-bottom pb-2 mb-3">
+                                    <i class="fa-solid fa-calendar-alt me-2"></i>Development Timeline
+                                </h6>
+                            </div>
+
+                            <!-- Start Date -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.StartDate.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-play text-success me-1"></i>
+                                    Start Date
+                                </label>
+                                <input type="date" 
+                                       class="form-control {% if form.StartDate.errors %}is-invalid{% endif %}" 
+                                       id="{{ form.StartDate.id_for_label }}" 
+                                       name="{{ form.StartDate.name }}" 
+                                       value="{{ form.StartDate.value|date:'Y-m-d'|default:'' }}">
+                                {% if form.StartDate.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.StartDate.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.StartDate.help_text %}
+                                    <div class="form-text">{{ form.StartDate.help_text }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- End Date -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.EndDate.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-stop text-danger me-1"></i>
+                                    Expected End Date
+                                </label>
+                                <input type="date" 
+                                       class="form-control {% if form.EndDate.errors %}is-invalid{% endif %}" 
+                                       id="{{ form.EndDate.id_for_label }}" 
+                                       name="{{ form.EndDate.name }}" 
+                                       value="{{ form.EndDate.value|date:'Y-m-d'|default:'' }}">
+                                {% if form.EndDate.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.EndDate.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.EndDate.help_text %}
+                                    <div class="form-text">{{ form.EndDate.help_text }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Status -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.Status.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-tasks text-info me-1"></i>
+                                    Project Status <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-select {% if form.Status.errors %}is-invalid{% endif %}" 
+                                        id="{{ form.Status.id_for_label }}" 
+                                        name="{{ form.Status.name }}">
+                                    <option value="">Select Status</option>
+                                    {% for value, label in form.Status.field.choices %}
+                                        {% if value %}
+                                            <option value="{{ value }}" 
+                                                    {% if value == form.Status.value %}selected{% endif %}>
+                                                {{ label }}
+                                            </option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                                {% if form.Status.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.Status.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.Status.help_text %}
+                                    <div class="form-text">{{ form.Status.help_text }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Budget -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.Budget.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-dollar-sign text-success me-1"></i>
+                                    Project Budget (UGX)
+                                </label>
+                                <input type="number" 
+                                       class="form-control {% if form.Budget.errors %}is-invalid{% endif %}" 
+                                       id="{{ form.Budget.id_for_label }}" 
+                                       name="{{ form.Budget.name }}" 
+                                       value="{{ form.Budget.value|default:'' }}"
+                                       placeholder="0"
+                                       step="0.01"
+                                       min="0">
+                                {% if form.Budget.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.Budget.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.Budget.help_text %}
+                                    <div class="form-text">{{ form.Budget.help_text }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Commercialization Planning Section -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h6 class="fw-bold text-secondary border-bottom pb-2 mb-3">
+                                    <i class="fa-solid fa-chart-line me-2"></i>Commercialization Planning
+                                </h6>
+                            </div>
+
+                            <!-- Expected Deliverables -->
+                            <div class="col-12 mb-3">
+                                <label for="{{ form.ExpectedDeliverables.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-clipboard-list text-secondary me-1"></i>
+                                    Expected Deliverables
+                                </label>
+                                <textarea class="form-control {% if form.ExpectedDeliverables.errors %}is-invalid{% endif %}" 
+                                          id="{{ form.ExpectedDeliverables.id_for_label }}" 
+                                          name="{{ form.ExpectedDeliverables.name }}" 
+                                          rows="3"
+                                          placeholder="List key deliverables such as prototypes, research papers, patents, software applications...">{{ form.ExpectedDeliverables.value|default:'' }}</textarea>
+                                {% if form.ExpectedDeliverables.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.ExpectedDeliverables.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.ExpectedDeliverables.help_text %}
+                                    <div class="form-text">{{ form.ExpectedDeliverables.help_text }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Commercialization Plan -->
+                            <div class="col-12 mb-3">
+                                <label for="{{ form.CommercializationPlan.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-rocket text-info me-1"></i>
+                                    Commercialization Plan
+                                </label>
+                                <textarea class="form-control {% if form.CommercializationPlan.errors %}is-invalid{% endif %}" 
+                                          id="{{ form.CommercializationPlan.id_for_label }}" 
+                                          name="{{ form.CommercializationPlan.name }}" 
+                                          rows="3"
+                                          placeholder="Describe the strategy for bringing this innovation to market, target customers, business model...">{{ form.CommercializationPlan.value|default:'' }}</textarea>
+                                {% if form.CommercializationPlan.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.CommercializationPlan.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.CommercializationPlan.help_text %}
+                                    <div class="form-text">{{ form.CommercializationPlan.help_text }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="d-flex justify-content-end gap-3 pt-3 border-top">
+                            <a href="{% url 'core:project_list' %}" class="btn btn-outline-secondary">
+                                <i class="fa-solid fa-times me-2"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-info">
+                                <i class="fa-solid fa-save me-2"></i>
+                                {% if object %}Update Project{% else %}Create Project{% endif %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Help Section -->
+            <div class="mt-4">
+                <div class="card border-0 bg-light">
+                    <div class="card-body p-3">
+                        <h6 class="fw-semibold mb-2">
+                            <i class="fa-solid fa-lightbulb text-warning me-2"></i>Project Registration Guidelines
+                        </h6>
+                        <ul class="small text-muted mb-0 ps-3">
+                            <li><strong>Innovation Focus:</strong> Clearly articulate the unique value proposition and technological advancement</li>
+                            <li><strong>Realistic Timeline:</strong> Set achievable milestones and consider dependencies</li>
+                            <li><strong>Commercialization Strategy:</strong> Think about market potential and business viability from the start</li>
+                            <li><strong>Resource Planning:</strong> Ensure facility and program alignment for optimal support</li>
+                            <li><strong>Deliverables:</strong> Define specific, measurable outcomes that demonstrate project success</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Project Form TypeScript Enhancements -->
+<script src="{% static 'js/form-enhancements.js' %}"></script>
+<script type="module">
+    // Additional project-specific enhancements
+        // Additional project-specific enhancements
+        const projectFormEnhancements = {
+            setupProjectTypeHandling() {
+                const projectTypeField = document.querySelector('select[name*="type"], select[name*="Type"]');
+                const budgetField = document.querySelector('input[name*="budget"], input[name*="Budget"]');
+                
+                if (projectTypeField && budgetField) {
+                    projectTypeField.addEventListener('change', () => {
+                        const selectedType = projectTypeField.value;
+                        if (selectedType.includes('research') || selectedType.includes('prototype')) {
+                            budgetField.closest('.mb-3, .form-group')?.classList.add('animate-fadeIn');
+                        }
+                    });
+                }
+            },
+
+            setupInnovationSuggestions() {
+                const innovationField = document.querySelector('input[name*="KeyInnovation"], input[name*="innovation"]');
+                if (innovationField) {
+                    const suggestions = ['AI-powered', 'IoT-enabled', 'Blockchain-based', 'Machine Learning', 'Automated', 'Smart sensing', 'Data-driven', 'Cloud-native'];
+                    
+                    innovationField.addEventListener('input', (e) => {
+                        const value = e.target.value.toLowerCase();
+                        if (value.length > 2) {
+                            const matchingSuggestions = suggestions.filter(s => 
+                                s.toLowerCase().includes(value)
+                            );
+                            console.log('Innovation suggestions:', matchingSuggestions);
+                        }
+                    });
+                }
+            },
+
+            setupCollaborationHints() {
+                const facilityField = document.querySelector('select[name*="FacilityId"], select[name*="facility"]');
+                const programField = document.querySelector('select[name*="ProgramId"], select[name*="program"]');
+                
+                if (facilityField && programField) {
+                    programField.addEventListener('change', () => {
+                        const selectedProgram = programField.selectedOptions[0]?.textContent;
+                        if (selectedProgram) {
+                            console.log('Consider facilities aligned with:', selectedProgram);
+                        }
+                    });
+                }
+            }
+        };
+
+        // Initialize project-specific enhancements
+        projectFormEnhancements.setupProjectTypeHandling();
+        projectFormEnhancements.setupInnovationSuggestions();
+        projectFormEnhancements.setupCollaborationHints();
+        
+        console.log('✅ Project form enhancements loaded');
+</script>
+{% endblock %}

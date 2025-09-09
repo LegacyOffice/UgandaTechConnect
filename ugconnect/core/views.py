@@ -1,10 +1,12 @@
 from django.urls import reverse_lazy
 from django.shortcuts import render 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.contrib import messages
 from .models import Program, Facility, Equipment, Project, Service, Participant, Outcome
-from .forms import ProjectForm
-from django.urls import reverse_lazy
-from .forms import ParticipantForm
+from .forms import (
+    ProgramForm, FacilityForm, EquipmentForm, ProjectForm, 
+    ServiceForm, ParticipantForm, OutcomeForm
+)
 from django.db.models import Q
 
 
@@ -31,12 +33,12 @@ class ProgramDetailView(DetailView):
     context_object_name = 'program'
 class ProgramCreateView(CreateView):
     model = Program
-    fields = ['name', 'description', 'national_alignment', 'focus_areas', 'phases']
+    form_class = ProgramForm
     template_name = 'core/program_form.html'
     success_url = reverse_lazy('core:program_list')
 class ProgramUpdateView(UpdateView):
     model = Program
-    fields = ['name', 'description', 'national_alignment', 'focus_areas', 'phases']
+    form_class = ProgramForm
     template_name = 'core/program_form.html'
 
     def get_success_url(self):
@@ -75,22 +77,14 @@ class FacilityDetailView(DetailView):
 
 class FacilityCreateView(CreateView):
     model = Facility
-    fields = [
-        'name', 'description', 'location', 'type',
-        'capacity', 'resources', 'contact_email',
-        'contact_phone', 'programs'
-    ]
+    form_class = FacilityForm
     template_name = 'core/facility_form.html'
     success_url = reverse_lazy('core:facility_list')
 
 
 class FacilityUpdateView(UpdateView):
     model = Facility
-    fields = [
-        'name', 'description', 'location', 'type',
-        'capacity', 'resources', 'contact_email',
-        'contact_phone', 'programs'
-    ]
+    form_class = FacilityForm
     template_name = 'core/facility_form.html'
 
     def get_success_url(self):
@@ -161,20 +155,21 @@ class EquipmentDetailView(DetailView):
 
 class EquipmentCreateView(CreateView):
     model = Equipment
-    fields = [
-        'facility', 'name', 'capabilities', 'description', 
-        'inventory_code', 'usage_domain', 'support_phase', 'is_operational'
-    ]
+    form_class = EquipmentForm
     template_name = 'core/equipment_form.html'
-    success_url = reverse_lazy('core:equipment_list')
+    
+    def get_success_url(self):
+        return reverse_lazy('core:equipment_detail', kwargs={'pk': self.object.pk})
+    
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, f'Equipment "{self.object.name}" was created successfully!')
+        return response
 
 
 class EquipmentUpdateView(UpdateView):
     model = Equipment
-    fields = [
-        'facility', 'name', 'capabilities', 'description', 
-        'inventory_code', 'usage_domain', 'support_phase', 'is_operational'
-    ]
+    form_class = EquipmentForm
     template_name = 'core/equipment_form.html'
     
     def get_success_url(self):
@@ -210,7 +205,14 @@ class ProjectCreateView(CreateView):
     model = Project
     form_class = ProjectForm
     template_name = 'core/project_form.html'  # Add 'core/' prefix
-    success_url = reverse_lazy('core:project_list')  # Add app namespace
+    
+    def get_success_url(self):
+        return reverse_lazy('core:project_detail', kwargs={'pk': self.object.pk})
+    
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, f'Project "{self.object.Title}" was created successfully!')
+        return response
 
 class ProjectUpdateView(UpdateView):
     model = Project
@@ -263,15 +265,20 @@ class ServiceDetailView(DetailView):
 
 class ServiceCreateView(CreateView):
     model = Service
-    fields = ['facility', 'name', 'description', 'category', 'skill_type', 'operating_hours']
+    form_class = ServiceForm
     template_name = 'core/service_form.html'
 
     def get_success_url(self):
         return reverse_lazy('core:service_detail', kwargs={'pk': self.object.pk})
+    
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, f'Service "{self.object.name}" was created successfully!')
+        return response
 
 class ServiceUpdateView(UpdateView):
     model = Service
-    fields = ['facility', 'name', 'description', 'category', 'skill_type', 'operating_hours']
+    form_class = ServiceForm
     template_name = 'core/service_form.html'
 
     def get_success_url(self):
@@ -299,7 +306,14 @@ class ParticipantCreateView(CreateView):
     model = Participant
     form_class = ParticipantForm
     template_name = 'core/participant_form.html'
-    success_url = reverse_lazy('core:participant_list')
+    
+    def get_success_url(self):
+        return reverse_lazy('core:participant_detail', kwargs={'pk': self.object.pk})
+    
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, f'Participant "{self.object.full_name}" was added successfully!')
+        return response
 
 class ParticipantUpdateView(UpdateView):
     model = Participant
@@ -343,14 +357,21 @@ class OutcomeDetailView(DetailView):
 
 class OutcomeCreateView(CreateView):
     model = Outcome
+    form_class = OutcomeForm
     template_name = 'core/outcome_form.html'
-    fields = '__all__'
-    success_url = reverse_lazy('outcome_list')
+    
+    def get_success_url(self):
+        return reverse_lazy('core:outcome_detail', kwargs={'pk': self.object.pk})
+    
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, f'Outcome "{self.object.Title}" was created successfully!')
+        return response
 
 class OutcomeUpdateView(UpdateView):
     model = Outcome
+    form_class = OutcomeForm
     template_name = 'core/outcome_form.html'
-    fields = '__all__'
     
     def get_success_url(self):
         return reverse_lazy('outcome_detail', kwargs={'pk': self.object.pk})

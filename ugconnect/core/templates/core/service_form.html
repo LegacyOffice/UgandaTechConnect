@@ -1,360 +1,293 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
 {% block title %}
-{% if object %}Edit Service{% else %}Add Service{% endif %} - Uganda Tech Connect
+    {% if object %}Edit Service{% else %}Add New Service{% endif %} - UgandaTechConnect
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-section {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+    .section-header {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 10px 10px 0 0;
+        margin: -2rem -2rem 1.5rem -2rem;
+    }
+    .form-control, .form-select {
+        border-radius: 10px;
+        border: 2px solid #e9ecef;
+        transition: all 0.3s ease;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+    }
+    .btn-success {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        border: none;
+        border-radius: 25px;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+    }
+    .btn-secondary {
+        border-radius: 25px;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-<div class="container mt-4">
+<div class="container-fluid py-4">
     <div class="row justify-content-center">
-        <div class="col-lg-10">
+        <div class="col-lg-10 col-xl-8">
             <!-- Header -->
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <div>
-                    <h2 class="fw-bold mb-1">
-                        <i class="fa-solid fa-hand-holding-heart text-info me-2"></i>
-                        {% if object %}Edit Service{% else %}Register New Service{% endif %}
-                    </h2>
-                    <p class="text-muted mb-0">
-                        {% if object %}Update service information and availability{% else %}Add a new service offering to the Uganda Tech Connect platform{% endif %}
-                    </p>
-                </div>
-                <a href="{% url 'core:service_list' %}" class="btn btn-outline-secondary">
-                    <i class="fa-solid fa-arrow-left me-2"></i>Back to Services
-                </a>
+            <div class="text-center mb-4">
+                <h2 class="fw-bold">
+                    <i class="fa-solid fa-cogs text-success me-2"></i>
+                    {% if object %}Edit Service{% else %}Add New Service{% endif %}
+                </h2>
+                <p class="text-muted">Complete the form below to {% if object %}update{% else %}register{% endif %} a service</p>
             </div>
 
-            <!-- Form Card -->
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-info bg-opacity-10 border-0">
-                    <h5 class="card-title mb-0">
-                        <i class="fa-solid fa-edit me-2"></i>Service Information
-                    </h5>
-                </div>
-                <div class="card-body p-4">
-                    <form method="post" novalidate>
-                        {% csrf_token %}
-                        
-                        <!-- Error Messages -->
-                        {% if form.non_field_errors %}
-                            <div class="alert alert-danger mb-4" role="alert">
-                                <i class="fa-solid fa-exclamation-triangle me-2"></i>
-                                {{ form.non_field_errors }}
-                            </div>
-                        {% endif %}
+            <!-- Form -->
+            <form method="post" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+                
+                <div class="form-section">
+                    <div class="section-header">
+                        <h5 class="mb-0"><i class="fa-solid fa-info-circle me-2"></i>Basic Information</h5>
+                    </div>
 
-                        <!-- Basic Information Section -->
-                        <div class="row mb-4">
-                            <div class="col-12">
-                                <h6 class="fw-bold text-primary border-bottom pb-2 mb-3">
-                                    <i class="fa-solid fa-info-circle me-2"></i>Basic Information
-                                </h6>
-                            </div>
-
-                            <!-- Service Name -->
-                            <div class="col-md-8 mb-3">
-                                <label for="{{ form.name.id_for_label }}" class="form-label fw-semibold">
-                                    <i class="fa-solid fa-tag text-primary me-1"></i>
-                                    Service Name <span class="text-danger">*</span>
-                                </label>
-                                <input type="text" 
-                                       class="form-control {% if form.name.errors %}is-invalid{% endif %}" 
-                                       id="{{ form.name.id_for_label }}" 
-                                       name="{{ form.name.name }}" 
-                                       value="{{ form.name.value|default:'' }}"
-                                       placeholder="Technical Consultation, Equipment Training, etc.">
-                                {% if form.name.errors %}
-                                    <div class="invalid-feedback">
-                                        {{ form.name.errors|first }}
-                                    </div>
-                                {% endif %}
-                                {% if form.name.help_text %}
-                                    <div class="form-text">{{ form.name.help_text }}</div>
-                                {% endif %}
-                            </div>
-
-                            <!-- Category -->
-                            <div class="col-md-4 mb-3">
-                                <label for="{{ form.category.id_for_label }}" class="form-label fw-semibold">
-                                    <i class="fa-solid fa-folder text-success me-1"></i>
-                                    Category <span class="text-danger">*</span>
-                                </label>
-                                <select class="form-select {% if form.category.errors %}is-invalid{% endif %}" 
-                                        id="{{ form.category.id_for_label }}" 
-                                        name="{{ form.category.name }}">
-                                    <option value="">Select Category</option>
-                                    {% for value, label in form.category.field.choices %}
-                                        {% if value %}
-                                            <option value="{{ value }}" 
-                                                    {% if value == form.category.value %}selected{% endif %}>
-                                                {{ label }}
-                                            </option>
-                                        {% endif %}
-                                    {% endfor %}
-                                </select>
-                                {% if form.category.errors %}
-                                    <div class="invalid-feedback">
-                                        {{ form.category.errors|first }}
-                                    </div>
-                                {% endif %}
-                                {% if form.category.help_text %}
-                                    <div class="form-text">{{ form.category.help_text }}</div>
-                                {% endif %}
-                            </div>
+                    <!-- Non-field errors -->
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger" role="alert">
+                            <i class="fa-solid fa-exclamation-triangle me-2"></i>
+                            {{ form.non_field_errors }}
                         </div>
+                    {% endif %}
 
-                        <!-- Service Description Section -->
-                        <div class="row mb-4">
-                            <div class="col-12">
-                                <h6 class="fw-bold text-success border-bottom pb-2 mb-3">
-                                    <i class="fa-solid fa-file-alt me-2"></i>Service Description
-                                </h6>
-                            </div>
-
-                            <!-- Description -->
-                            <div class="col-12 mb-3">
-                                <label for="{{ form.description.id_for_label }}" class="form-label fw-semibold">
-                                    <i class="fa-solid fa-align-left text-success me-1"></i>
-                                    Detailed Description <span class="text-danger">*</span>
-                                </label>
-                                <textarea class="form-control {% if form.description.errors %}is-invalid{% endif %}" 
-                                          id="{{ form.description.id_for_label }}" 
-                                          name="{{ form.description.name }}" 
-                                          rows="5"
-                                          placeholder="Provide a comprehensive description of the service, what it includes, and its benefits...">{{ form.description.value|default:'' }}</textarea>
-                                {% if form.description.errors %}
-                                    <div class="invalid-feedback">
-                                        {{ form.description.errors|first }}
-                                    </div>
-                                {% endif %}
-                                {% if form.description.help_text %}
-                                    <div class="form-text">{{ form.description.help_text }}</div>
-                                {% endif %}
-                            </div>
-                        </div>
-
-                        <!-- Provider Information Section -->
-                        <div class="row mb-4">
-                            <div class="col-12">
-                                <h6 class="fw-bold text-warning border-bottom pb-2 mb-3">
-                                    <i class="fa-solid fa-building me-2"></i>Provider Information
-                                </h6>
-                            </div>
-
-                            <!-- Facility -->
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.facility.id_for_label }}" class="form-label fw-semibold">
-                                    <i class="fa-solid fa-map-marker-alt text-warning me-1"></i>
-                                    Associated Facility <span class="text-danger">*</span>
-                                </label>
-                                <select class="form-select {% if form.facility.errors %}is-invalid{% endif %}" 
-                                        id="{{ form.facility.id_for_label }}" 
-                                        name="{{ form.facility.name }}">
-                                    <option value="">Select Facility</option>
-                                    {% for choice in form.facility.field.queryset %}
-                                        <option value="{{ choice.pk }}" 
-                                                {% if choice.pk == form.facility.value %}selected{% endif %}>
-                                            {{ choice.name }} - {{ choice.location }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                                {% if form.facility.errors %}
-                                    <div class="invalid-feedback">
-                                        {{ form.facility.errors|first }}
-                                    </div>
-                                {% endif %}
-                                {% if form.facility.help_text %}
-                                    <div class="form-text">{{ form.facility.help_text }}</div>
-                                {% endif %}
-                            </div>
-
-                            <!-- Provider -->
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.provider.id_for_label }}" class="form-label fw-semibold">
-                                    <i class="fa-solid fa-user-tie text-info me-1"></i>
-                                    Service Provider
-                                </label>
-                                <input type="text" 
-                                       class="form-control {% if form.provider.errors %}is-invalid{% endif %}" 
-                                       id="{{ form.provider.id_for_label }}" 
-                                       name="{{ form.provider.name }}" 
-                                       value="{{ form.provider.value|default:'' }}"
-                                       placeholder="Dr. Jane Nakato, TechnoLab Services">
-                                {% if form.provider.errors %}
-                                    <div class="invalid-feedback">
-                                        {{ form.provider.errors|first }}
-                                    </div>
-                                {% endif %}
-                                {% if form.provider.help_text %}
-                                    <div class="form-text">{{ form.provider.help_text }}</div>
-                                {% endif %}
-                            </div>
-                        </div>
-
-                        <!-- Service Details Section -->
-                        <div class="row mb-4">
-                            <div class="col-12">
-                                <h6 class="fw-bold text-info border-bottom pb-2 mb-3">
-                                    <i class="fa-solid fa-cogs me-2"></i>Service Details
-                                </h6>
-                            </div>
-
-                            <!-- Cost -->
-                            <div class="col-md-4 mb-3">
-                                <label for="{{ form.cost.id_for_label }}" class="form-label fw-semibold">
-                                    <i class="fa-solid fa-dollar-sign text-success me-1"></i>
-                                    Cost (UGX)
-                                </label>
-                                <input type="number" 
-                                       class="form-control {% if form.cost.errors %}is-invalid{% endif %}" 
-                                       id="{{ form.cost.id_for_label }}" 
-                                       name="{{ form.cost.name }}" 
-                                       value="{{ form.cost.value|default:'' }}"
-                                       placeholder="0"
-                                       step="0.01"
-                                       min="0">
-                                {% if form.cost.errors %}
-                                    <div class="invalid-feedback">
-                                        {{ form.cost.errors|first }}
-                                    </div>
-                                {% endif %}
-                                {% if form.cost.help_text %}
-                                    <div class="form-text">{{ form.cost.help_text }}</div>
-                                {% endif %}
-                            </div>
-
-                            <!-- Duration -->
-                            <div class="col-md-4 mb-3">
-                                <label for="{{ form.duration.id_for_label }}" class="form-label fw-semibold">
-                                    <i class="fa-solid fa-clock text-warning me-1"></i>
-                                    Duration
-                                </label>
-                                <input type="text" 
-                                       class="form-control {% if form.duration.errors %}is-invalid{% endif %}" 
-                                       id="{{ form.duration.id_for_label }}" 
-                                       name="{{ form.duration.name }}" 
-                                       value="{{ form.duration.value|default:'' }}"
-                                       placeholder="2 hours, 1 day, 1 week">
-                                {% if form.duration.errors %}
-                                    <div class="invalid-feedback">
-                                        {{ form.duration.errors|first }}
-                                    </div>
-                                {% endif %}
-                                {% if form.duration.help_text %}
-                                    <div class="form-text">{{ form.duration.help_text }}</div>
-                                {% endif %}
-                            </div>
-
-                            <!-- Availability -->
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label fw-semibold">
-                                    <i class="fa-solid fa-check-circle text-primary me-1"></i>
-                                    Service Availability
-                                </label>
-                                <div class="form-check form-switch mt-2">
-                                    <input class="form-check-input {% if form.available.errors %}is-invalid{% endif %}" 
-                                           type="checkbox" 
-                                           id="{{ form.available.id_for_label }}" 
-                                           name="{{ form.available.name }}"
-                                           {% if form.available.value %}checked{% endif %}>
-                                    <label class="form-check-label" for="{{ form.available.id_for_label }}">
-                                        <span class="fw-semibold">Currently Available</span>
-                                        <br><small class="text-muted">Service is ready to be offered</small>
-                                    </label>
-                                    {% if form.available.errors %}
-                                        <div class="invalid-feedback d-block">
-                                            {{ form.available.errors|first }}
-                                        </div>
-                                    {% endif %}
+                    <div class="row">
+                        <!-- Facility -->
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.facility.id_for_label }}" class="form-label fw-semibold">
+                                <i class="fa-solid fa-building text-primary me-1"></i>
+                                Facility <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-select {% if form.facility.errors %}is-invalid{% endif %}" 
+                                    id="{{ form.facility.id_for_label }}" 
+                                    name="{{ form.facility.name }}" required>
+                                <option value="">Select Facility</option>
+                                {% for choice in form.facility.field.queryset %}
+                                    <option value="{{ choice.pk }}" 
+                                            {% if choice.pk == form.facility.value %}selected{% endif %}>
+                                        {{ choice.name }} - {{ choice.location }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            {% if form.facility.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.facility.errors|first }}
                                 </div>
-                            </div>
+                            {% endif %}
+                            {% if form.facility.help_text %}
+                                <div class="form-text">{{ form.facility.help_text }}</div>
+                            {% endif %}
                         </div>
 
-                        <!-- Contact and Additional Information Section -->
-                        <div class="row mb-4">
-                            <div class="col-12">
-                                <h6 class="fw-bold text-secondary border-bottom pb-2 mb-3">
-                                    <i class="fa-solid fa-address-book me-2"></i>Additional Information
-                                </h6>
-                            </div>
+                        <!-- Name -->
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.name.id_for_label }}" class="form-label fw-semibold">
+                                <i class="fa-solid fa-tag text-success me-1"></i>
+                                Service Name <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" 
+                                   class="form-control {% if form.name.errors %}is-invalid{% endif %}" 
+                                   id="{{ form.name.id_for_label }}" 
+                                   name="{{ form.name.name }}" 
+                                   value="{{ form.name.value|default:'' }}" 
+                                   placeholder="Enter service name..." required>
+                            {% if form.name.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.name.errors|first }}
+                                </div>
+                            {% endif %}
+                            {% if form.name.help_text %}
+                                <div class="form-text">{{ form.name.help_text }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
 
-                            <!-- Contact Information -->
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.contact_info.id_for_label }}" class="form-label fw-semibold">
-                                    <i class="fa-solid fa-phone text-secondary me-1"></i>
-                                    Contact Information
-                                </label>
-                                <input type="text" 
-                                       class="form-control {% if form.contact_info.errors %}is-invalid{% endif %}" 
-                                       id="{{ form.contact_info.id_for_label }}" 
-                                       name="{{ form.contact_info.name }}" 
-                                       value="{{ form.contact_info.value|default:'' }}"
-                                       placeholder="+256 700 123456, email@example.com">
-                                {% if form.contact_info.errors %}
-                                    <div class="invalid-feedback">
-                                        {{ form.contact_info.errors|first }}
-                                    </div>
-                                {% endif %}
-                                {% if form.contact_info.help_text %}
-                                    <div class="form-text">{{ form.contact_info.help_text }}</div>
-                                {% endif %}
-                            </div>
-
-                            <!-- Requirements -->
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.requirements.id_for_label }}" class="form-label fw-semibold">
-                                    <i class="fa-solid fa-list-check text-info me-1"></i>
-                                    Requirements
-                                </label>
-                                <input type="text" 
-                                       class="form-control {% if form.requirements.errors %}is-invalid{% endif %}" 
-                                       id="{{ form.requirements.id_for_label }}" 
-                                       name="{{ form.requirements.name }}" 
-                                       value="{{ form.requirements.value|default:'' }}"
-                                       placeholder="Prerequisites, materials needed, etc.">
-                                {% if form.requirements.errors %}
-                                    <div class="invalid-feedback">
-                                        {{ form.requirements.errors|first }}
-                                    </div>
-                                {% endif %}
-                                {% if form.requirements.help_text %}
-                                    <div class="form-text">{{ form.requirements.help_text }}</div>
-                                {% endif %}
-                            </div>
+                    <div class="row">
+                        <!-- Category -->
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.category.id_for_label }}" class="form-label fw-semibold">
+                                <i class="fa-solid fa-folder text-warning me-1"></i>
+                                Category <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-select {% if form.category.errors %}is-invalid{% endif %}" 
+                                    id="{{ form.category.id_for_label }}" 
+                                    name="{{ form.category.name }}" required>
+                                <option value="">Select Category</option>
+                                {% for value, label in form.category.field.choices %}
+                                    {% if value %}
+                                        <option value="{{ value }}" 
+                                                {% if value == form.category.value %}selected{% endif %}>
+                                            {{ label }}
+                                        </option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            {% if form.category.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.category.errors|first }}
+                                </div>
+                            {% endif %}
+                            {% if form.category.help_text %}
+                                <div class="form-text">{{ form.category.help_text }}</div>
+                            {% endif %}
                         </div>
 
-                        <!-- Form Actions -->
-                        <div class="d-flex justify-content-end gap-3 pt-3 border-top">
-                            <a href="{% url 'core:service_list' %}" class="btn btn-outline-secondary">
-                                <i class="fa-solid fa-times me-2"></i>Cancel
-                            </a>
-                            <button type="submit" class="btn btn-info">
-                                <i class="fa-solid fa-save me-2"></i>
-                                {% if object %}Update Service{% else %}Register Service{% endif %}
-                            </button>
+                        <!-- Skill Type -->
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.skill_type.id_for_label }}" class="form-label fw-semibold">
+                                <i class="fa-solid fa-brain text-info me-1"></i>
+                                Skill Type <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-select {% if form.skill_type.errors %}is-invalid{% endif %}" 
+                                    id="{{ form.skill_type.id_for_label }}" 
+                                    name="{{ form.skill_type.name }}" required>
+                                <option value="">Select Skill Type</option>
+                                {% for value, label in form.skill_type.field.choices %}
+                                    {% if value %}
+                                        <option value="{{ value }}" 
+                                                {% if value == form.skill_type.value %}selected{% endif %}>
+                                            {{ label }}
+                                        </option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            {% if form.skill_type.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.skill_type.errors|first }}
+                                </div>
+                            {% endif %}
+                            {% if form.skill_type.help_text %}
+                                <div class="form-text">{{ form.skill_type.help_text }}</div>
+                            {% endif %}
                         </div>
-                    </form>
-                </div>
-            </div>
+                    </div>
 
-            <!-- Help Section -->
-            <div class="mt-4">
-                <div class="card border-0 bg-light">
-                    <div class="card-body p-3">
-                        <h6 class="fw-semibold mb-2">
-                            <i class="fa-solid fa-lightbulb text-warning me-2"></i>Service Registration Guidelines
-                        </h6>
-                        <ul class="small text-muted mb-0 ps-3">
-                            <li><strong>Clear Description:</strong> Provide detailed information about what the service includes</li>
-                            <li><strong>Accurate Pricing:</strong> Specify costs in Ugandan Shillings or indicate if service is free</li>
-                            <li><strong>Facility Association:</strong> Link service to the appropriate facility for location clarity</li>
-                            <li><strong>Contact Information:</strong> Ensure reliable contact details for service inquiries</li>
-                            <li><strong>Availability Status:</strong> Keep availability status updated to avoid confusion</li>
-                        </ul>
+                    <!-- Operating Hours -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.operating_hours.id_for_label }}" class="form-label fw-semibold">
+                                <i class="fa-solid fa-clock text-secondary me-1"></i>
+                                Operating Hours
+                            </label>
+                            <input type="text" 
+                                   class="form-control {% if form.operating_hours.errors %}is-invalid{% endif %}" 
+                                   id="{{ form.operating_hours.id_for_label }}" 
+                                   name="{{ form.operating_hours.name }}" 
+                                   value="{{ form.operating_hours.value|default:'' }}" 
+                                   placeholder="e.g., 9:00 AM - 5:00 PM (optional)">
+                            {% if form.operating_hours.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.operating_hours.errors|first }}
+                                </div>
+                            {% endif %}
+                            {% if form.operating_hours.help_text %}
+                                <div class="form-text">{{ form.operating_hours.help_text }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <label for="{{ form.description.id_for_label }}" class="form-label fw-semibold">
+                                <i class="fa-solid fa-align-left text-dark me-1"></i>
+                                Description
+                            </label>
+                            <textarea class="form-control {% if form.description.errors %}is-invalid{% endif %}" 
+                                      id="{{ form.description.id_for_label }}" 
+                                      name="{{ form.description.name }}" 
+                                      rows="4"
+                                      placeholder="Describe the service...">{{ form.description.value|default:'' }}</textarea>
+                            {% if form.description.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.description.errors|first }}
+                                </div>
+                            {% endif %}
+                            {% if form.description.help_text %}
+                                <div class="form-text">{{ form.description.help_text }}</div>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-            </div>
+
+                <!-- Action Buttons -->
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <div class="d-flex justify-content-center gap-3">
+                            <a href="{% url 'core:service_list' %}" class="btn btn-secondary">
+                                <i class="fa-solid fa-arrow-left me-2"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fa-solid fa-save me-2"></i>
+                                {% if object %}Update Service{% else %}Add Service{% endif %}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add form validation feedback
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function(e) {
+        let isValid = true;
+        
+        // Check required fields
+        const requiredFields = form.querySelectorAll('[required]');
+        requiredFields.forEach(field => {
+            if (!field.value.trim()) {
+                field.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                field.classList.remove('is-invalid');
+            }
+        });
+        
+        if (!isValid) {
+            e.preventDefault();
+            const firstInvalid = form.querySelector('.is-invalid');
+            if (firstInvalid) {
+                firstInvalid.focus();
+                firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+    });
+    
+    // Remove invalid class on input
+    form.addEventListener('input', function(e) {
+        if (e.target.classList.contains('is-invalid') && e.target.value.trim()) {
+            e.target.classList.remove('is-invalid');
+        }
+    });
+});
+</script>
+
 {% endblock %}

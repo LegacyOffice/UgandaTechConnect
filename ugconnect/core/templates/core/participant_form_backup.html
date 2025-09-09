@@ -1,0 +1,320 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+{% if object %}Edit Participant{% else %}Add Participant{% endif %} - Uganda Tech Connect
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="fw-bold mb-1">
+                        <i class="fa-solid fa-users text-secondary me-2"></i>
+                        {% if object %}Edit Participant{% else %}Register New Participant{% endif %}
+                    </h2>
+                    <p class="text-muted mb-0">
+                        {% if object %}Update participant information and project involvement{% else %}Add a new team member to the Uganda Tech Connect platform{% endif %}
+                    </p>
+                </div>
+                <a href="{% url 'core:participant_list' %}" class="btn btn-outline-secondary">
+                    <i class="fa-solid fa-arrow-left me-2"></i>Back to Participants
+                </a>
+            </div>
+
+            <!-- Form Card -->
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-secondary bg-opacity-10 border-0">
+                    <h5 class="card-title mb-0">
+                        <i class="fa-solid fa-edit me-2"></i>Participant Information
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        
+                        <!-- Error Messages -->
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger mb-4" role="alert">
+                                <i class="fa-solid fa-exclamation-triangle me-2"></i>
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+
+                        <!-- Personal Information Section -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h6 class="fw-bold text-primary border-bottom pb-2 mb-3">
+                                    <i class="fa-solid fa-user me-2"></i>Personal Information
+                                </h6>
+                            </div>
+
+                            <!-- Full Name -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.full_name.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-id-card text-primary me-1"></i>
+                                    Full Name <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" 
+                                       class="form-control {% if form.full_name.errors %}is-invalid{% endif %}" 
+                                       id="{{ form.full_name.id_for_label }}" 
+                                       name="{{ form.full_name.name }}" 
+                                       value="{{ form.full_name.value|default:'' }}"
+                                       placeholder="John Doe Mukasa">
+                                {% if form.full_name.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.full_name.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.full_name.help_text %}
+                                    <div class="form-text">{{ form.full_name.help_text }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Email -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.email.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-envelope text-info me-1"></i>
+                                    Email Address <span class="text-danger">*</span>
+                                </label>
+                                <input type="email" 
+                                       class="form-control {% if form.email.errors %}is-invalid{% endif %}" 
+                                       id="{{ form.email.id_for_label }}" 
+                                       name="{{ form.email.name }}" 
+                                       value="{{ form.email.value|default:'' }}"
+                                       placeholder="john.mukasa@university.ac.ug">
+                                {% if form.email.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.email.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.email.help_text %}
+                                    <div class="form-text">{{ form.email.help_text }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Institutional Information Section -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h6 class="fw-bold text-success border-bottom pb-2 mb-3">
+                                    <i class="fa-solid fa-building me-2"></i>Institutional Information
+                                </h6>
+                            </div>
+
+                            <!-- Institution -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.institution.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-university text-success me-1"></i>
+                                    Institution
+                                </label>
+                                <input type="text" 
+                                       class="form-control {% if form.institution.errors %}is-invalid{% endif %}" 
+                                       id="{{ form.institution.id_for_label }}" 
+                                       name="{{ form.institution.name }}" 
+                                       value="{{ form.institution.value|default:'' }}"
+                                       placeholder="Makerere University">
+                                {% if form.institution.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.institution.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.institution.help_text %}
+                                    <div class="form-text">{{ form.institution.help_text }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Affiliation -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.affiliation.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-briefcase text-warning me-1"></i>
+                                    Affiliation
+                                </label>
+                                <input type="text" 
+                                       class="form-control {% if form.affiliation.errors %}is-invalid{% endif %}" 
+                                       id="{{ form.affiliation.id_for_label }}" 
+                                       name="{{ form.affiliation.name }}" 
+                                       value="{{ form.affiliation.value|default:'' }}"
+                                       placeholder="Computer Science Department">
+                                {% if form.affiliation.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.affiliation.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.affiliation.help_text %}
+                                    <div class="form-text">{{ form.affiliation.help_text }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Skills and Expertise Section -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h6 class="fw-bold text-warning border-bottom pb-2 mb-3">
+                                    <i class="fa-solid fa-cogs me-2"></i>Skills and Expertise
+                                </h6>
+                            </div>
+
+                            <!-- Specialization -->
+                            <div class="col-md-8 mb-3">
+                                <label for="{{ form.specialization.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-star text-warning me-1"></i>
+                                    Specialization
+                                </label>
+                                <input type="text" 
+                                       class="form-control {% if form.specialization.errors %}is-invalid{% endif %}" 
+                                       id="{{ form.specialization.id_for_label }}" 
+                                       name="{{ form.specialization.name }}" 
+                                       value="{{ form.specialization.value|default:'' }}"
+                                       placeholder="IoT Development, Machine Learning, Hardware Design">
+                                {% if form.specialization.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.specialization.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.specialization.help_text %}
+                                    <div class="form-text">{{ form.specialization.help_text }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Cross-Skill Trained -->
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-semibold">
+                                    <i class="fa-solid fa-exchange-alt text-info me-1"></i>
+                                    Cross-Skill Training
+                                </label>
+                                <div class="form-check form-switch mt-2">
+                                    <input class="form-check-input {% if form.cross_skill_trained.errors %}is-invalid{% endif %}" 
+                                           type="checkbox" 
+                                           id="{{ form.cross_skill_trained.id_for_label }}" 
+                                           name="{{ form.cross_skill_trained.name }}"
+                                           {% if form.cross_skill_trained.value %}checked{% endif %}>
+                                    <label class="form-check-label" for="{{ form.cross_skill_trained.id_for_label }}">
+                                        Has received cross-disciplinary training
+                                    </label>
+                                    {% if form.cross_skill_trained.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.cross_skill_trained.errors|first }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Project Role Section -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h6 class="fw-bold text-info border-bottom pb-2 mb-3">
+                                    <i class="fa-solid fa-tasks me-2"></i>Project Involvement
+                                </h6>
+                            </div>
+
+                            <!-- Project -->
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.project.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-lightbulb text-info me-1"></i>
+                                    Project <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-select {% if form.project.errors %}is-invalid{% endif %}" 
+                                        id="{{ form.project.id_for_label }}" 
+                                        name="{{ form.project.name }}">
+                                    <option value="">Select Project</option>
+                                    {% for choice in form.project.field.queryset %}
+                                        <option value="{{ choice.pk }}" 
+                                                {% if choice.pk == form.project.value %}selected{% endif %}>
+                                            {{ choice.Title }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                {% if form.project.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.project.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.project.help_text %}
+                                    <div class="form-text">{{ form.project.help_text }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Role on Project -->
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.role_on_project.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-user-tag text-primary me-1"></i>
+                                    Project Role
+                                </label>
+                                <input type="text" 
+                                       class="form-control {% if form.role_on_project.errors %}is-invalid{% endif %}" 
+                                       id="{{ form.role_on_project.id_for_label }}" 
+                                       name="{{ form.role_on_project.name }}" 
+                                       value="{{ form.role_on_project.value|default:'' }}"
+                                       placeholder="Team Lead, Developer, Researcher">
+                                {% if form.role_on_project.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.role_on_project.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.role_on_project.help_text %}
+                                    <div class="form-text">{{ form.role_on_project.help_text }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Skill Role -->
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.skill_role.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-wrench text-secondary me-1"></i>
+                                    Skill Role
+                                </label>
+                                <input type="text" 
+                                       class="form-control {% if form.skill_role.errors %}is-invalid{% endif %}" 
+                                       id="{{ form.skill_role.id_for_label }}" 
+                                       name="{{ form.skill_role.name }}" 
+                                       value="{{ form.skill_role.value|default:'' }}"
+                                       placeholder="Hardware Engineer, Software Developer">
+                                {% if form.skill_role.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.skill_role.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.skill_role.help_text %}
+                                    <div class="form-text">{{ form.skill_role.help_text }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="d-flex justify-content-end gap-3 pt-3 border-top">
+                            <a href="{% url 'core:participant_list' %}" class="btn btn-outline-secondary">
+                                <i class="fa-solid fa-times me-2"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-secondary">
+                                <i class="fa-solid fa-save me-2"></i>
+                                {% if object %}Update Participant{% else %}Register Participant{% endif %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Help Section -->
+            <div class="mt-4">
+                <div class="card border-0 bg-light">
+                    <div class="card-body p-3">
+                        <h6 class="fw-semibold mb-2">
+                            <i class="fa-solid fa-lightbulb text-warning me-2"></i>Participant Registration Guidelines
+                        </h6>
+                        <ul class="small text-muted mb-0 ps-3">
+                            <li>Ensure accurate contact information for effective collaboration</li>
+                            <li>Clearly define specialization areas for better team matching</li>
+                            <li>Specify project roles to clarify responsibilities and expectations</li>
+                            <li>Cross-skill training indicates readiness for multidisciplinary work</li>
+                            <li>Institutional affiliation helps identify collaboration opportunities</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

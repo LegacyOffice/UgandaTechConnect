@@ -102,8 +102,8 @@ class Equipment(models.Model):
         max_length=50,
         unique=True,
         validators=[RegexValidator(
-            regex=r'^[A-Z0-9\-_]+$',
-            message='Inventory code must contain only uppercase letters, numbers, hyphens, and underscores'
+            regex=r'^[A-Za-z0-9\-_]+$',
+            message='Inventory code must contain only letters, numbers, hyphens, and underscores'
         )],
         help_text="Tracking code (e.g., 'EQ-CNC-001', 'PRINTER-3D-A2')"
     )
@@ -164,15 +164,15 @@ class Project(models.Model):
     ]
     
     ProjectId = models.AutoField(primary_key=True)
-    ProgramId = models.ForeignKey('Program', on_delete=models.CASCADE, related_name='projects')
-    FacilityId = models.ForeignKey('Facility', on_delete=models.CASCADE, related_name='projects')
+    ProgramId = models.ForeignKey('Program', on_delete=models.CASCADE, related_name='projects', blank=True, null=True)
+    FacilityId = models.ForeignKey('Facility', on_delete=models.CASCADE, related_name='projects', blank=True, null=True)
     Title = models.CharField(max_length=200)
-    NatureOfProject = models.CharField(max_length=20, choices=NATURE_CHOICES)
-    Description = models.TextField()
-    InnovationFocus = models.CharField(max_length=20, choices=INNOVATION_CHOICES)
-    PrototypeStage = models.CharField(max_length=20, choices=STAGE_CHOICES)
-    TestingRequirements = models.TextField()
-    CommercializationPlan = models.TextField()
+    NatureOfProject = models.CharField(max_length=20, choices=NATURE_CHOICES, blank=True)
+    Description = models.TextField(blank=True)
+    InnovationFocus = models.CharField(max_length=20, choices=INNOVATION_CHOICES, blank=True)
+    PrototypeStage = models.CharField(max_length=20, choices=STAGE_CHOICES, blank=True)
+    TestingRequirements = models.TextField(blank=True)
+    CommercializationPlan = models.TextField(blank=True)
     
     def __str__(self):
         return self.Title
@@ -259,15 +259,15 @@ class Participant(models.Model):
         ('Business Lead', 'Business Lead'),
     ]
 
-    project = models.ForeignKey('Project', on_delete=models.CASCADE, related_name='participants')
+    project = models.ForeignKey('Project', on_delete=models.CASCADE, related_name='participants', blank=True, null=True)
     full_name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
-    affiliation = models.CharField(max_length=50, choices=AFFILIATION_CHOICES)
-    specialization = models.CharField(max_length=50, choices=SPECIALIZATION_CHOICES)
+    affiliation = models.CharField(max_length=50, choices=AFFILIATION_CHOICES, blank=True)
+    specialization = models.CharField(max_length=50, choices=SPECIALIZATION_CHOICES, blank=True)
     cross_skill_trained = models.BooleanField(default=False)
-    institution = models.CharField(max_length=100, choices=INSTITUTION_CHOICES)
-    role_on_project = models.CharField(max_length=50, choices=ROLE_CHOICES)
-    skill_role = models.CharField(max_length=50, choices=SKILL_ROLE_CHOICES)
+    institution = models.CharField(max_length=100, choices=INSTITUTION_CHOICES, blank=True)
+    role_on_project = models.CharField(max_length=50, choices=ROLE_CHOICES, blank=True)
+    skill_role = models.CharField(max_length=50, choices=SKILL_ROLE_CHOICES, blank=True)
 
     def __str__(self):
         return self.full_name
@@ -300,7 +300,9 @@ class Outcome(models.Model):
     ProjectId = models.ForeignKey(
         'Project',  # Assuming you have a Project model
         on_delete=models.CASCADE,
-        related_name='outcomes'
+        related_name='outcomes',
+        blank=True,
+        null=True
     )
     Title = models.CharField(max_length=200)
     Description = models.TextField(blank=True)

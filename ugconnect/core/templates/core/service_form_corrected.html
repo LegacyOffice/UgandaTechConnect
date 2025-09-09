@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-    {% if object %}Edit Equipment{% else %}Add New Equipment{% endif %} - UgandaTechConnect
+    {% if object %}Edit Service{% else %}Add New Service{% endif %} - UgandaTechConnect
 {% endblock %}
 
 {% block extra_css %}
@@ -15,7 +15,7 @@
         box-shadow: 0 8px 25px rgba(0,0,0,0.1);
     }
     .section-header {
-        background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
         color: white;
         padding: 1rem 1.5rem;
         border-radius: 10px 10px 0 0;
@@ -27,11 +27,11 @@
         transition: all 0.3s ease;
     }
     .form-control:focus, .form-select:focus {
-        border-color: #6c757d;
-        box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.25);
+        border-color: #28a745;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
     }
     .btn-success {
-        background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
         border: none;
         border-radius: 25px;
         padding: 0.75rem 2rem;
@@ -52,10 +52,10 @@
             <!-- Header -->
             <div class="text-center mb-4">
                 <h2 class="fw-bold">
-                    <i class="fa-solid fa-tools text-secondary me-2"></i>
-                    {% if object %}Edit Equipment{% else %}Add New Equipment{% endif %}
+                    <i class="fa-solid fa-cogs text-success me-2"></i>
+                    {% if object %}Edit Service{% else %}Add New Service{% endif %}
                 </h2>
-                <p class="text-muted">Complete the form below to {% if object %}update{% else %}register{% endif %} equipment</p>
+                <p class="text-muted">Complete the form below to {% if object %}update{% else %}register{% endif %} a service</p>
             </div>
 
             <!-- Form -->
@@ -107,14 +107,14 @@
                         <div class="col-md-6 mb-3">
                             <label for="{{ form.name.id_for_label }}" class="form-label fw-semibold">
                                 <i class="fa-solid fa-tag text-success me-1"></i>
-                                Equipment Name <span class="text-danger">*</span>
+                                Service Name <span class="text-danger">*</span>
                             </label>
                             <input type="text" 
                                    class="form-control {% if form.name.errors %}is-invalid{% endif %}" 
                                    id="{{ form.name.id_for_label }}" 
                                    name="{{ form.name.name }}" 
                                    value="{{ form.name.value|default:'' }}" 
-                                   placeholder="e.g., 3D Printer, CNC Machine" required>
+                                   placeholder="Enter service name..." required>
                             {% if form.name.errors %}
                                 <div class="invalid-feedback">
                                     {{ form.name.errors|first }}
@@ -127,131 +127,85 @@
                     </div>
 
                     <div class="row">
-                        <!-- Inventory Code -->
+                        <!-- Category -->
                         <div class="col-md-6 mb-3">
-                            <label for="{{ form.inventory_code.id_for_label }}" class="form-label fw-semibold">
-                                <i class="fa-solid fa-barcode text-warning me-1"></i>
-                                Inventory Code
+                            <label for="{{ form.category.id_for_label }}" class="form-label fw-semibold">
+                                <i class="fa-solid fa-folder text-warning me-1"></i>
+                                Category <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-select {% if form.category.errors %}is-invalid{% endif %}" 
+                                    id="{{ form.category.id_for_label }}" 
+                                    name="{{ form.category.name }}" required>
+                                <option value="">Select Category</option>
+                                {% for value, label in form.category.field.choices %}
+                                    {% if value %}
+                                        <option value="{{ value }}" 
+                                                {% if value == form.category.value %}selected{% endif %}>
+                                            {{ label }}
+                                        </option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            {% if form.category.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.category.errors|first }}
+                                </div>
+                            {% endif %}
+                            {% if form.category.help_text %}
+                                <div class="form-text">{{ form.category.help_text }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Skill Type -->
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.skill_type.id_for_label }}" class="form-label fw-semibold">
+                                <i class="fa-solid fa-brain text-info me-1"></i>
+                                Skill Type <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-select {% if form.skill_type.errors %}is-invalid{% endif %}" 
+                                    id="{{ form.skill_type.id_for_label }}" 
+                                    name="{{ form.skill_type.name }}" required>
+                                <option value="">Select Skill Type</option>
+                                {% for value, label in form.skill_type.field.choices %}
+                                    {% if value %}
+                                        <option value="{{ value }}" 
+                                                {% if value == form.skill_type.value %}selected{% endif %}>
+                                            {{ label }}
+                                        </option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            {% if form.skill_type.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.skill_type.errors|first }}
+                                </div>
+                            {% endif %}
+                            {% if form.skill_type.help_text %}
+                                <div class="form-text">{{ form.skill_type.help_text }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Operating Hours -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.operating_hours.id_for_label }}" class="form-label fw-semibold">
+                                <i class="fa-solid fa-clock text-secondary me-1"></i>
+                                Operating Hours
                             </label>
                             <input type="text" 
-                                   class="form-control {% if form.inventory_code.errors %}is-invalid{% endif %}" 
-                                   id="{{ form.inventory_code.id_for_label }}" 
-                                   name="{{ form.inventory_code.name }}" 
-                                   value="{{ form.inventory_code.value|default:'' }}" 
-                                   placeholder="e.g., EQ-001, PRINTER-3D-A1">
-                            {% if form.inventory_code.errors %}
+                                   class="form-control {% if form.operating_hours.errors %}is-invalid{% endif %}" 
+                                   id="{{ form.operating_hours.id_for_label }}" 
+                                   name="{{ form.operating_hours.name }}" 
+                                   value="{{ form.operating_hours.value|default:'' }}" 
+                                   placeholder="e.g., 9:00 AM - 5:00 PM (optional)">
+                            {% if form.operating_hours.errors %}
                                 <div class="invalid-feedback">
-                                    {{ form.inventory_code.errors|first }}
+                                    {{ form.operating_hours.errors|first }}
                                 </div>
                             {% endif %}
-                            {% if form.inventory_code.help_text %}
-                                <div class="form-text">{{ form.inventory_code.help_text }}</div>
-                            {% endif %}
-                        </div>
-
-                        <!-- Usage Domain -->
-                        <div class="col-md-6 mb-3">
-                            <label for="{{ form.usage_domain.id_for_label }}" class="form-label fw-semibold">
-                                <i class="fa-solid fa-folder text-info me-1"></i>
-                                Usage Domain <span class="text-danger">*</span>
-                            </label>
-                            <select class="form-select {% if form.usage_domain.errors %}is-invalid{% endif %}" 
-                                    id="{{ form.usage_domain.id_for_label }}" 
-                                    name="{{ form.usage_domain.name }}" required>
-                                <option value="">Select Usage Domain</option>
-                                {% for value, label in form.usage_domain.field.choices %}
-                                    {% if value %}
-                                        <option value="{{ value }}" 
-                                                {% if value == form.usage_domain.value %}selected{% endif %}>
-                                            {{ label }}
-                                        </option>
-                                    {% endif %}
-                                {% endfor %}
-                            </select>
-                            {% if form.usage_domain.errors %}
-                                <div class="invalid-feedback">
-                                    {{ form.usage_domain.errors|first }}
-                                </div>
-                            {% endif %}
-                            {% if form.usage_domain.help_text %}
-                                <div class="form-text">{{ form.usage_domain.help_text }}</div>
-                            {% endif %}
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <!-- Support Phase -->
-                        <div class="col-md-6 mb-3">
-                            <label for="{{ form.support_phase.id_for_label }}" class="form-label fw-semibold">
-                                <i class="fa-solid fa-cogs text-secondary me-1"></i>
-                                Support Phase <span class="text-danger">*</span>
-                            </label>
-                            <select class="form-select {% if form.support_phase.errors %}is-invalid{% endif %}" 
-                                    id="{{ form.support_phase.id_for_label }}" 
-                                    name="{{ form.support_phase.name }}" required>
-                                <option value="">Select Support Phase</option>
-                                {% for value, label in form.support_phase.field.choices %}
-                                    {% if value %}
-                                        <option value="{{ value }}" 
-                                                {% if value == form.support_phase.value %}selected{% endif %}>
-                                            {{ label }}
-                                        </option>
-                                    {% endif %}
-                                {% endfor %}
-                            </select>
-                            {% if form.support_phase.errors %}
-                                <div class="invalid-feedback">
-                                    {{ form.support_phase.errors|first }}
-                                </div>
-                            {% endif %}
-                            {% if form.support_phase.help_text %}
-                                <div class="form-text">{{ form.support_phase.help_text }}</div>
-                            {% endif %}
-                        </div>
-
-                        <!-- Operational Status -->
-                        <div class="col-md-6 mb-3 d-flex align-items-end">
-                            <div class="form-check">
-                                <input type="checkbox" 
-                                       class="form-check-input {% if form.is_operational.errors %}is-invalid{% endif %}" 
-                                       id="{{ form.is_operational.id_for_label }}" 
-                                       name="{{ form.is_operational.name }}" 
-                                       {% if form.is_operational.value %}checked{% endif %}>
-                                <label class="form-check-label fw-semibold" for="{{ form.is_operational.id_for_label }}">
-                                    <i class="fa-solid fa-check-circle text-success me-1"></i>
-                                    Equipment is Operational
-                                </label>
-                                {% if form.is_operational.errors %}
-                                    <div class="invalid-feedback">
-                                        {{ form.is_operational.errors|first }}
-                                    </div>
-                                {% endif %}
-                                {% if form.is_operational.help_text %}
-                                    <div class="form-text">{{ form.is_operational.help_text }}</div>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Capabilities -->
-                    <div class="row">
-                        <div class="col-12 mb-3">
-                            <label for="{{ form.capabilities.id_for_label }}" class="form-label fw-semibold">
-                                <i class="fa-solid fa-star text-warning me-1"></i>
-                                Capabilities
-                            </label>
-                            <textarea class="form-control {% if form.capabilities.errors %}is-invalid{% endif %}" 
-                                      id="{{ form.capabilities.id_for_label }}" 
-                                      name="{{ form.capabilities.name }}" 
-                                      rows="3"
-                                      placeholder="Describe what this equipment can do...">{{ form.capabilities.value|default:'' }}</textarea>
-                            {% if form.capabilities.errors %}
-                                <div class="invalid-feedback">
-                                    {{ form.capabilities.errors|first }}
-                                </div>
-                            {% endif %}
-                            {% if form.capabilities.help_text %}
-                                <div class="form-text">{{ form.capabilities.help_text }}</div>
+                            {% if form.operating_hours.help_text %}
+                                <div class="form-text">{{ form.operating_hours.help_text }}</div>
                             {% endif %}
                         </div>
                     </div>
@@ -267,7 +221,7 @@
                                       id="{{ form.description.id_for_label }}" 
                                       name="{{ form.description.name }}" 
                                       rows="4"
-                                      placeholder="Overview of equipment purpose and specifications...">{{ form.description.value|default:'' }}</textarea>
+                                      placeholder="Describe the service...">{{ form.description.value|default:'' }}</textarea>
                             {% if form.description.errors %}
                                 <div class="invalid-feedback">
                                     {{ form.description.errors|first }}
@@ -284,12 +238,12 @@
                 <div class="row">
                     <div class="col-12 text-center">
                         <div class="d-flex justify-content-center gap-3">
-                            <a href="{% url 'core:equipment_list' %}" class="btn btn-secondary">
+                            <a href="{% url 'service_list' %}" class="btn btn-secondary">
                                 <i class="fa-solid fa-arrow-left me-2"></i>Cancel
                             </a>
                             <button type="submit" class="btn btn-success">
                                 <i class="fa-solid fa-save me-2"></i>
-                                {% if object %}Update Equipment{% else %}Add Equipment{% endif %}
+                                {% if object %}Update Service{% else %}Add Service{% endif %}
                             </button>
                         </div>
                     </div>

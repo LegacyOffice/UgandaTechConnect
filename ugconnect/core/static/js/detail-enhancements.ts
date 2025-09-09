@@ -293,9 +293,17 @@ export class DetailEnhancements {
         
         toc.appendChild(tocList);
         
-        const sidebar = document.querySelector('.col-md-3, .sidebar') || 
-                       document.querySelector('.container').appendChild(document.createElement('div'));
-        sidebar.appendChild(toc);
+        let sidebar = document.querySelector('.col-md-3, .sidebar');
+        if (!sidebar) {
+            const container = document.querySelector('.container');
+            if (container) {
+                sidebar = document.createElement('div');
+                container.appendChild(sidebar);
+            }
+        }
+        if (sidebar) {
+            sidebar.appendChild(toc);
+        }
     }
 
     private setupSmoothScrolling(): void {

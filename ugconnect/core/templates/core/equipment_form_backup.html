@@ -1,0 +1,423 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+{% if object %}Edit Equipment{% else %}Add Equipment{% endif %} - Uganda Tech Connect
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="fw-bold mb-1">
+                        <i class="fa-solid fa-cogs text-warning me-2"></i>
+                        {% if object %}Edit Equipment{% else %}Register New Equipment{% endif %}
+                    </h2>
+                    <p class="text-muted mb-0">
+                        {% if object %}Update equipment details and specifications{% else %}Add new machinery or tools to the facility inventory{% endif %}
+                    </p>
+                </div>
+                <a href="{% url 'core:equipment_list' %}" class="btn btn-outline-secondary">
+                    <i class="fa-solid fa-arrow-left me-2"></i>Back to Equipment
+                </a>
+            </div>
+
+            <!-- Form Card -->
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-warning bg-opacity-10 border-0">
+                    <h5 class="card-title mb-0">
+                        <i class="fa-solid fa-edit me-2"></i>Equipment Information
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        
+                        <!-- Error Messages -->
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger mb-4" role="alert">
+                                <i class="fa-solid fa-exclamation-triangle me-2"></i>
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+
+                        <!-- Basic Information Section -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h6 class="fw-bold text-primary border-bottom pb-2 mb-3">
+                                    <i class="fa-solid fa-info-circle me-2"></i>Basic Information
+                                </h6>
+                            </div>
+
+                            <!-- Equipment Name -->
+                            <div class="col-md-8 mb-3">
+                                <label for="{{ form.name.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-tag text-primary me-1"></i>
+                                    Equipment Name <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" 
+                                       class="form-control {% if form.name.errors %}is-invalid{% endif %}" 
+                                       id="{{ form.name.id_for_label }}" 
+                                       name="{{ form.name.name }}" 
+                                       value="{{ form.name.value|default:'' }}"
+                                       placeholder="3D Printer, Oscilloscope, CNC Machine">
+                                {% if form.name.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.name.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.name.help_text %}
+                                    <div class="form-text">{{ form.name.help_text }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Inventory Code -->
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.inventory_code.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-barcode text-secondary me-1"></i>
+                                    Inventory Code
+                                </label>
+                                <input type="text" 
+                                       class="form-control {% if form.inventory_code.errors %}is-invalid{% endif %}" 
+                                       id="{{ form.inventory_code.id_for_label }}" 
+                                       name="{{ form.inventory_code.name }}" 
+                                       value="{{ form.inventory_code.value|default:'' }}"
+                                       placeholder="EQ-001, TECH-2024-01">
+                                {% if form.inventory_code.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.inventory_code.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.inventory_code.help_text %}
+                                    <div class="form-text">{{ form.inventory_code.help_text }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Technical Specifications Section -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h6 class="fw-bold text-success border-bottom pb-2 mb-3">
+                                    <i class="fa-solid fa-cogs me-2"></i>Technical Specifications
+                                </h6>
+                            </div>
+
+                            <!-- Type -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.type.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-layer-group text-success me-1"></i>
+                                    Equipment Type <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-select {% if form.type.errors %}is-invalid{% endif %}" 
+                                        id="{{ form.type.id_for_label }}" 
+                                        name="{{ form.type.name }}">
+                                    <option value="">Select Type</option>
+                                    {% for value, label in form.type.field.choices %}
+                                        {% if value %}
+                                            <option value="{{ value }}" 
+                                                    {% if value == form.type.value %}selected{% endif %}>
+                                                {{ label }}
+                                            </option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                                {% if form.type.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.type.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.type.help_text %}
+                                    <div class="form-text">{{ form.type.help_text }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Model -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.model.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-hashtag text-info me-1"></i>
+                                    Model
+                                </label>
+                                <input type="text" 
+                                       class="form-control {% if form.model.errors %}is-invalid{% endif %}" 
+                                       id="{{ form.model.id_for_label }}" 
+                                       name="{{ form.model.name }}" 
+                                       value="{{ form.model.value|default:'' }}"
+                                       placeholder="CR-10 V3, TDS2024C, X-Carve Pro">
+                                {% if form.model.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.model.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.model.help_text %}
+                                    <div class="form-text">{{ form.model.help_text }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Manufacturer -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.manufacturer.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-industry text-warning me-1"></i>
+                                    Manufacturer
+                                </label>
+                                <input type="text" 
+                                       class="form-control {% if form.manufacturer.errors %}is-invalid{% endif %}" 
+                                       id="{{ form.manufacturer.id_for_label }}" 
+                                       name="{{ form.manufacturer.name }}" 
+                                       value="{{ form.manufacturer.value|default:'' }}"
+                                       placeholder="Creality, Tektronix, Inventables">
+                                {% if form.manufacturer.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.manufacturer.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.manufacturer.help_text %}
+                                    <div class="form-text">{{ form.manufacturer.help_text }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Serial Number -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.serial_number.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-key text-secondary me-1"></i>
+                                    Serial Number
+                                </label>
+                                <input type="text" 
+                                       class="form-control {% if form.serial_number.errors %}is-invalid{% endif %}" 
+                                       id="{{ form.serial_number.id_for_label }}" 
+                                       name="{{ form.serial_number.name }}" 
+                                       value="{{ form.serial_number.value|default:'' }}"
+                                       placeholder="SN123456789">
+                                {% if form.serial_number.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.serial_number.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.serial_number.help_text %}
+                                    <div class="form-text">{{ form.serial_number.help_text }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Status and Condition Section -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h6 class="fw-bold text-warning border-bottom pb-2 mb-3">
+                                    <i class="fa-solid fa-clipboard-check me-2"></i>Status and Condition
+                                </h6>
+                            </div>
+
+                            <!-- Condition -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.condition.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-stethoscope text-warning me-1"></i>
+                                    Condition <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-select {% if form.condition.errors %}is-invalid{% endif %}" 
+                                        id="{{ form.condition.id_for_label }}" 
+                                        name="{{ form.condition.name }}">
+                                    <option value="">Select Condition</option>
+                                    {% for value, label in form.condition.field.choices %}
+                                        {% if value %}
+                                            <option value="{{ value }}" 
+                                                    {% if value == form.condition.value %}selected{% endif %}>
+                                                {{ label }}
+                                            </option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                                {% if form.condition.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.condition.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.condition.help_text %}
+                                    <div class="form-text">{{ form.condition.help_text }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Operational Status -->
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold">
+                                    <i class="fa-solid fa-power-off text-success me-1"></i>
+                                    Operational Status
+                                </label>
+                                <div class="form-check form-switch mt-2">
+                                    <input class="form-check-input {% if form.is_operational.errors %}is-invalid{% endif %}" 
+                                           type="checkbox" 
+                                           id="{{ form.is_operational.id_for_label }}" 
+                                           name="{{ form.is_operational.name }}"
+                                           {% if form.is_operational.value %}checked{% endif %}>
+                                    <label class="form-check-label" for="{{ form.is_operational.id_for_label }}">
+                                        <span class="fw-semibold">Currently Operational</span>
+                                        <br><small class="text-muted">Equipment is functioning and available for use</small>
+                                    </label>
+                                    {% if form.is_operational.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.is_operational.errors|first }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <!-- Purchase Date -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.purchase_date.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-calendar-alt text-info me-1"></i>
+                                    Purchase Date
+                                </label>
+                                <input type="date" 
+                                       class="form-control {% if form.purchase_date.errors %}is-invalid{% endif %}" 
+                                       id="{{ form.purchase_date.id_for_label }}" 
+                                       name="{{ form.purchase_date.name }}" 
+                                       value="{{ form.purchase_date.value|date:'Y-m-d'|default:'' }}">
+                                {% if form.purchase_date.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.purchase_date.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.purchase_date.help_text %}
+                                    <div class="form-text">{{ form.purchase_date.help_text }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Purchase Cost -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.purchase_cost.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-dollar-sign text-success me-1"></i>
+                                    Purchase Cost (UGX)
+                                </label>
+                                <input type="number" 
+                                       class="form-control {% if form.purchase_cost.errors %}is-invalid{% endif %}" 
+                                       id="{{ form.purchase_cost.id_for_label }}" 
+                                       name="{{ form.purchase_cost.name }}" 
+                                       value="{{ form.purchase_cost.value|default:'' }}"
+                                       placeholder="0"
+                                       step="0.01"
+                                       min="0">
+                                {% if form.purchase_cost.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.purchase_cost.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.purchase_cost.help_text %}
+                                    <div class="form-text">{{ form.purchase_cost.help_text }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Location and Access Section -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h6 class="fw-bold text-info border-bottom pb-2 mb-3">
+                                    <i class="fa-solid fa-map-marker-alt me-2"></i>Location and Access
+                                </h6>
+                            </div>
+
+                            <!-- Facility -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.facility.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-building text-info me-1"></i>
+                                    Facility <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-select {% if form.facility.errors %}is-invalid{% endif %}" 
+                                        id="{{ form.facility.id_for_label }}" 
+                                        name="{{ form.facility.name }}">
+                                    <option value="">Select Facility</option>
+                                    {% for choice in form.facility.field.queryset %}
+                                        <option value="{{ choice.pk }}" 
+                                                {% if choice.pk == form.facility.value %}selected{% endif %}>
+                                            {{ choice.name }} - {{ choice.location }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                {% if form.facility.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.facility.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.facility.help_text %}
+                                    <div class="form-text">{{ form.facility.help_text }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Location -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.location.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-location-dot text-warning me-1"></i>
+                                    Specific Location
+                                </label>
+                                <input type="text" 
+                                       class="form-control {% if form.location.errors %}is-invalid{% endif %}" 
+                                       id="{{ form.location.id_for_label }}" 
+                                       name="{{ form.location.name }}" 
+                                       value="{{ form.location.value|default:'' }}"
+                                       placeholder="Room 101, Lab A, Workshop 2">
+                                {% if form.location.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.location.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.location.help_text %}
+                                    <div class="form-text">{{ form.location.help_text }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Specifications -->
+                            <div class="col-12 mb-3">
+                                <label for="{{ form.specifications.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="fa-solid fa-list-alt text-secondary me-1"></i>
+                                    Technical Specifications
+                                </label>
+                                <textarea class="form-control {% if form.specifications.errors %}is-invalid{% endif %}" 
+                                          id="{{ form.specifications.id_for_label }}" 
+                                          name="{{ form.specifications.name }}" 
+                                          rows="4"
+                                          placeholder="Detailed technical specifications, capabilities, software requirements, etc...">{{ form.specifications.value|default:'' }}</textarea>
+                                {% if form.specifications.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.specifications.errors|first }}
+                                    </div>
+                                {% endif %}
+                                {% if form.specifications.help_text %}
+                                    <div class="form-text">{{ form.specifications.help_text }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="d-flex justify-content-end gap-3 pt-3 border-top">
+                            <a href="{% url 'core:equipment_list' %}" class="btn btn-outline-secondary">
+                                <i class="fa-solid fa-times me-2"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-warning">
+                                <i class="fa-solid fa-save me-2"></i>
+                                {% if object %}Update Equipment{% else %}Register Equipment{% endif %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Help Section -->
+            <div class="mt-4">
+                <div class="card border-0 bg-light">
+                    <div class="card-body p-3">
+                        <h6 class="fw-semibold mb-2">
+                            <i class="fa-solid fa-lightbulb text-warning me-2"></i>Equipment Registration Guidelines
+                        </h6>
+                        <ul class="small text-muted mb-0 ps-3">
+                            <li><strong>Inventory Management:</strong> Use consistent naming and coding conventions</li>
+                            <li><strong>Technical Details:</strong> Include complete specifications for proper utilization</li>
+                            <li><strong>Condition Tracking:</strong> Regularly update operational status and condition</li>
+                            <li><strong>Location Information:</strong> Specify exact location for easy equipment access</li>
+                            <li><strong>Maintenance Records:</strong> Keep track of purchase information for warranty and support</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
